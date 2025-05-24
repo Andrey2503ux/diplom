@@ -1,0 +1,42 @@
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+.typed{
+padding-left: 5%;
+border: solid black;
+width: 300px;
+margin-left: 25%;
+padding-right: 5%;
+}
+
+.reaction{ text-align:"center";}
+
+.typed{ animation: fadeIn 3s ease-in-out;}
+
+.reaction { animation: fadeIn 3s ease-in-out; } 
+
+a{
+border:1px solid blue;
+border-radius:5px;
+text-decoration: none;
+padding: 3px;
+background: rgb(104, 169, 255);
+}
+a:hover{
+color:black;
+border:1px solid blue;
+border-radius:5px;
+text-decoration: none;
+padding: 3px;
+background: rgb(208, 255, 0);
+}
+img{
+  border:5px double black;
+  border-radius: 10%;
+}
+p{
+  border:5px double black;
+  border-radius:15px;
+  padding:5px;
+}
