@@ -73,6 +73,20 @@ footer {
     padding: 10px;
     font-size: 20px;
 }
+            <button id="growing">Нажми меня</button>
+
+<style>
+#growing {
+  transition: font-size 3s, color 2s;
+}
+</style>
+
+<script>
+growing.onclick = function() {
+  this.style.fontSize = '36px';
+  this.style.color = 'red';
+};
+</script>
             </style>
         <header>
             <div class="logo">
