@@ -40,3 +40,7 @@ p{
   border-radius:15px;
   padding:5px;
 }
+.animated {
+  transition-property: background-color;
+  transition-duration: 3s;
+}
