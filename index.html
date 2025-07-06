@@ -2,8 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Биография | Твой Цифровой Двойник</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Биография | Твой Крутой Псевдоним</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -16,286 +16,483 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
         }
         body {
             background: var(--dark);
             color: white;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            font-family: 'Rajdhani', sans-serif;
             overflow-x: hidden;
             min-height: 100vh;
             perspective: 1000px;
-            touch-action: manipulation;
         }
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 3.5rem !important;
-                text-align: center;
-                padding: 0 15px;
-            }
-            .hero h2 {
-                font-size: 1.3rem !important;
-            }
-            .card-container {
-                flex-direction: column;
-                align-items: center;
-                padding: 20px 10px !important;
-            }
-            .card {
-                width: 90% !important;
-                height: auto !important;
-                margin-bottom: 20px;
-            }
-            .holo-grid {
-                grid-template-columns: 1fr !important;
-            }
-            .photo-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-            #assistant {
-                right: 10px !important;
-                bottom: 10px !important;
-                width: 60px !important;
-                height: 60px !important;
-            }
-            .voice-panel {
-                width: 95% !important;
-                left: 2.5% !important;
-            }
-        }
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 2.8rem !important;
-            }
-            .photo-grid {
-                grid-template-columns: 1fr !important;
-            }
-        }
-        /* Голосовой ассистент */
-        #assistant {
+        /* Matrix эффект */
+        #matrix {
             position: fixed;
-            right: 30px;
-            bottom: 30px;
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            opacity: 0.1;
+        }
+        /* Глазик в шапке */
+        .eye-tracker {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 9999;
-            box-shadow: 0 0 20px var(--neon), 0 0 40px rgba(0, 100, 255, 0.6);
-            animation: pulse 2s infinite;
-            border: 2px solid white;
-        }
-        #assistant i {
-            font-size: 30px;
-            color: white;
-        }
-        .voice-panel {
-            position: fixed;
-            bottom: 120px;
-            right: 30px;
-            width: 300px;
-            background: rgba(10, 10, 30, 0.95);
+            background: radial-gradient(circle, #111 0%, #000 70%);
             border: 2px solid var(--neon);
-            border-radius: 20px;
-            padding: 20px;
-            z-index: 9998;
-            display: none;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 30px rgba(0, 200, 255, 0.5);
+            box-shadow: 0 0 15px var(--neon);
+            z-index: 1000;
+            overflow: hidden;
         }
-        .voice-message {
-            min-height: 60px;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 10px;
-            border-left: 3px solid var(--pink);
-        }
-        .voice-controls {
-            display: flex;
-            justify-content: space-between;
-        }
-        .voice-btn {
-            width: 45px;
-            height: 45px;
+        .pupil {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--neon);
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.05s linear;
+            box-shadow: 0 0 10px var(--neon);
+        }
+        /* Главная секция */
+        .hero {
+            height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
         }
-        .voice-btn:hover {
-            background: var(--neon);
-            transform: scale(1.1);
+        .hero h1 {
+            font-size: 8rem;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, var(--neon), var(--pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
+            animation: glitch 3s infinite;
+            z-index: 10;
+        }
+        .hero h2 {
+            font-size: 2rem;
+            margin-top: -20px;
+            color: var(--neon);
+            animation: flicker 4s infinite;
+        }
+        /* 3D карточки */
+        .card-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            padding: 50px;
+            transform-style: preserve-3d;
+        }
+        .card {
+            width: 300px;
+            height: 400px;
+            background: rgba(20, 20, 40, 0.7);
+            border: 1px solid var(--neon);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            transform-style: preserve-3d;
+            transition: transform 0.5s, box-shadow 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--neon), var(--pink), var(--matrix));
+            z-index: -1;
+            filter: blur(20px);
+        }
+        .card:hover {
+            transform: translateZ(50px) rotateY(10deg);
+            box-shadow: 0 0 50px var(--neon);
+        }
+        /* Ховер-эффекты */
+        .hologram {
+            position: relative;
+            padding: 50px 0;
+        }
+        .holo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .holo-item {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            padding: 30px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        .holo-item:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+        .holo-item:hover:before {
+            left: 100%;
+        }
+        .holo-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.5);
+            border: 1px solid var(--neon);
         }
         /* Анимации */
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(0, 200, 255, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(0, 200, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(0, 200, 255, 0); }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-5px, 5px); }
+            40% { transform: translate(-5px, -5px); }
+            60% { transform: translate(5px, 5px); }
+            80% { transform: translate(5px, -5px); }
+            100% { transform: translate(0); }
         }
-        @keyframes float {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.3; }
         }
-        /* Остальные стили (из предыдущего кода) остаются без изменений */
-        /* ... */
+        /* Текстовый эффект */
+        .typing {
+            display: inline-block;
+        }
+        .typing::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        /* Парящие частицы */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        /* Аудио визуализатор */
+        .visualizer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 2px;
+            z-index: 900;
+        }
+        .bar {
+            width: 4px;
+            background: var(--neon);
+            border-radius: 2px 2px 0 0;
+            height: 10px;
+            animation: dance 1.5s infinite alternate;
+            animation-delay: calc(var(--i) * 0.05s);
+        }
+        @keyframes dance {
+            0% { height: 10px; }
+            100% { height: 100px; }
+        }
+        /* Взрывающиеся фото */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .photo {
+            aspect-ratio: 1;
+            background: #333;
+            border: 2px solid var(--neon);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .photo:hover {
+            transform: scale(1.2);
+            z-index: 100;
+            box-shadow: 0 0 30px var(--neon);
+        }
+        /* Кнопка с неоном */
+        .neon-btn {
+            padding: 15px 40px;
+            background: transparent;
+            color: var(--neon);
+            border: 2px solid var(--neon);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            margin: 30px 0;
+            transition: 0.5s;
+        }
+        .neon-btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--neon), transparent);
+            transition: 0.5s;
+        }
+        .neon-btn:hover {
+            color: #000;
+            box-shadow: 0 0 20px var(--neon), 0 0 40px var(--neon);
+        }
+        .neon-btn:hover:before {
+            left: 100%;
+        }
     </style>
 </head>
 <body>
-    <!-- Голосовой ассистент -->
-    <div id="assistant">
-        <i class="fas fa-robot"></i>
+    <!-- Matrix эффект -->
+    <canvas id="matrix"></canvas>
+    
+    <!-- Глазик следит за курсором -->
+    <div class="eye-tracker">
+        <div class="pupil" id="pupil"></div>
     </div>
-    <div class="voice-panel" id="voicePanel">
-        <div class="voice-message" id="voiceMessage">
-            Привет! Я твой цифровой двойник. Нажми "Старт" чтобы я рассказал о тебе.
+    
+    <!-- Аудио визуализатор -->
+    <div class="visualizer" id="visualizer"></div>
+    
+    <!-- Главный экран -->
+    <section class="hero">
+        <canvas class="particles" id="particles"></canvas>
+        <h1 id="glitch-text">Твой Псевдоним</h1>
+        <h2><span class="typing">Легенда цифрового мира</span></h2>
+        <button class="neon-btn">Войти в мой мир</button>
+    </section>
+    
+    <!-- 3D карточки -->
+    <section class="card-container">
+        <div class="card">
+            <h3>Мое Начало</h3>
+            <p>Родился в матрице в 199X. С детства взламывал игрушки вместо того, чтобы в них играть.</p>
         </div>
-        <div class="voice-controls">
-            <div class="voice-btn" id="startVoice" title="Старт">
-                <i class="fas fa-play"></i>
+        <div class="card">
+            <h3>Мои Достижения</h3>
+            <p>Взломал Пентагон в 15 лет (просто чтобы проверить защиту). Создал ИИ, который пишет стихи лучше Есенина.</p>
+        </div>
+        <div class="card">
+            <h3>Моя Философия</h3>
+            <p>"Если код не работает - значит нужно больше кофе. Если не помогает - значит нужно меньше сна."</p>
+        </div>
+    </section>
+    
+    <!-- Холограммные блоки -->
+    <section class="hologram">
+        <div class="holo-grid">
+            <div class="holo-item">
+                <i class="fas fa-code fa-3x" style="color: var(--neon);"></i>
+                <h3>Кодинг</h3>
+                <p>Пишу код на 20+ языках. Даже на тех, которые еще не придумали.</p>
             </div>
-            <div class="voice-btn" id="pauseVoice" title="Пауза">
-                <i class="fas fa-pause"></i>
+            <div class="holo-item">
+                <i class="fas fa-brain fa-3x" style="color: var(--pink);"></i>
+                <h3>ИИ</h3>
+                <p>Обучаю нейросети делать то, о чем обычные люди боятся мечтать.</p>
             </div>
-            <div class="voice-btn" id="stopVoice" title="Стоп">
-                <i class="fas fa-stop"></i>
+            <div class="holo-item">
+                <i class="fas fa-lock-open fa-3x" style="color: var(--matrix);"></i>
+                <h3>Кибербезопасность</h3>
+                <p>Ломаю системы, чтобы сделать их сильнее. Хакер по призванию.</p>
             </div>
-            <div class="voice-btn" id="closePanel" title="Закрыть">
-                <i class="fas fa-times"></i>
+            <div class="holo-item">
+                <i class="fas fa-vr-cardboard fa-3x" style="color: var(--neon);"></i>
+                <h3>VR/AR</h3>
+                <p>Создаю миры, в которые люди сбегают от реальности.</p>
             </div>
         </div>
-    </div>
-
-    <!-- Остальная часть сайта (без изменений) -->
-    <!-- ... -->
+    </section>
+    
+    <!-- Фотогалерея -->
+    <section>
+        <h2 style="text-align: center; margin: 50px 0; font-size: 2.5rem; text-transform: uppercase; letter-spacing: 3px; color: var(--neon);">
+            Мои Проекты
+        </h2>
+        <div class="photo-grid">
+            <div class="photo"></div>
+            <div class="photo"></div>
+            <div class="photo"></div>
+            <div class="photo"></div>
+            <div class="photo"></div>
+            <div class="photo"></div>
+        </div>
+    </section>
 
     <script>
-        // ================== Голосовой ассистент ==================
-        const assistant = document.getElementById('assistant');
-        const voicePanel = document.getElementById('voicePanel');
-        const voiceMessage = document.getElementById('voiceMessage');
-        const startBtn = document.getElementById('startVoice');
-        const pauseBtn = document.getElementById('pauseVoice');
-        const stopBtn = document.getElementById('stopVoice');
-        const closeBtn = document.getElementById('closePanel');
+        // Matrix эффект
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
         
-        let speech = null;
-        const biographyText = `
-            Приветствую в моём цифровом мире! Я — креативный технолог и визионер будущего. 
-            Моя история началась в 1995 году, когда я впервые взломал игровую приставку отца. 
-            Сейчас я создаю нейросети, которые пишут музыку и предсказывают биржевые тренды. 
-            Мой ключевой проект — система искусственного интеллекта, генерирующая виртуальные миры. 
-            В свободное время взламываю корпоративные системы по заказу правительства. 
-            Моя цель — стереть грань между реальностью и цифровым пространством.
-        `;
+        const chars = "01010101010101";
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
         
-        // Активация панели
-        assistant.addEventListener('click', () => {
-            voicePanel.style.display = 'block';
-            assistant.style.animation = 'float 3s infinite';
-        });
-        
-        // Закрытие панели
-        closeBtn.addEventListener('click', () => {
-            voicePanel.style.display = 'none';
-            assistant.style.animation = 'pulse 2s infinite';
-        });
-        
-        // Запуск речи
-        startBtn.addEventListener('click', () => {
-            if (speech && !speech.paused) return;
-            
-            if ('speechSynthesis' in window) {
-                if (speech) {
-                    speechSynthesis.resume();
-                } else {
-                    speech = new SpeechSynthesisUtterance(biographyText);
-                    speech.lang = 'ru-RU';
-                    speech.rate = 1.1;
-                    speech.pitch = 1.2;
-                    speech.volume = 1;
-                    
-                    speech.onstart = () => {
-                        voiceMessage.innerHTML = '<i class="fas fa-volume-up"></i> Рассказываю вашу историю...';
-                    };
-                    
-                    speech.onend = () => {
-                        voiceMessage.innerHTML = 'Рассказ завершён. Хотите повторить?';
-                        speech = null;
-                    };
-                    
-                    speechSynthesis.speak(speech);
-                }
-            } else {
-                voiceMessage.innerHTML = 'Ваш браузер не поддерживает голосовые функции!';
-            }
-        });
-        
-        // Пауза
-        pauseBtn.addEventListener('click', () => {
-            if (speech && !speech.paused) {
-                speechSynthesis.pause();
-                voiceMessage.innerHTML = '<i class="fas fa-pause"></i> Пауза';
-            }
-        });
-        
-        // Остановка
-        stopBtn.addEventListener('click', () => {
-            if (speech) {
-                speechSynthesis.cancel();
-                voiceMessage.innerHTML = 'Рассказ остановлен';
-                speech = null;
-            }
-        });
-        
-        // ================== Адаптивность для тач-устройств ==================
-        // Оптимизация карточек для касаний
-        document.querySelectorAll('.card, .holo-item').forEach(item => {
-            item.addEventListener('touchstart', function() {
-                this.classList.add('touch-active');
-            });
-            
-            item.addEventListener('touchend', function() {
-                this.classList.remove('touch-active');
-            });
-        });
-        
-        // Предотвращение масштабирования
-        document.addEventListener('gesturestart', function(e) {
-            e.preventDefault();
-        });
-        
-        // Оптимизация анимаций для мобил
-        if ('ontouchstart' in window) {
-            document.body.classList.add('touch-device');
-            const style = document.createElement('style');
-            style.innerHTML = `
-                .particles, #matrix {
-                    display: none !important;
-                }
-                * {
-                    animation-duration: 0.01s !important;
-                    animation-delay: 0s !important;
-                    animation-iteration-count: 1 !important;
-                    transition: none !important;
-                }
-            `;
-            document.head.appendChild(style);
+        for(let i = 0; i < columns; i++) {
+            drops[i] = 1;
         }
         
-        // Остальной код (частицы, матрица, 3D эффекты) остается без изменений
-        // ...
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = "#0f0";
+            ctx.font = fontSize + "px monospace";
+            
+            for(let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                
+                drops[i]++;
+            }
+        }
+        
+        // Глазик следит за мышкой
+        const pupil = document.getElementById('pupil');
+        document.addEventListener('mousemove', (e) => {
+            const eye = pupil.parentElement;
+            const eyeRect = eye.getBoundingClientRect();
+            const eyeCenterX = eyeRect.left + eyeRect.width / 2;
+            const eyeCenterY = eyeRect.top + eyeRect.height / 2;
+            
+            const angle = Math.atan2(e.clientY - eyeCenterY, e.clientX - eyeCenterX);
+            const distance = Math.min(15, Math.hypot(e.clientX - eyeCenterX, e.clientY - eyeCenterY) / 10);
+            
+            pupil.style.transform = `translate(-50%, -50%) translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
+        });
+        
+        // Аудио визуализатор
+        const visualizer = document.getElementById('visualizer');
+        for (let i = 0; i < 100; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.setProperty('--i', i);
+            visualizer.appendChild(bar);
+        }
+        
+        // Частицы в шапке
+        const particlesCanvas = document.getElementById('particles');
+        const particlesCtx = particlesCanvas.getContext('2d');
+        particlesCanvas.width = window.innerWidth;
+        particlesCanvas.height = window.innerHeight;
+        
+        let particles = [];
+        const particleCount = 200;
+        
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * particlesCanvas.width,
+                y: Math.random() * particlesCanvas.height,
+                size: Math.random() * 3 + 1,
+                speedX: (Math.random() - 0.5) * 2,
+                speedY: (Math.random() - 0.5) * 2
+            });
+        }
+        
+        function animateParticles() {
+            particlesCtx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
+            particlesCtx.fillStyle = '#0ff';
+            
+            particles.forEach(particle => {
+                particlesCtx.beginPath();
+                particlesCtx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                particlesCtx.fill();
+                
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+                
+                if (particle.x > particlesCanvas.width || particle.x < 0) particle.speedX *= -1;
+                if (particle.y > particlesCanvas.height || particle.y < 0) particle.speedY *= -1;
+            });
+            
+            requestAnimationFrame(animateParticles);
+        }
+        
+        // Глитч эффект для текста
+        const glitchText = document.getElementById('glitch-text');
+        setInterval(() => {
+            glitchText.style.textShadow = `
+                0 0 10px #0ff,
+                ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 rgba(255, 0, 255, 0.7),
+                ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 rgba(0, 255, 0, 0.7)
+            `;
+        }, 100);
+        
+        // Запуск всех анимаций
+        animateParticles();
+        setInterval(drawMatrix, 50);
+        
+        // Адаптация под размер экрана
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particlesCanvas.width = window.innerWidth;
+            particlesCanvas.height = window.innerHeight;
+        });
+        
+        // Взрыв фото при клике
+        document.querySelectorAll('.photo').forEach(photo => {
+            photo.addEventListener('click', function() {
+                this.style.transform = 'scale(3)';
+                this.style.opacity = '0';
+                this.style.transition = 'all 1s ease';
+                
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                    this.style.opacity = '1';
+                }, 1000);
+            });
+        });
     </script>
 </body>
 </html>
+  
 
     
