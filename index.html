@@ -2,497 +2,303 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Биография | Твой Крутой Псевдоним</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ОФИЦИАЛЬНЫЙ САЙТ ПЕНСИОННОГО ФОНДА</title>
     <style>
-        :root {
-            --neon: #0ff;
-            --pink: #f0f;
-            --dark: #000;
-            --matrix: #0f0;
-        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         body {
-            background: var(--dark);
-            color: white;
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'Times New Roman', serif;
+            background-color: #f0f0f0;
+            color: #333;
+            line-height: 1.6;
             overflow-x: hidden;
-            min-height: 100vh;
-            perspective: 1000px;
+            touch-action: manipulation;
         }
-        /* Matrix эффект */
-        #matrix {
+        .header {
+            background-color: #005baa;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            position: relative;
+            border-bottom: 5px solid #ffcc00;
+        }
+        .header h1 {
+            font-size: 24px;
+        }
+        .content {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #005baa;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #004080;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #005baa;
+            color: white;
+            margin-top: 20px;
+        }
+        
+        /* Тролль эффекты */
+        .fake-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+        }
+        .virus-scan {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
-            opacity: 0.1;
+            background: #000;
+            z-index: 9999;
+            display: none;
+            color: #0f0;
+            font-family: monospace;
+            padding: 20px;
+            overflow: auto;
         }
-        /* Глазик в шапке */
-        .eye-tracker {
+        .cursor-trail {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #111 0%, #000 70%);
-            border: 2px solid var(--neon);
-            box-shadow: 0 0 15px var(--neon);
-            z-index: 1000;
-            overflow: hidden;
-        }
-        .pupil {
-            position: absolute;
             width: 20px;
             height: 20px;
-            background: var(--neon);
+            background-color: red;
             border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.05s linear;
-            box-shadow: 0 0 10px var(--neon);
+            pointer-events: none;
+            z-index: 9998;
+            display: none;
         }
-        /* Главная секция */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .hero h1 {
-            font-size: 8rem;
-            text-transform: uppercase;
-            background: linear-gradient(45deg, var(--neon), var(--pink));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 30px rgba(0, 255, 255, 0.7);
-            animation: glitch 3s infinite;
-            z-index: 10;
-        }
-        .hero h2 {
-            font-size: 2rem;
-            margin-top: -20px;
-            color: var(--neon);
-            animation: flicker 4s infinite;
-        }
-        /* 3D карточки */
-        .card-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 40px;
-            padding: 50px;
-            transform-style: preserve-3d;
-        }
-        .card {
-            width: 300px;
-            height: 400px;
-            background: rgba(20, 20, 40, 0.7);
-            border: 1px solid var(--neon);
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
-            transform-style: preserve-3d;
-            transition: transform 0.5s, box-shadow 0.5s;
-            position: relative;
-            overflow: hidden;
-        }
-        .card:before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, var(--neon), var(--pink), var(--matrix));
-            z-index: -1;
-            filter: blur(20px);
-        }
-        .card:hover {
-            transform: translateZ(50px) rotateY(10deg);
-            box-shadow: 0 0 50px var(--neon);
-        }
-        /* Ховер-эффекты */
-        .hologram {
-            position: relative;
-            padding: 50px 0;
-        }
-        .holo-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        .holo-item {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(0, 255, 255, 0.3);
-            padding: 30px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
-        .holo-item:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
-            transition: all 0.6s ease;
-        }
-        .holo-item:hover:before {
-            left: 100%;
-        }
-        .holo-item:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.5);
-            border: 1px solid var(--neon);
-        }
-        /* Анимации */
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-5px, 5px); }
-            40% { transform: translate(-5px, -5px); }
-            60% { transform: translate(5px, 5px); }
-            80% { transform: translate(5px, -5px); }
-            100% { transform: translate(0); }
-        }
-        @keyframes flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-            20%, 24%, 55% { opacity: 0.3; }
-        }
-        /* Текстовый эффект */
-        .typing {
-            display: inline-block;
-        }
-        .typing::after {
-            content: '|';
-            animation: blink 1s infinite;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        /* Парящие частицы */
-        .particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-        /* Аудио визуализатор */
-        .visualizer {
+        .fake-blue-screen {
             position: fixed;
-            bottom: 0;
+            top: 0;
             left: 0;
             width: 100%;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 2px;
-            z-index: 900;
-        }
-        .bar {
-            width: 4px;
-            background: var(--neon);
-            border-radius: 2px 2px 0 0;
-            height: 10px;
-            animation: dance 1.5s infinite alternate;
-            animation-delay: calc(var(--i) * 0.05s);
-        }
-        @keyframes dance {
-            0% { height: 10px; }
-            100% { height: 100px; }
-        }
-        /* Взрывающиеся фото */
-        .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-        }
-        .photo {
-            aspect-ratio: 1;
-            background: #333;
-            border: 2px solid var(--neon);
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .photo:hover {
-            transform: scale(1.2);
-            z-index: 100;
-            box-shadow: 0 0 30px var(--neon);
-        }
-        /* Кнопка с неоном */
-        .neon-btn {
-            padding: 15px 40px;
-            background: transparent;
-            color: var(--neon);
-            border: 2px solid var(--neon);
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            margin: 30px 0;
-            transition: 0.5s;
-        }
-        .neon-btn:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, var(--neon), transparent);
-            transition: 0.5s;
+            background: #0078d7;
+            color: white;
+            font-family: 'Courier New', monospace;
+            padding: 40px;
+            z-index: 99999;
+            display: none;
         }
-        .neon-btn:hover {
-            color: #000;
-            box-shadow: 0 0 20px var(--neon), 0 0 40px var(--neon);
-        }
-        .neon-btn:hover:before {
-            left: 100%;
+        
+        /* Адаптивность */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 20px;
+            }
+            .content {
+                padding: 15px;
+                margin: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Matrix эффект -->
-    <canvas id="matrix"></canvas>
-    
-    <!-- Глазик следит за курсором -->
-    <div class="eye-tracker">
-        <div class="pupil" id="pupil"></div>
+    <div class="header">
+        <h1>ПЕНСИОННЫЙ ФОНД РОССИЙСКОЙ ФЕДЕРАЦИИ</h1>
     </div>
     
-    <!-- Аудио визуализатор -->
-    <div class="visualizer" id="visualizer"></div>
+    <div class="content">
+        <h2>ПРОВЕРКА НАЧИСЛЕНИЯ ДОПОЛНИТЕЛЬНЫХ ВЫПЛАТ</h2>
+        <p>Для проверки наличия дополнительных выплат по вашей пенсии, пожалуйста, заполните форму:</p>
+        
+        <div class="form-group">
+            <label for="name">ФИО:</label>
+            <input type="text" id="name" placeholder="Введите ваше полное имя">
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Номер телефона:</label>
+            <input type="tel" id="phone" placeholder="Введите ваш номер телефона">
+        </div>
+        
+        <div class="form-group">
+            <label for="birthdate">Дата рождения:</label>
+            <input type="date" id="birthdate">
+        </div>
+        
+        <div class="form-group">
+            <label for="snils">СНИЛС:</label>
+            <input type="text" id="snils" placeholder="Введите ваш номер СНИЛС">
+        </div>
+        
+        <button id="submit-btn">ПРОВЕРИТЬ НАЛИЧИЕ ВЫПЛАТ</button>
+    </div>
     
-    <!-- Главный экран -->
-    <section class="hero">
-        <canvas class="particles" id="particles"></canvas>
-        <h1 id="glitch-text">Твой Псевдоним</h1>
-        <h2><span class="typing">Легенда цифрового мира</span></h2>
-        <button class="neon-btn">Войти в мой мир</button>
-    </section>
+    <div class="footer">
+        © 2023 Пенсионный фонд Российской Федерации
+    </div>
     
-    <!-- 3D карточки -->
-    <section class="card-container">
-        <div class="card">
-            <h3>Мое Начало</h3>
-            <p>Родился в матрице в 199X. С детства взламывал игрушки вместо того, чтобы в них играть.</p>
-        </div>
-        <div class="card">
-            <h3>Мои Достижения</h3>
-            <p>Взломал Пентагон в 15 лет (просто чтобы проверить защиту). Создал ИИ, который пишет стихи лучше Есенина.</p>
-        </div>
-        <div class="card">
-            <h3>Моя Философия</h3>
-            <p>"Если код не работает - значит нужно больше кофе. Если не помогает - значит нужно меньше сна."</p>
-        </div>
-    </section>
+    <!-- Тролль элементы -->
+    <div class="fake-notification" id="fake-notification">
+        Обнаружено 3 новых выплаты на общую сумму 42,189 руб.
+    </div>
     
-    <!-- Холограммные блоки -->
-    <section class="hologram">
-        <div class="holo-grid">
-            <div class="holo-item">
-                <i class="fas fa-code fa-3x" style="color: var(--neon);"></i>
-                <h3>Кодинг</h3>
-                <p>Пишу код на 20+ языках. Даже на тех, которые еще не придумали.</p>
-            </div>
-            <div class="holo-item">
-                <i class="fas fa-brain fa-3x" style="color: var(--pink);"></i>
-                <h3>ИИ</h3>
-                <p>Обучаю нейросети делать то, о чем обычные люди боятся мечтать.</p>
-            </div>
-            <div class="holo-item">
-                <i class="fas fa-lock-open fa-3x" style="color: var(--matrix);"></i>
-                <h3>Кибербезопасность</h3>
-                <p>Ломаю системы, чтобы сделать их сильнее. Хакер по призванию.</p>
-            </div>
-            <div class="holo-item">
-                <i class="fas fa-vr-cardboard fa-3x" style="color: var(--neon);"></i>
-                <h3>VR/AR</h3>
-                <p>Создаю миры, в которые люди сбегают от реальности.</p>
-            </div>
-        </div>
-    </section>
+    <div class="virus-scan" id="virus-scan">
+        <h2>Антивирусная проверка</h2>
+        <p>Сканирование вашего устройства...</p>
+        <div id="scan-progress"></div>
+        <p>Обнаружено: 127 вирусов</p>
+        <p>Утечка данных: ДА</p>
+        <p>Взлом камеры: ДА</p>
+        <p>Рекомендуется срочное лечение!</p>
+    </div>
     
-    <!-- Фотогалерея -->
-    <section>
-        <h2 style="text-align: center; margin: 50px 0; font-size: 2.5rem; text-transform: uppercase; letter-spacing: 3px; color: var(--neon);">
-            Мои Проекты
-        </h2>
-        <div class="photo-grid">
-            <div class="photo"></div>
-            <div class="photo"></div>
-            <div class="photo"></div>
-            <div class="photo"></div>
-            <div class="photo"></div>
-            <div class="photo"></div>
-        </div>
-    </section>
+    <div class="cursor-trail" id="cursor-trail"></div>
+    
+    <div class="fake-blue-screen" id="fake-blue-screen">
+        <h1>:(</h1>
+        <p>На вашем устройстве возникла проблема, и его необходимо перезагрузить.</p>
+        <p>Мы просто собираем некоторые данные об ошибке, а затем автоматически перезагрузим ваш компьютер.</p>
+        <p>0% завершено</p>
+        <p>СБОЙ ВИДЕОПАМЯТИ</p>
+        <p>ОСТАНОВКА: 0x0000001A</p>
+    </div>
 
     <script>
-        // Matrix эффект
-        const canvas = document.getElementById('matrix');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        
-        const chars = "01010101010101";
-        const fontSize = 14;
-        const columns = canvas.width / fontSize;
-        const drops = [];
-        
-        for(let i = 0; i < columns; i++) {
-            drops[i] = 1;
-        }
-        
-        function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Основной троллинг при отправке формы
+        document.getElementById('submit-btn').addEventListener('click', function(e) {
+            e.preventDefault();
             
-            ctx.fillStyle = "#0f0";
-            ctx.font = fontSize + "px monospace";
+            // Показать фейковое уведомление
+            document.getElementById('fake-notification').style.display = 'block';
             
-            for(let i = 0; i < drops.length; i++) {
-                const text = chars[Math.floor(Math.random() * chars.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            // Через 3 секунды запустить "антивирусное сканирование"
+            setTimeout(function() {
+                document.getElementById('fake-notification').style.display = 'none';
+                document.getElementById('virus-scan').style.display = 'block';
                 
-                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                
-                drops[i]++;
+                // Имитация процесса сканирования
+                let progress = 0;
+                const scanInterval = setInterval(function() {
+                    progress += 5;
+                    document.getElementById('scan-progress').innerHTML = `Прогресс: ${progress}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(scanInterval);
+                        
+                        // Через 5 секунд синий экран смерти
+                        setTimeout(function() {
+                            document.getElementById('virus-scan').style.display = 'none';
+                            document.getElementById('fake-blue-screen').style.display = 'block';
+                            
+                            // Анимация процентов на синем экране
+                            let bsodProgress = 0;
+                            const bsodInterval = setInterval(function() {
+                                bsodProgress += 1;
+                                document.querySelector('.fake-blue-screen p:nth-of-type(3)').textContent = 
+                                    bsodProgress + '% завершено';
+                                
+                                if (bsodProgress >= 100) {
+                                    clearInterval(bsodInterval);
+                                    
+                                    // Включить след от курсора
+                                    document.getElementById('cursor-trail').style.display = 'block';
+                                    
+                                    // Случайные звуки
+                                    const sounds = ['error', 'alert', 'notification'];
+                                    setInterval(function() {
+                                        const sound = new Audio(`https://assets.mixkit.co/sfx/preview/${sounds[Math.floor(Math.random() * sounds.length)]}.mp3`);
+                                        sound.volume = 0.3;
+                                        sound.play();
+                                    }, 3000);
+                                    
+                                    // Перевернуть страницу
+                                    setTimeout(function() {
+                                        document.body.style.transform = 'rotate(180deg)';
+                                        document.body.style.transition = 'transform 2s';
+                                        
+                                        // Изменить курсор
+                                        document.body.style.cursor = 'url("https://cdn.custom-cursor.com/db/7647/32/stardew-valley-blue-chicken-cursor.png"), auto';
+                                        
+                                        // Случайные всплывающие окна
+                                        setInterval(function() {
+                                            alert('ВАШ КОМПЬЮТЕР ЗАРАЖЕН!');
+                                        }, 10000);
+                                    }, 5000);
+                                }
+                            }, 50);
+                        }, 5000);
+                    }
+                }, 200);
+            }, 3000);
+        });
+        
+        // След от курсора
+        document.addEventListener('mousemove', function(e) {
+            const trail = document.getElementById('cursor-trail');
+            trail.style.left = (e.pageX - 10) + 'px';
+            trail.style.top = (e.pageY - 10) + 'px';
+            
+            // Случайный цвет
+            if (Math.random() > 0.9) {
+                const colors = ['red', 'blue', 'green', 'yellow', 'purple'];
+                trail.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
             }
-        }
-        
-        // Глазик следит за мышкой
-        const pupil = document.getElementById('pupil');
-        document.addEventListener('mousemove', (e) => {
-            const eye = pupil.parentElement;
-            const eyeRect = eye.getBoundingClientRect();
-            const eyeCenterX = eyeRect.left + eyeRect.width / 2;
-            const eyeCenterY = eyeRect.top + eyeRect.height / 2;
-            
-            const angle = Math.atan2(e.clientY - eyeCenterY, e.clientX - eyeCenterX);
-            const distance = Math.min(15, Math.hypot(e.clientX - eyeCenterX, e.clientY - eyeCenterY) / 10);
-            
-            pupil.style.transform = `translate(-50%, -50%) translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
         });
         
-        // Аудио визуализатор
-        const visualizer = document.getElementById('visualizer');
-        for (let i = 0; i < 100; i++) {
-            const bar = document.createElement('div');
-            bar.className = 'bar';
-            bar.style.setProperty('--i', i);
-            visualizer.appendChild(bar);
-        }
-        
-        // Частицы в шапке
-        const particlesCanvas = document.getElementById('particles');
-        const particlesCtx = particlesCanvas.getContext('2d');
-        particlesCanvas.width = window.innerWidth;
-        particlesCanvas.height = window.innerHeight;
-        
-        let particles = [];
-        const particleCount = 200;
-        
-        for (let i = 0; i < particleCount; i++) {
-            particles.push({
-                x: Math.random() * particlesCanvas.width,
-                y: Math.random() * particlesCanvas.height,
-                size: Math.random() * 3 + 1,
-                speedX: (Math.random() - 0.5) * 2,
-                speedY: (Math.random() - 0.5) * 2
-            });
-        }
-        
-        function animateParticles() {
-            particlesCtx.clearRect(0, 0, particlesCanvas.width, particlesCanvas.height);
-            particlesCtx.fillStyle = '#0ff';
-            
-            particles.forEach(particle => {
-                particlesCtx.beginPath();
-                particlesCtx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                particlesCtx.fill();
-                
-                particle.x += particle.speedX;
-                particle.y += particle.speedY;
-                
-                if (particle.x > particlesCanvas.width || particle.x < 0) particle.speedX *= -1;
-                if (particle.y > particlesCanvas.height || particle.y < 0) particle.speedY *= -1;
-            });
-            
-            requestAnimationFrame(animateParticles);
-        }
-        
-        // Глитч эффект для текста
-        const glitchText = document.getElementById('glitch-text');
-        setInterval(() => {
-            glitchText.style.textShadow = `
-                0 0 10px #0ff,
-                ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 rgba(255, 0, 255, 0.7),
-                ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 rgba(0, 255, 0, 0.7)
-            `;
-        }, 100);
-        
-        // Запуск всех анимаций
-        animateParticles();
-        setInterval(drawMatrix, 50);
-        
-        // Адаптация под размер экрана
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            particlesCanvas.width = window.innerWidth;
-            particlesCanvas.height = window.innerHeight;
+        // Тряска экрана при касании на мобильных
+        document.addEventListener('touchstart', function() {
+            document.body.style.animation = 'shake 0.5s';
+            setTimeout(function() {
+                document.body.style.animation = '';
+            }, 500);
         });
         
-        // Взрыв фото при клике
-        document.querySelectorAll('.photo').forEach(photo => {
-            photo.addEventListener('click', function() {
-                this.style.transform = 'scale(3)';
-                this.style.opacity = '0';
-                this.style.transition = 'all 1s ease';
-                
-                setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                    this.style.opacity = '1';
-                }, 1000);
-            });
+        // Запрет масштабирования на мобильных
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
         });
     </script>
 </body>
 </html>
+
   
 
     
