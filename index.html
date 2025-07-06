@@ -1,44 +1,207 @@
-<html>
-  <head>
-    <title>Обо мне</title>
-    <link rel="stylesheet" href="style.css"/>
-  </head>
-  <body>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Биография | Твой Ник</title>
+    <style>
+        :root {
+            --neon: #0ff;
+            --dark: #000;
+        }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        body {
+            background: var(--dark);
+            color: white;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="%230ff" stroke-width="2"/></svg>'), auto;
+        }
+        /* Шапка с неоновым текстом и частицами */
+        header {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle, #1a1a2e 0%, #000 70%);
+        }
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        h1 {
+            font-size: 6rem;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 10px var(--neon), 0 0 20px var(--neon);
+            animation: flicker 3s infinite alternate;
+        }
+        /* Анимация мерцания */
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.6; }
+        }
+        /* Секция "Обо мне" с 3D-карточкой */
+        .about {
+            padding: 100px 20px;
+            perspective: 1000px;
+        }
+        .card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(10, 10, 30, 0.7);
+            border: 1px solid var(--neon);
+            border-radius: 15px;
+            padding: 30px;
+            transform-style: preserve-3d;
+            transform: rotateY(5deg);
+            transition: transform 0.5s;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+        .card:hover {
+            transform: rotateY(0);
+        }
+        /* Хронология с параллаксом */
+        .timeline {
+            padding: 100px 0;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><circle cx="50" cy="50" r="1" fill="%230ff" /></svg>') repeat;
+            background-attachment: fixed;
+        }
+        .event {
+            margin: 40px auto;
+            width: 60%;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-left: 3px solid var(--neon);
+            transform: translateX(-100px);
+            opacity: 0;
+            transition: all 0.8s ease;
+        }
+        .event.active {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        /* Подвал с неоном */
+        footer {
+            padding: 50px 0;
+            text-align: center;
+            background: #0a0a1a;
+            border-top: 1px solid var(--neon);
+        }
+        .social a {
+            color: var(--neon);
+            font-size: 2rem;
+            margin: 0 15px;
+            text-shadow: 0 0 10px var(--neon);
+            transition: 0.3s;
+        }
+        .social a:hover {
+            text-shadow: 0 0 20px var(--neon), 0 0 30px var(--neon);
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка с частицами -->
     <header>
-      <a href="">главная</a>
+        <canvas class="particles" id="particles"></canvas>
+        <h1>Твое Имя</h1>
     </header>
-    <main>
-<div class="typed">
-      <h1>Базарбаев Андрей</h1>
-      <ul>
-        <li>люблю вкусняшки</li>
-        <li>катаюсь на самокате</li>
-        <li>делаю уроки</li>
-        <li>А еще я делаю <a href="site.html">сайты</a></li>
-      </ul>
-</div>
-<div class="reaction">
-  <button id="color">Нажми меня</button>
 
-<style>
-  #color {
-    transition-property: background-color;
-    transition-duration: 3s;
-  }
-</style>
+    <!-- Секция "Обо мне" -->
+    <section class="about">
+        <div class="card">
+            <h2>КТО Я?</h2>
+            <p>Жги сюда свой текст. Например: <br><br>
+            "Я — цифровой кочевник, взламываю реальность через код и нейросети. Мои проекты горят ярче, чем серверы ЦОД при DDoS-атаке. Здесь нет лжи, только чистый кэш моих побед."</p>
+        </div>
+    </section>
 
-<script>
-  color.onclick = function() {
-    this.style.backgroundColor = 'red';
-  };
-</script>
-<p>Привет! Меня зовут Андрей, и мне 13 лет. Я живу в Екатеринбурге, в самом сердце Урала!</p><img src="https://kudabilet.net/wp-content/uploads/2021/07/ekb.jpg"> 
-<p>Город у нас большой и интересный, всегда есть чем заняться</p>
-<img src="https://penza-sputnik.ru/upload/iblock/54c/54c4048d78e9a071791e3878883ab6cc.jpg"><p>Я новерное, обычный парень, Люблю погонять в футбол с друзьями во дворе, особенно когда тепло. Зимой, конечно, сложнее, но зато можно на коньках покататься или в снежки поиграть</p>
-<img src="https://image.mel.fm/i/G/G024rljXdk/640.jpg"><p>В школе учусь... ну, как учусь. Не скажу, что отличник, но стараюсь. Больше всего люблю историю и географию – интересно узнавать про разные страны и времена. А вот с математикой у меня не всегда ладится, но я работаю над этим. Еще я очень люблю компьютерные игры. Не то чтобы целыми днями сижу за компом, но иногда, после школы, хочется расслабиться и поиграть во что-нибудь интересное. Мама, конечно, ругается, говорит, что надо больше гулять, но я стараюсь находить баланс. В свободное время, когда не играю и не гуляю, люблю читать. Особенно фантастику и приключения. Представляю себя героем, который спасает мир или отправляется в далекие путешествия. Екатеринбург – мой родной город, и я его очень люблю. Здесь много красивых мест, парков и скверов. Летом мы часто ходим гулять на набережную Исети, а зимой катаемся с горок в парке Маяковского. В общем, вот такой я – обычный тринадцатилетний парень из Екатеринбурга. У меня есть друзья, семья, любимые занятия и мечты. И я надеюсь, что в будущем меня ждет много интересного!</p>
-</div>
-    </main>
+    <!-- Хронология -->
+    <section class="timeline">
+        <div class="event">
+            <h3>2020: Начал путь</h3>
+            <p>Описание этапа. Добавь дерзости.</p>
+        </div>
+        <div class="event">
+            <h3>2023: Прорыв</h3>
+            <p>Чем гордишься? Вбей сюда.</p>
+        </div>
+    </section>
+
+    <!-- Подвал -->
     <footer>
+        <div class="social">
+            <a href="#">TG</a>
+            <a href="#">GitHub</a>
+            <a href="#">Insta</a>
+        </div>
     </footer>
-  </body>
+
+    <script>
+        // Частицы в шапке
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let particles = [];
+        const particleCount = 200;
+        
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 3 + 1,
+                speedX: (Math.random() - 0.5) * 2,
+                speedY: (Math.random() - 0.5) * 2
+            });
+        }
+        
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0ff';
+            
+            particles.forEach(particle => {
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+                
+                if (particle.x > canvas.width || particle.x < 0) particle.speedX *= -1;
+                if (particle.y > canvas.height || particle.y < 0) particle.speedY *= -1;
+            });
+            
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+        
+        // Активация событий при скролле
+        const events = document.querySelectorAll('.event');
+        window.addEventListener('scroll', () => {
+            events.forEach(event => {
+                const position = event.getBoundingClientRect();
+                if (position.top < window.innerHeight * 0.75) {
+                    event.classList.add('active');
+                }
+            });
+        });
+        
+        // Эффект параллакса для фона timeline
+        window.addEventListener('scroll', () => {
+            document.querySelector('.timeline').style.backgroundPositionY = -window.scrollY * 0.5 + 'px';
+        });
+    </script>
+</body>
 </html>
+    
