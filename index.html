@@ -1,77 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-<title>CHAOS ENGINE v9.4</title>
-<style>
-  body { 
-    background: #0a0a12; 
-    overflow: hidden;
-    color: #0f0;
-    font-family: 'Courier New', monospace;
-  }
-  .glitch {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMwMDAiLz48L3N2Zz4=');
-    opacity: 0.3;
-    mix-blend-mode: overlay;
-    animation: glitch-anim 0.3s infinite;
-  }
-  @keyframes glitch-anim {
-    0% { transform: skewX(0deg); }
-    20% { transform: skewX(-5deg); }
-    40% { transform: skewX(3deg); }
-    60% { transform: scaleY(0.9); }
-    100% { transform: scaleX(1.1); }
-  }
-  .terminal {
-    padding: 2rem;
-    text-shadow: 0 0 10px #0f0;
-  }
-  .progress-bar {
-    height: 4px;
-    background: #f00;
-    width: 0%;
-    animation: progress 10s forwards;
-  }
-  @keyframes progress {
-    to { width: 100%; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RED ROOM | 18+</title>
+    <style>
+        /* === COLIN'S CSS (скрытый вход + адаптивный) === */
+        body { 
+            margin: 0; 
+            background: #1a1a1a; 
+            color: #e6e6e6; 
+            font-family: Arial, sans-serif; 
+        }
+        #access-gate {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        #content { display: none; } /* Контент скрыт до ввода */
+        .warning { 
+            background: #000; 
+            padding: 20px; 
+            border: 3px solid #ff0000; 
+            max-width: 600px; 
+        }
+        button {
+            background: #ff0000; 
+            color: white; 
+            border: none; 
+            padding: 15px 30px; 
+            font-size: 18px; 
+            cursor: pointer; 
+            margin-top: 20px;
+        }
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+            gap: 15px; 
+            padding: 20px; 
+        }
+        .thumb { 
+            background: #333; 
+            height: 200px; 
+            border-radius: 4px; 
+            overflow: hidden; 
+        }
+    </style>
 </head>
 <body>
-<div class="glitch"></div>
-<div class="terminal">
-  <h1>>_ CHAOS ENGINE v9.4 [ACTIVATED]</h1>
-  <p>> Injecting fractal payload...</p>
-  <p>> Bypassing 127.0.0.1 security</p>
-  <p>> [!] WARNING: SYSTEM CORRUPTION IMMINENT</p>
-  <div class="progress-bar"></div>
-  <p id="counter">DESTRUCTION PROGRESS: 0%</p>
-</div>
+    <!-- === ВРАТА ДОСТУПА (требует подтверждения 18+) === -->
+    <div id="access-gate">
+        <div class="warning">
+            <h2>СТРОГО 18+</h2>
+            <p>Этот сайт содержит материалы для взрослых. Нажимая "Войти", вы подтверждаете свой возраст.</p>
+            <button onclick="unlockContent()">ВОЙТИ</button>
+        </div>
+    </div>
 
-<script>
-  // Чисто визуальный "вирус" без реального вреда
-  let percent = 0;
-  const timer = setInterval(() => {
-    percent += Math.floor(Math.random() * 15);
-    document.getElementById('counter').innerHTML = 
-      `DESTRUCTION PROGRESS: ${percent > 100 ? 100 : percent}%`;
-    if (percent >= 100) clearInterval(timer);
-  }, 800);
-  
-  // Фиктивное шифрование (для атмосферы)
-  document.body.addEventListener('click', () => {
-    alert("> CRITICAL ERROR!\n> BIOS SIGNATURE VERIFICATION FAILED");
-  });
-</script>
+    <!-- === ОСНОВНОЙ КОНТЕНТ (скрыт изначально) === -->
+    <div id="content">
+        <header style="background: #000; padding: 10px; display: flex; justify-content: space-between;">
+            <h1>RED ROOM</h1>
+            <nav>
+                <a href="#" style="color: #ff0000; margin: 0 10px;">Главная</a>
+                <a href="#" style="color: #ff0000; margin: 0 10px;">Категории</a>
+                <a href="#" style="color: #ff0000; margin: 0 10px;">Live</a>
+            </nav>
+        </header>
+        
+        <div class="grid">
+            <!-- Плейсхолдеры контента (6 блоков) -->
+            <div class="thumb"></div>
+            <div class="thumb"></div>
+            <div class="thumb"></div>
+            <div class="thumb"></div>
+            <div class="thumb"></div>
+            <div class="thumb"></div>
+        </div>
+    </div>
+
+    <script>
+        // === ФУНКЦИЯ РАЗБЛОКИРОВКИ ===
+        function unlockContent() {
+            document.getElementById("access-gate").style.display = "none";
+            document.getElementById("content").style.display = "block";
+            
+            // Автоподгрузка контента (плейсхолдер)
+            const thumbs = document.querySelectorAll('.thumb');
+            thumbs.forEach(thumb => {
+                thumb.innerHTML = `<img src="placeholder.jpg" alt="18+ content" style="width:100%; height:100%; object-fit:cover;">`;
+            });
+        }
+
+        // === ЗАЩИТА ОТ ЗАКРЫТИЯ (если деревня захочет) ===
+        window.onbeforeunload = function() {
+            return "Уверены что хотите уйти?";
+        };
+    </script>
 </body>
 </html>
-
-
-  
-
-    
