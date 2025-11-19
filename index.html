@@ -4,14 +4,149 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Варя - Самая Прекрасная</title>
-    <link rel="stylesheet" href="стиль.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 20px #ff9a9e; }
+            to { box-shadow: 0 0 30px #ff6b6b; }
+        }
+        
+        h1 {
+            color: #fff;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+        
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 6s ease-in infinite;
+            opacity: 0.7;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .compliments {
+            display: grid;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .compliment-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.1em;
+            color: #333;
+            transform: scale(0.95);
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s ease forwards;
+            opacity: 0;
+        }
+        
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .compliment-card:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 1);
+        }
+        
+        .photo-frame {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border: 5px solid white;
+            border-radius: 50%;
+            overflow: hidden;
+            animation: rotate 20s linear infinite;
+            box-shadow: 0 0 25px rgba(255, 107, 107, 0.5);
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkle 1.5s linear infinite;
+        }
+        
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+    </style>
 </head>
 <body>
     <div class="hearts" id="hearts"></div>
     <div class="container">
         <div class="header">
             <h1>💖 ВАРЯ 💖</h1>
-            <p class="subtitle">Самая прекрасная девушка во Вселенной</p>
+            <p style="color: white; font-size: 1.2em;">Самая прекрасная девушка во Вселенной</p>
             
             <div class="photo-frame">
                 <div class="photo-placeholder">
@@ -25,6 +160,88 @@
         </div>
     </div>
 
-    <script src="site.html"></script>
+    <script>
+        // Создание плавающих сердечек
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            for (let i = 0; i < 50; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '💖';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDelay = Math.random() * 6 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heartsContainer.appendChild(heart);
+            }
+        }
+        
+        // Создание блесток
+        function createSparkles() {
+            setInterval(() => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + 'vw';
+                sparkle.style.top = Math.random() * 100 + 'vh';
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => {
+                    sparkle.remove();
+                }, 1500);
+            }, 100);
+        }
+        
+        // Список комплиментов для Вари
+        const compliments = [
+            "Твоя улыбка освещает весь мир 🌟",
+            "Ты невероятно прекрасна каждый день 💫",
+            "Твои глаза - самые красивые во Вселенной ✨",
+            "Ты умнее всех и прекраснее всех одновременно 💖",
+            "Твоя душа такая же красивая, как и внешность 🌸",
+            "Ты делаешь этот мир лучше просто своим существованием 🌈",
+            "Твоя энергия заряжает позитивом всех вокруг ⚡",
+            "Ты самая желанная и любимая 💕",
+            "Твоё сердце полно доброты и тепла 🔥",
+            "Ты вдохновляешь на великие дела 🎯",
+            "Твоя красота не поддается описанию 📝",
+            "Ты - воплощение совершенства 💎",
+            "С тобой хочется прожить вечность ⏳",
+            "Твои мечты обязательно сбудутся 🌠",
+            "Ты заслуживаешь всего самого лучшего 🏆",
+            "Твоя нежность растапливает самые холодные сердца ❄️",
+            "Ты - самая яркая звезда на небе 🌟",
+            "Твоё присутствие делает любой день особенным 🎉",
+            "Ты уникальна и неповторима 🦄",
+            "Твоя красота с каждым днем только расцветает 🌷"
+        ];
+        
+        // Добавление комплиментов на страницу
+        function displayCompliments() {
+            const container = document.getElementById('compliments');
+            compliments.forEach((compliment, index) => {
+                const card = document.createElement('div');
+                card.className = 'compliment-card';
+                card.textContent = compliment;
+                card.style.animationDelay = (index * 0.1) + 's';
+                container.appendChild(card);
+            });
+        }
+        
+        // Инициализация всех эффектов
+        function init() {
+            createHearts();
+            createSparkles();
+            displayCompliments();
+        }
+        
+        // Запуск при загрузке страницы
+        document.addEventListener('DOMContentLoaded', init);
+        
+        // Добавление эффекта параллакса при движении
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            document.querySelector('.header').style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+    </script>
 </body>
 </html>
