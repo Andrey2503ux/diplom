@@ -3,245 +3,1039 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Варя - Самая Прекрасная</title>
+    <title>Говорящая Варюша</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
         }
-        
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-            overflow-x: hidden;
+            background: linear-gradient(135deg, #ffd6e7, #c1f0ff);
             min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 100%;
-            padding: 20px;
-        }
-        
-        .header {
-            text-align: center;
-            padding: 40px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            margin-bottom: 30px;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
-        
-        @keyframes glow {
-            from { box-shadow: 0 0 20px #ff9a9e; }
-            to { box-shadow: 0 0 30px #ff6b6b; }
-        }
-        
-        h1 {
-            color: #fff;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            margin-bottom: 10px;
-        }
-        
-        .hearts {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        .heart {
-            position: absolute;
-            font-size: 20px;
-            animation: float 6s ease-in infinite;
-            opacity: 0.7;
-        }
-        
-        @keyframes float {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
-        
-        .compliments {
-            display: grid;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .compliment-card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 15px;
-            text-align: center;
-            font-size: 1.1em;
-            color: #333;
-            transform: scale(0.95);
-            transition: all 0.3s ease;
-            animation: slideIn 0.5s ease forwards;
-            opacity: 0;
-        }
-        
-        @keyframes slideIn {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-        
-        .compliment-card:hover {
-            transform: scale(1.05);
-            background: rgba(255, 255, 255, 1);
-        }
-        
-        .photo-frame {
-            width: 200px;
-            height: 200px;
-            margin: 20px auto;
-            border: 5px solid white;
-            border-radius: 50%;
-            overflow: hidden;
-            animation: rotate 20s linear infinite;
-            box-shadow: 0 0 25px rgba(255, 107, 107, 0.5);
-        }
-        
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        .photo-placeholder {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
             display: flex;
-            align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 1.2em;
+            align-items: center;
+            padding: 20px;
         }
-        
-        .sparkle {
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ff66a3;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 0 #ffccdd;
+        }
+
+        .character-container {
+            position: relative;
+            margin: 30px auto;
+            width: 300px;
+            height: 400px;
+        }
+
+        .character {
+            width: 100%;
+            height: 100%;
+            background: #ffb6c1;
+            border-radius: 50% 50% 40% 40%;
+            position: relative;
+            border: 5px solid #ff8fab;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .character:hover {
+            transform: scale(1.05);
+        }
+
+        .face {
             position: absolute;
-            width: 4px;
-            height: 4px;
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+        }
+
+        .eyes {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .eye {
+            width: 40px;
+            height: 40px;
             background: white;
             border-radius: 50%;
-            animation: sparkle 1.5s linear infinite;
+            border: 3px solid #ff66a3;
+            position: relative;
         }
-        
-        @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
+
+        .pupil {
+            width: 20px;
+            height: 20px;
+            background: #ff66a3;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .mouth {
+            width: 60px;
+            height: 30px;
+            background: #ff3366;
+            border-radius: 0 0 30px 30px;
+            margin: 0 auto;
+            transition: height 0.3s;
+        }
+
+        .talking .mouth {
+            height: 15px;
+            animation: talk 0.5s infinite alternate;
+        }
+
+        @keyframes talk {
+            0% { height: 15px; }
+            100% { height: 30px; }
+        }
+
+        .hair {
+            width: 100%;
+            height: 100px;
+            background: #ffcc00;
+            border-radius: 50% 50% 0 0;
+            position: absolute;
+            top: -20px;
+        }
+
+        .speech-bubble {
+            background: white;
+            border: 3px solid #ff66a3;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 500px;
+            min-height: 80px;
+            position: relative;
+            font-size: 1.2em;
+            color: #333;
+            box-shadow: 3px 3px 0 #ffccdd;
+        }
+
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            border: 10px solid transparent;
+            border-top-color: #ff66a3;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .action-btn {
+            background: #ff66a3;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .action-btn:hover {
+            background: #ff3366;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(255,51,102,0.3);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            color: #ff66a3;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .mood-indicator {
+            margin: 20px 0;
+            font-size: 1.3em;
+            color: #ff66a3;
+        }
+
+        .achievements {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            text-align: left;
+        }
+
+        .achievement {
+            background: #e6f7ff;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 5px solid #ff66a3;
+        }
+
+        .unlocked {
+            background: #e8ffe8;
+            border-left-color: #4CAF50;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="hearts" id="hearts"></div>
     <div class="container">
-        <div class="header">
-            <h1>💖 ВАРЯ 💖</h1>
-            <p style="color: white; font-size: 1.2em;">Самая прекрасная девушка во Вселенной</p>
-            
-            <div class="photo-frame">
-                <div class="photo-placeholder">
-                    💫 Твое фото здесь 💫
+        <h1>🎮 Говорящая Варюша 🎮</h1>
+        
+        <div class="character-container">
+            <div class="hair"></div>
+            <div class="character" id="varusha">
+                <div class="face">
+                    <div class="eyes">
+                        <div class="eye">
+                            <div class="pupil"></div>
+                        </div>
+                        <div class="eye">
+                            <div class="pupil"></div>
+                        </div>
+                    </div>
+                    <div class="mouth" id="mouth"></div>
                 </div>
             </div>
         </div>
         
-        <div class="compliments" id="compliments">
-            <!-- Комплименты будут добавлены через JavaScript -->
+        <div class="speech-bubble" id="speech">
+            Привет! Я Варюша! Пощекочи меня или нажми на кнопки ниже!
+        </div>
+        
+        <div class="mood-indicator" id="mood">
+            Настроение: 😊 Радостная
+        </div>
+        
+        <div class="controls">
+            <button class="action-btn" onclick="tickle()">🎀 Пощекотать</button>
+            <button class="action-btn" onclick="tellJoke()">😂 Рассказать шутку</button>
+            <button class="action-btn" onclick="feed()">🍕 Угостить</button>
+            <button class="action-btn" onclick="dance()">💃 Потанцевать</button>
+            <button class="action-btn" onclick="askQuestion()">❓ Задать вопрос</button>
+            <button class="action-btn" onclick="sing()">🎤 Спеть песню</button>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="happiness">100</div>
+                <div class="stat-label">Счастье</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="energy">100</div>
+                <div class="stat-label">Энергия</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="friendship">50</div>
+                <div class="stat-label">Дружба</div>
+            </div>
+        </div>
+        
+        <div class="achievements">
+            <h3>🏆 Достижения:</h3>
+            <div class="achievement" id="ach1">Познакомиться с Варюшей</div>
+            <div class="achievement" id="ach2">10 раз пощекотать</div>
+            <div class="achievement" id="ach3">Рассказать 5 шуток</div>
+            <div class="achievement" id="ach4">Достичь 200 очков дружбы</div>
         </div>
     </div>
 
     <script>
-        // Создание плавающих сердечек
-        function createHearts() {
-            const heartsContainer = document.getElementById('hearts');
-            for (let i = 0; i < 50; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'heart';
-                heart.innerHTML = '💖';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDelay = Math.random() * 6 + 's';
-                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                heartsContainer.appendChild(heart);
+        const phrases = {
+            greeting: [
+                "Привет! Как твои дела?",
+                "О, кто это к нам пришёл!",
+                "Я так рада тебя видеть!",
+                "Приветик! Давай повеселимся!"
+            ],
+            tickle: [
+                "Ха-ха-ха! Щекотно!",
+                "Ай-ай-ай! Перестань!",
+                "Хи-хи-хи! Я очень щекотливая!",
+                "Смеюсь до слёз! Ха-ха!"
+            ],
+            joke: [
+                "Что программист сказал перед смертью? Hello world!",
+                "Почему математики такие хорошие садовники? Потому что у них есть корни!",
+                "Что говорит байт биту? Мы будем друзьями навеки!",
+                "Почему компьютер пошел к врачу? У него был вирус!"
+            ],
+            food: [
+                "Ммм... вкуснятина! Спасибо!",
+                "Я на диете! Но раз уж ты угощаешь...",
+                "Обожаю пиццу! Ты знал(а)?",
+                "Спасибо, теперь у меня есть силы для веселья!"
+            ],
+            dance: [
+                "Смотри как я могу! Ля-ля-ля!",
+                "Танец маленьких утят - мой любимый!",
+                "Раз, два, три... Вращение!",
+                "Я бы пошла на танцы, но они бывают только по средам!"
+            ],
+            question: [
+                "А ты знаешь, что я люблю розовый цвет?",
+                "Как думаешь, я больше похожа на кошку или на лисичку?",
+                "Хочешь услышать секрет? Шшш...",
+                "А ты часто играешь в такие игры?"
+            ],
+            sing: [
+                "🎵 Ла-ла-ла, я пою как соловей! 🎵",
+                "🎶 Дождик, дождик, перестань... 🎶",
+                "🎤 В лесу родилась ёлочка, в лесу она росла! 🎤",
+                "🎵 Мы делили апельсин, много нас, а он один! 🎵"
+            ]
+        };
+
+        let happiness = 100;
+        let energy = 100;
+        let friendship = 50;
+        let tickleCount = 0;
+        let jokeCount = 0;
+        let mood = "happy";
+
+        const moods = {
+            happy: { emoji: "😊", text: "Радостная" },
+            excited: { emoji: "🤩", text: "Восхищенная" },
+            tired: { emoji: "😴", text: "Уставшая" },
+            playful: { emoji: "😜", text: "Игривая" },
+            loved: { emoji: "😍", text: "Влюбленная" }
+        };
+
+        function getRandomPhrase(category) {
+            const categoryPhrases = phrases[category];
+            return categoryPhrases[Math.floor(Math.random() * categoryPhrases.length)];
+        }
+
+        function updateStats() {
+            document.getElementById('happiness').textContent = happiness;
+            document.getElementById('energy').textContent = energy;
+            document.getElementById('friendship').textContent = friendship;
+            
+            // Обновление настроения
+            if (happiness > 80) mood = "happy";
+            else if (energy < 30) mood = "tired";
+            else if (friendship > 150) mood = "loved";
+            else if (happiness > 60 && energy > 70) mood = "excited";
+            else mood = "playful";
+            
+            const moodEmoji = moods[mood].emoji;
+            const moodText = moods[mood].text;
+            document.getElementById('mood').innerHTML = `Настроение: ${moodEmoji} ${moodText}`;
+            
+            // Проверка достижений
+            checkAchievements();
+        }
+
+        function talk(phrase) {
+            const speechElement = document.getElementById('speech');
+            const mouth = document.getElementById('mouth');
+            const character = document.getElementById('varusha');
+            
+            speechElement.textContent = phrase;
+            character.classList.add('talking');
+            
+            // Остановка анимации через время
+            setTimeout(() => {
+                character.classList.remove('talking');
+            }, 2000);
+        }
+
+        function tickle() {
+            if (energy < 10) {
+                talk("Я слишком устала для щекотки...");
+                return;
+            }
+            
+            talk(getRandomPhrase('tickle'));
+            happiness = Math.min(happiness + 10, 100);
+            energy = Math.max(energy - 5, 0);
+            friendship += 5;
+            tickleCount++;
+            
+            updateStats();
+        }
+
+        function tellJoke() {
+            talk(getRandomPhrase('joke'));
+            happiness = Math.min(happiness + 15, 100);
+            friendship += 10;
+            jokeCount++;
+            
+            updateStats();
+        }
+
+        function feed() {
+            talk(getRandomPhrase('food'));
+            happiness = Math.min(happiness + 20, 100);
+            energy = Math.min(energy + 30, 100);
+            friendship += 15;
+            
+            updateStats();
+        }
+
+        function dance() {
+            if (energy < 20) {
+                talk("У меня нет сил танцевать...");
+                return;
+            }
+            
+            talk(getRandomPhrase('dance'));
+            happiness = Math.min(happiness + 25, 100);
+            energy = Math.max(energy - 20, 0);
+            friendship += 20;
+            
+            updateStats();
+        }
+
+        function askQuestion() {
+            talk(getRandomPhrase('question'));
+            happiness = Math.min(happiness + 5, 100);
+            friendship += 8;
+            
+            updateStats();
+        }
+
+        function sing() {
+            talk(getRandomPhrase('sing'));
+            happiness = Math.min(happiness + 30, 100);
+            energy = Math.max(energy - 10, 0);
+            friendship += 25;
+            
+            updateStats();
+        }
+
+        function checkAchievements() {
+            // Разблокировка достижений
+            const ach1 = document.getElementById('ach1');
+            const ach2 = document.getElementById('ach2');
+            const ach3 = document.getElementById('ach3');
+            const ach4 = document.getElementById('ach4');
+            
+            // Все начинают с первого достижения
+            ach1.classList.add('unlocked');
+            
+            if (tickleCount >= 10) {
+                ach2.classList.add('unlocked');
+            }
+            
+            if (jokeCount >= 5) {
+                ach3.classList.add('unlocked');
+            }
+            
+            if (friendship >= 200) {
+                ach4.classList.add('unlocked');
             }
         }
-        
-        // Создание блесток
-        function createSparkles() {
-            setInterval(() => {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = Math.random() * 100 + 'vw';
-                sparkle.style.top = Math.random() * 100 + 'vh';
-                document.body.appendChild(sparkle);
-                
-                setTimeout(() => {
-                    sparkle.remove();
-                }, 1500);
-            }, 100);
-        }
-        
-        // Список комплиментов для Вари
-        const compliments = [
-            "Твоя улыбка освещает весь мир 🌟",
-            "Ты невероятно прекрасна каждый день 💫",
-            "Твои глаза - самые красивые во Вселенной ✨",
-            "Ты умнее всех и прекраснее всех одновременно 💖",
-            "Твоя душа такая же красивая, как и внешность 🌸",
-            "Ты делаешь этот мир лучше просто своим существованием 🌈",
-            "Твоя энергия заряжает позитивом всех вокруг ⚡",
-            "Ты самая желанная и любимая 💕",
-            "Твоё сердце полно доброты и тепла 🔥",
-            "Ты вдохновляешь на великие дела 🎯",
-            "Твоя красота не поддается описанию 📝",
-            "Ты - воплощение совершенства 💎",
-            "С тобой хочется прожить вечность ⏳",
-            "Твои мечты обязательно сбудутся 🌠",
-            "Ты заслуживаешь всего самого лучшего 🏆",
-            "Твоя нежность растапливает самые холодные сердца ❄️",
-            "Ты - самая яркая звезда на небе 🌟",
-            "Твоё присутствие делает любой день особенным 🎉",
-            "Ты уникальна и неповторима 🦄",
-            "Твоя красота с каждым днем только расцветает 🌷"
-        ];
-        
-        // Добавление комплиментов на страницу
-        function displayCompliments() {
-            const container = document.getElementById('compliments');
-            compliments.forEach((compliment, index) => {
-                const card = document.createElement('div');
-                card.className = 'compliment-card';
-                card.textContent = compliment;
-                card.style.animationDelay = (index * 0.1) + 's';
-                container.appendChild(card);
-            });
-        }
-        
-        // Инициализация всех эффектов
-        function init() {
-            createHearts();
-            createSparkles();
-            displayCompliments();
-        }
-        
-        // Запуск при загрузке страницы
-        document.addEventListener('DOMContentLoaded', init);
-        
-        // Добавление эффекта параллакса при движении
-        document.addEventListener('mousemove', (e) => {
-            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
-            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
-            document.querySelector('.header').style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+        // Инициализация
+        document.getElementById('varusha').addEventListener('click', () => {
+            if (Math.random() > 0.5) {
+                tickle();
+            } else {
+                talk(getRandomPhrase('greeting'));
+            }
         });
+
+        // Авто-обновление энергии каждую минуту
+        setInterval(() => {
+            if (energy < 100) {
+                energy = Math.min(energy + 1, 100);
+                updateStats();
+            }
+        }, 60000);
+
+        // Первое обновление
+        updateStats();
+
+        // Случайные реплики каждые 30 секунд
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                const categories = Object.keys(phrases);
+                const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+                talk(getRandomPhrase(randomCategory));
+            }
+        }, 30000);
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Говорящая Варюша</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffd6e7, #c1f0ff);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #ff66a3;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 0 #ffccdd;
+        }
+
+        .character-container {
+            position: relative;
+            margin: 30px auto;
+            width: 300px;
+            height: 400px;
+        }
+
+        .character {
+            width: 100%;
+            height: 100%;
+            background: #ffb6c1;
+            border-radius: 50% 50% 40% 40%;
+            position: relative;
+            border: 5px solid #ff8fab;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .character:hover {
+            transform: scale(1.05);
+        }
+
+        .face {
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+        }
+
+        .eyes {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .eye {
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            border: 3px solid #ff66a3;
+            position: relative;
+        }
+
+        .pupil {
+            width: 20px;
+            height: 20px;
+            background: #ff66a3;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        .mouth {
+            width: 60px;
+            height: 30px;
+            background: #ff3366;
+            border-radius: 0 0 30px 30px;
+            margin: 0 auto;
+            transition: height 0.3s;
+        }
+
+        .talking .mouth {
+            height: 15px;
+            animation: talk 0.5s infinite alternate;
+        }
+
+        @keyframes talk {
+            0% { height: 15px; }
+            100% { height: 30px; }
+        }
+
+        .hair {
+            width: 100%;
+            height: 100px;
+            background: #ffcc00;
+            border-radius: 50% 50% 0 0;
+            position: absolute;
+            top: -20px;
+        }
+
+        .speech-bubble {
+            background: white;
+            border: 3px solid #ff66a3;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 500px;
+            min-height: 80px;
+            position: relative;
+            font-size: 1.2em;
+            color: #333;
+            box-shadow: 3px 3px 0 #ffccdd;
+        }
+
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            border: 10px solid transparent;
+            border-top-color: #ff66a3;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .action-btn {
+            background: #ff66a3;
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .action-btn:hover {
+            background: #ff3366;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(255,51,102,0.3);
+        }
+
+        .action-btn:active {
+            transform: translateY(0);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            color: #ff66a3;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .mood-indicator {
+            margin: 20px 0;
+            font-size: 1.3em;
+            color: #ff66a3;
+        }
+
+        .achievements {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 15px;
+            text-align: left;
+        }
+
+        .achievement {
+            background: #e6f7ff;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border-left: 5px solid #ff66a3;
+        }
+
+        .unlocked {
+            background: #e8ffe8;
+            border-left-color: #4CAF50;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Говорящая Варюша 🎮</h1>
+        
+        <div class="character-container">
+            <div class="hair"></div>
+            <div class="character" id="varusha">
+                <div class="face">
+                    <div class="eyes">
+                        <div class="eye">
+                            <div class="pupil"></div>
+                        </div>
+                        <div class="eye">
+                            <div class="pupil"></div>
+                        </div>
+                    </div>
+                    <div class="mouth" id="mouth"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="speech-bubble" id="speech">
+            Привет! Я Варюша! Пощекочи меня или нажми на кнопки ниже!
+        </div>
+        
+        <div class="mood-indicator" id="mood">
+            Настроение: 😊 Радостная
+        </div>
+        
+        <div class="controls">
+            <button class="action-btn" onclick="tickle()">🎀 Пощекотать</button>
+            <button class="action-btn" onclick="tellJoke()">😂 Рассказать шутку</button>
+            <button class="action-btn" onclick="feed()">🍕 Угостить</button>
+            <button class="action-btn" onclick="dance()">💃 Потанцевать</button>
+            <button class="action-btn" onclick="askQuestion()">❓ Задать вопрос</button>
+            <button class="action-btn" onclick="sing()">🎤 Спеть песню</button>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="happiness">100</div>
+                <div class="stat-label">Счастье</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="energy">100</div>
+                <div class="stat-label">Энергия</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="friendship">50</div>
+                <div class="stat-label">Дружба</div>
+            </div>
+        </div>
+        
+        <div class="achievements">
+            <h3>🏆 Достижения:</h3>
+            <div class="achievement" id="ach1">Познакомиться с Варюшей</div>
+            <div class="achievement" id="ach2">10 раз пощекотать</div>
+            <div class="achievement" id="ach3">Рассказать 5 шуток</div>
+            <div class="achievement" id="ach4">Достичь 200 очков дружбы</div>
+        </div>
+    </div>
+
+    <script>
+        const phrases = {
+            greeting: [
+                "Привет! Как твои дела?",
+                "О, кто это к нам пришёл!",
+                "Я так рада тебя видеть!",
+                "Приветик! Давай повеселимся!"
+            ],
+            tickle: [
+                "Ха-ха-ха! Щекотно!",
+                "Ай-ай-ай! Перестань!",
+                "Хи-хи-хи! Я очень щекотливая!",
+                "Смеюсь до слёз! Ха-ха!"
+            ],
+            joke: [
+                "Что программист сказал перед смертью? Hello world!",
+                "Почему математики такие хорошие садовники? Потому что у них есть корни!",
+                "Что говорит байт биту? Мы будем друзьями навеки!",
+                "Почему компьютер пошел к врачу? У него был вирус!"
+            ],
+            food: [
+                "Ммм... вкуснятина! Спасибо!",
+                "Я на диете! Но раз уж ты угощаешь...",
+                "Обожаю пиццу! Ты знал(а)?",
+                "Спасибо, теперь у меня есть силы для веселья!"
+            ],
+            dance: [
+                "Смотри как я могу! Ля-ля-ля!",
+                "Танец маленьких утят - мой любимый!",
+                "Раз, два, три... Вращение!",
+                "Я бы пошла на танцы, но они бывают только по средам!"
+            ],
+            question: [
+                "А ты знаешь, что я люблю розовый цвет?",
+                "Как думаешь, я больше похожа на кошку или на лисичку?",
+                "Хочешь услышать секрет? Шшш...",
+                "А ты часто играешь в такие игры?"
+            ],
+            sing: [
+                "🎵 Ла-ла-ла, я пою как соловей! 🎵",
+                "🎶 Дождик, дождик, перестань... 🎶",
+                "🎤 В лесу родилась ёлочка, в лесу она росла! 🎤",
+                "🎵 Мы делили апельсин, много нас, а он один! 🎵"
+            ]
+        };
+
+        let happiness = 100;
+        let energy = 100;
+        let friendship = 50;
+        let tickleCount = 0;
+        let jokeCount = 0;
+        let mood = "happy";
+
+        const moods = {
+            happy: { emoji: "😊", text: "Радостная" },
+            excited: { emoji: "🤩", text: "Восхищенная" },
+            tired: { emoji: "😴", text: "Уставшая" },
+            playful: { emoji: "😜", text: "Игривая" },
+            loved: { emoji: "😍", text: "Влюбленная" }
+        };
+
+        function getRandomPhrase(category) {
+            const categoryPhrases = phrases[category];
+            return categoryPhrases[Math.floor(Math.random() * categoryPhrases.length)];
+        }
+
+        function updateStats() {
+            document.getElementById('happiness').textContent = happiness;
+            document.getElementById('energy').textContent = energy;
+            document.getElementById('friendship').textContent = friendship;
+            
+            // Обновление настроения
+            if (happiness > 80) mood = "happy";
+            else if (energy < 30) mood = "tired";
+            else if (friendship > 150) mood = "loved";
+            else if (happiness > 60 && energy > 70) mood = "excited";
+            else mood = "playful";
+            
+            const moodEmoji = moods[mood].emoji;
+            const moodText = moods[mood].text;
+            document.getElementById('mood').innerHTML = `Настроение: ${moodEmoji} ${moodText}`;
+            
+            // Проверка достижений
+            checkAchievements();
+        }
+
+        function talk(phrase) {
+            const speechElement = document.getElementById('speech');
+            const mouth = document.getElementById('mouth');
+            const character = document.getElementById('varusha');
+            
+            speechElement.textContent = phrase;
+            character.classList.add('talking');
+            
+            // Остановка анимации через время
+            setTimeout(() => {
+                character.classList.remove('talking');
+            }, 2000);
+        }
+
+        function tickle() {
+            if (energy < 10) {
+                talk("Я слишком устала для щекотки...");
+                return;
+            }
+            
+            talk(getRandomPhrase('tickle'));
+            happiness = Math.min(happiness + 10, 100);
+            energy = Math.max(energy - 5, 0);
+            friendship += 5;
+            tickleCount++;
+            
+            updateStats();
+        }
+
+        function tellJoke() {
+            talk(getRandomPhrase('joke'));
+            happiness = Math.min(happiness + 15, 100);
+            friendship += 10;
+            jokeCount++;
+            
+            updateStats();
+        }
+
+        function feed() {
+            talk(getRandomPhrase('food'));
+            happiness = Math.min(happiness + 20, 100);
+            energy = Math.min(energy + 30, 100);
+            friendship += 15;
+            
+            updateStats();
+        }
+
+        function dance() {
+            if (energy < 20) {
+                talk("У меня нет сил танцевать...");
+                return;
+            }
+            
+            talk(getRandomPhrase('dance'));
+            happiness = Math.min(happiness + 25, 100);
+            energy = Math.max(energy - 20, 0);
+            friendship += 20;
+            
+            updateStats();
+        }
+
+        function askQuestion() {
+            talk(getRandomPhrase('question'));
+            happiness = Math.min(happiness + 5, 100);
+            friendship += 8;
+            
+            updateStats();
+        }
+
+        function sing() {
+            talk(getRandomPhrase('sing'));
+            happiness = Math.min(happiness + 30, 100);
+            energy = Math.max(energy - 10, 0);
+            friendship += 25;
+            
+            updateStats();
+        }
+
+        function checkAchievements() {
+            // Разблокировка достижений
+            const ach1 = document.getElementById('ach1');
+            const ach2 = document.getElementById('ach2');
+            const ach3 = document.getElementById('ach3');
+            const ach4 = document.getElementById('ach4');
+            
+            // Все начинают с первого достижения
+            ach1.classList.add('unlocked');
+            
+            if (tickleCount >= 10) {
+                ach2.classList.add('unlocked');
+            }
+            
+            if (jokeCount >= 5) {
+                ach3.classList.add('unlocked');
+            }
+            
+            if (friendship >= 200) {
+                ach4.classList.add('unlocked');
+            }
+        }
+
+        // Инициализация
+        document.getElementById('varusha').addEventListener('click', () => {
+            if (Math.random() > 0.5) {
+                tickle();
+            } else {
+                talk(getRandomPhrase('greeting'));
+            }
+        });
+
+        // Авто-обновление энергии каждую минуту
+        setInterval(() => {
+            if (energy < 100) {
+                energy = Math.min(energy + 1, 100);
+                updateStats();
+            }
+        }, 60000);
+
+        // Первое обновление
+        updateStats();
+
+        // Случайные реплики каждые 30 секунд
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                const categories = Object.keys(phrases);
+                const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+                talk(getRandomPhrase(randomCategory));
+            }
+        }, 30000);
     </script>
 </body>
 </html>
