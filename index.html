@@ -3,1039 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Говорящая Варюша</title>
+    <title>ОГЭ-Драйв | Твой помощник</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --dark: #2d3436;
+            --light: #dfe6e9;
+            --accent: #ff7675;
+            --success: #00b894;
         }
 
         body {
-            background: linear-gradient(135deg, #ffd6e7, #c1f0ff);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
-        }
-
-        h1 {
-            color: #ff66a3;
-            margin-bottom: 20px;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 0 #ffccdd;
-        }
-
-        .character-container {
-            position: relative;
-            margin: 30px auto;
-            width: 300px;
-            height: 400px;
-        }
-
-        .character {
-            width: 100%;
-            height: 100%;
-            background: #ffb6c1;
-            border-radius: 50% 50% 40% 40%;
-            position: relative;
-            border: 5px solid #ff8fab;
-            transition: transform 0.3s;
-            cursor: pointer;
-        }
-
-        .character:hover {
-            transform: scale(1.05);
-        }
-
-        .face {
-            position: absolute;
-            top: 25%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-        }
-
-        .eyes {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-
-        .eye {
-            width: 40px;
-            height: 40px;
-            background: white;
-            border-radius: 50%;
-            border: 3px solid #ff66a3;
-            position: relative;
-        }
-
-        .pupil {
-            width: 20px;
-            height: 20px;
-            background: #ff66a3;
-            border-radius: 50%;
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-
-        .mouth {
-            width: 60px;
-            height: 30px;
-            background: #ff3366;
-            border-radius: 0 0 30px 30px;
-            margin: 0 auto;
-            transition: height 0.3s;
-        }
-
-        .talking .mouth {
-            height: 15px;
-            animation: talk 0.5s infinite alternate;
-        }
-
-        @keyframes talk {
-            0% { height: 15px; }
-            100% { height: 30px; }
-        }
-
-        .hair {
-            width: 100%;
-            height: 100px;
-            background: #ffcc00;
-            border-radius: 50% 50% 0 0;
-            position: absolute;
-            top: -20px;
-        }
-
-        .speech-bubble {
-            background: white;
-            border: 3px solid #ff66a3;
-            border-radius: 20px;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 500px;
-            min-height: 80px;
-            position: relative;
-            font-size: 1.2em;
-            color: #333;
-            box-shadow: 3px 3px 0 #ffccdd;
-        }
-
-        .speech-bubble:after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            border: 10px solid transparent;
-            border-top-color: #ff66a3;
-        }
-
-        .controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 30px 0;
-        }
-
-        .action-btn {
-            background: #ff66a3;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 15px;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
-        }
-
-        .action-btn:hover {
-            background: #ff3366;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(255,51,102,0.3);
-        }
-
-        .action-btn:active {
-            transform: translateY(0);
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            background: #f0f8ff;
-            padding: 15px;
-            border-radius: 15px;
-            margin-top: 20px;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.8em;
-            color: #ff66a3;
-            font-weight: bold;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .mood-indicator {
-            margin: 20px 0;
-            font-size: 1.3em;
-            color: #ff66a3;
-        }
-
-        .achievements {
-            margin-top: 30px;
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 15px;
-            text-align: left;
-        }
-
-        .achievement {
-            background: #e6f7ff;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border-left: 5px solid #ff66a3;
-        }
-
-        .unlocked {
-            background: #e8ffe8;
-            border-left-color: #4CAF50;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 2em;
-            }
-            
-            .controls {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🎮 Говорящая Варюша 🎮</h1>
-        
-        <div class="character-container">
-            <div class="hair"></div>
-            <div class="character" id="varusha">
-                <div class="face">
-                    <div class="eyes">
-                        <div class="eye">
-                            <div class="pupil"></div>
-                        </div>
-                        <div class="eye">
-                            <div class="pupil"></div>
-                        </div>
-                    </div>
-                    <div class="mouth" id="mouth"></div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="speech-bubble" id="speech">
-            Привет! Я Варюша! Пощекочи меня или нажми на кнопки ниже!
-        </div>
-        
-        <div class="mood-indicator" id="mood">
-            Настроение: 😊 Радостная
-        </div>
-        
-        <div class="controls">
-            <button class="action-btn" onclick="tickle()">🎀 Пощекотать</button>
-            <button class="action-btn" onclick="tellJoke()">😂 Рассказать шутку</button>
-            <button class="action-btn" onclick="feed()">🍕 Угостить</button>
-            <button class="action-btn" onclick="dance()">💃 Потанцевать</button>
-            <button class="action-btn" onclick="askQuestion()">❓ Задать вопрос</button>
-            <button class="action-btn" onclick="sing()">🎤 Спеть песню</button>
-        </div>
-        
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-value" id="happiness">100</div>
-                <div class="stat-label">Счастье</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value" id="energy">100</div>
-                <div class="stat-label">Энергия</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value" id="friendship">50</div>
-                <div class="stat-label">Дружба</div>
-            </div>
-        </div>
-        
-        <div class="achievements">
-            <h3>🏆 Достижения:</h3>
-            <div class="achievement" id="ach1">Познакомиться с Варюшей</div>
-            <div class="achievement" id="ach2">10 раз пощекотать</div>
-            <div class="achievement" id="ach3">Рассказать 5 шуток</div>
-            <div class="achievement" id="ach4">Достичь 200 очков дружбы</div>
-        </div>
-    </div>
-
-    <script>
-        const phrases = {
-            greeting: [
-                "Привет! Как твои дела?",
-                "О, кто это к нам пришёл!",
-                "Я так рада тебя видеть!",
-                "Приветик! Давай повеселимся!"
-            ],
-            tickle: [
-                "Ха-ха-ха! Щекотно!",
-                "Ай-ай-ай! Перестань!",
-                "Хи-хи-хи! Я очень щекотливая!",
-                "Смеюсь до слёз! Ха-ха!"
-            ],
-            joke: [
-                "Что программист сказал перед смертью? Hello world!",
-                "Почему математики такие хорошие садовники? Потому что у них есть корни!",
-                "Что говорит байт биту? Мы будем друзьями навеки!",
-                "Почему компьютер пошел к врачу? У него был вирус!"
-            ],
-            food: [
-                "Ммм... вкуснятина! Спасибо!",
-                "Я на диете! Но раз уж ты угощаешь...",
-                "Обожаю пиццу! Ты знал(а)?",
-                "Спасибо, теперь у меня есть силы для веселья!"
-            ],
-            dance: [
-                "Смотри как я могу! Ля-ля-ля!",
-                "Танец маленьких утят - мой любимый!",
-                "Раз, два, три... Вращение!",
-                "Я бы пошла на танцы, но они бывают только по средам!"
-            ],
-            question: [
-                "А ты знаешь, что я люблю розовый цвет?",
-                "Как думаешь, я больше похожа на кошку или на лисичку?",
-                "Хочешь услышать секрет? Шшш...",
-                "А ты часто играешь в такие игры?"
-            ],
-            sing: [
-                "🎵 Ла-ла-ла, я пою как соловей! 🎵",
-                "🎶 Дождик, дождик, перестань... 🎶",
-                "🎤 В лесу родилась ёлочка, в лесу она росла! 🎤",
-                "🎵 Мы делили апельсин, много нас, а он один! 🎵"
-            ]
-        };
-
-        let happiness = 100;
-        let energy = 100;
-        let friendship = 50;
-        let tickleCount = 0;
-        let jokeCount = 0;
-        let mood = "happy";
-
-        const moods = {
-            happy: { emoji: "😊", text: "Радостная" },
-            excited: { emoji: "🤩", text: "Восхищенная" },
-            tired: { emoji: "😴", text: "Уставшая" },
-            playful: { emoji: "😜", text: "Игривая" },
-            loved: { emoji: "😍", text: "Влюбленная" }
-        };
-
-        function getRandomPhrase(category) {
-            const categoryPhrases = phrases[category];
-            return categoryPhrases[Math.floor(Math.random() * categoryPhrases.length)];
-        }
-
-        function updateStats() {
-            document.getElementById('happiness').textContent = happiness;
-            document.getElementById('energy').textContent = energy;
-            document.getElementById('friendship').textContent = friendship;
-            
-            // Обновление настроения
-            if (happiness > 80) mood = "happy";
-            else if (energy < 30) mood = "tired";
-            else if (friendship > 150) mood = "loved";
-            else if (happiness > 60 && energy > 70) mood = "excited";
-            else mood = "playful";
-            
-            const moodEmoji = moods[mood].emoji;
-            const moodText = moods[mood].text;
-            document.getElementById('mood').innerHTML = `Настроение: ${moodEmoji} ${moodText}`;
-            
-            // Проверка достижений
-            checkAchievements();
-        }
-
-        function talk(phrase) {
-            const speechElement = document.getElementById('speech');
-            const mouth = document.getElementById('mouth');
-            const character = document.getElementById('varusha');
-            
-            speechElement.textContent = phrase;
-            character.classList.add('talking');
-            
-            // Остановка анимации через время
-            setTimeout(() => {
-                character.classList.remove('talking');
-            }, 2000);
-        }
-
-        function tickle() {
-            if (energy < 10) {
-                talk("Я слишком устала для щекотки...");
-                return;
-            }
-            
-            talk(getRandomPhrase('tickle'));
-            happiness = Math.min(happiness + 10, 100);
-            energy = Math.max(energy - 5, 0);
-            friendship += 5;
-            tickleCount++;
-            
-            updateStats();
-        }
-
-        function tellJoke() {
-            talk(getRandomPhrase('joke'));
-            happiness = Math.min(happiness + 15, 100);
-            friendship += 10;
-            jokeCount++;
-            
-            updateStats();
-        }
-
-        function feed() {
-            talk(getRandomPhrase('food'));
-            happiness = Math.min(happiness + 20, 100);
-            energy = Math.min(energy + 30, 100);
-            friendship += 15;
-            
-            updateStats();
-        }
-
-        function dance() {
-            if (energy < 20) {
-                talk("У меня нет сил танцевать...");
-                return;
-            }
-            
-            talk(getRandomPhrase('dance'));
-            happiness = Math.min(happiness + 25, 100);
-            energy = Math.max(energy - 20, 0);
-            friendship += 20;
-            
-            updateStats();
-        }
-
-        function askQuestion() {
-            talk(getRandomPhrase('question'));
-            happiness = Math.min(happiness + 5, 100);
-            friendship += 8;
-            
-            updateStats();
-        }
-
-        function sing() {
-            talk(getRandomPhrase('sing'));
-            happiness = Math.min(happiness + 30, 100);
-            energy = Math.max(energy - 10, 0);
-            friendship += 25;
-            
-            updateStats();
-        }
-
-        function checkAchievements() {
-            // Разблокировка достижений
-            const ach1 = document.getElementById('ach1');
-            const ach2 = document.getElementById('ach2');
-            const ach3 = document.getElementById('ach3');
-            const ach4 = document.getElementById('ach4');
-            
-            // Все начинают с первого достижения
-            ach1.classList.add('unlocked');
-            
-            if (tickleCount >= 10) {
-                ach2.classList.add('unlocked');
-            }
-            
-            if (jokeCount >= 5) {
-                ach3.classList.add('unlocked');
-            }
-            
-            if (friendship >= 200) {
-                ach4.classList.add('unlocked');
-            }
-        }
-
-        // Инициализация
-        document.getElementById('varusha').addEventListener('click', () => {
-            if (Math.random() > 0.5) {
-                tickle();
-            } else {
-                talk(getRandomPhrase('greeting'));
-            }
-        });
-
-        // Авто-обновление энергии каждую минуту
-        setInterval(() => {
-            if (energy < 100) {
-                energy = Math.min(energy + 1, 100);
-                updateStats();
-            }
-        }, 60000);
-
-        // Первое обновление
-        updateStats();
-
-        // Случайные реплики каждые 30 секунд
-        setInterval(() => {
-            if (Math.random() > 0.7) {
-                const categories = Object.keys(phrases);
-                const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-                talk(getRandomPhrase(randomCategory));
-            }
-        }, 30000);
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Говорящая Варюша</title>
-    <style>
-        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            transition: all 0.3s ease;
         }
 
-        body {
-            background: linear-gradient(135deg, #ffd6e7, #c1f0ff);
-            min-height: 100vh;
+        /* Тёмная тема для режима Паники */
+        body.panic-mode {
+            background-color: #2d3436;
+            color: white;
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: bold; cursor: pointer; }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 5%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 40px 5%;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            text-align: center;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .card:hover { transform: translateY(-10px); background: #f9f9ff; }
+
+        .assistants { padding: 40px 5%; text-align: center; background: white; }
+        
+        .assistant-list {
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
-        }
-
-        h1 {
-            color: #ff66a3;
-            margin-bottom: 20px;
-            font-size: 2.5em;
-            text-shadow: 2px 2px 0 #ffccdd;
-        }
-
-        .character-container {
-            position: relative;
-            margin: 30px auto;
-            width: 300px;
-            height: 400px;
-        }
-
-        .character {
-            width: 100%;
-            height: 100%;
-            background: #ffb6c1;
-            border-radius: 50% 50% 40% 40%;
-            position: relative;
-            border: 5px solid #ff8fab;
-            transition: transform 0.3s;
-            cursor: pointer;
-        }
-
-        .character:hover {
-            transform: scale(1.05);
-        }
-
-        .face {
-            position: absolute;
-            top: 25%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-        }
-
-        .eyes {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-
-        .eye {
-            width: 40px;
-            height: 40px;
-            background: white;
-            border-radius: 50%;
-            border: 3px solid #ff66a3;
-            position: relative;
-        }
-
-        .pupil {
-            width: 20px;
-            height: 20px;
-            background: #ff66a3;
-            border-radius: 50%;
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
-
-        .mouth {
-            width: 60px;
-            height: 30px;
-            background: #ff3366;
-            border-radius: 0 0 30px 30px;
-            margin: 0 auto;
-            transition: height 0.3s;
-        }
-
-        .talking .mouth {
-            height: 15px;
-            animation: talk 0.5s infinite alternate;
-        }
-
-        @keyframes talk {
-            0% { height: 15px; }
-            100% { height: 30px; }
-        }
-
-        .hair {
-            width: 100%;
-            height: 100px;
-            background: #ffcc00;
-            border-radius: 50% 50% 0 0;
-            position: absolute;
-            top: -20px;
-        }
-
-        .speech-bubble {
-            background: white;
-            border: 3px solid #ff66a3;
-            border-radius: 20px;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 500px;
-            min-height: 80px;
-            position: relative;
-            font-size: 1.2em;
-            color: #333;
-            box-shadow: 3px 3px 0 #ffccdd;
-        }
-
-        .speech-bubble:after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            border: 10px solid transparent;
-            border-top-color: #ff66a3;
-        }
-
-        .controls {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 30px 0;
-        }
-
-        .action-btn {
-            background: #ff66a3;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 15px;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
-        }
-
-        .action-btn:hover {
-            background: #ff3366;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(255,51,102,0.3);
-        }
-
-        .action-btn:active {
-            transform: translateY(0);
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            background: #f0f8ff;
-            padding: 15px;
-            border-radius: 15px;
+            gap: 20px;
+            flex-wrap: wrap;
             margin-top: 20px;
         }
 
-        .stat {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.8em;
-            color: #ff66a3;
-            font-weight: bold;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .mood-indicator {
-            margin: 20px 0;
-            font-size: 1.3em;
-            color: #ff66a3;
-        }
-
-        .achievements {
-            margin-top: 30px;
+        .helper {
+            width: 180px;
             padding: 20px;
-            background: #f9f9f9;
-            border-radius: 15px;
+            border: 2px dashed var(--secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .helper:hover { background: var(--secondary); color: white; transform: scale(1.05); }
+
+        /* Кнопка Паника */
+        .panic-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 118, 117, 0.5);
+            margin-top: 20px;
+        }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            color: var(--dark);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
             text-align: left;
         }
 
-        .achievement {
-            background: #e6f7ff;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border-left: 5px solid #ff66a3;
+        .close-modal {
+            float: right;
+            cursor: pointer;
+            font-size: 1.5rem;
+            font-weight: bold;
         }
 
-        .unlocked {
-            background: #e8ffe8;
-            border-left-color: #4CAF50;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                padding: 15px;
-            }
-            
-            h1 {
-                font-size: 2em;
-            }
-            
-            .controls {
-                grid-template-columns: 1fr;
-            }
-        }
+        footer { text-align: center; padding: 20px; background: var(--dark); color: white; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎮 Говорящая Варюша 🎮</h1>
-        
-        <div class="character-container">
-            <div class="hair"></div>
-            <div class="character" id="varusha">
-                <div class="face">
-                    <div class="eyes">
-                        <div class="eye">
-                            <div class="pupil"></div>
-                        </div>
-                        <div class="eye">
-                            <div class="pupil"></div>
-                        </div>
-                    </div>
-                    <div class="mouth" id="mouth"></div>
-                </div>
-            </div>
+
+<header>
+    <div class="logo" onclick="location.reload()">🚀 ОГЭ-ДРАЙВ</div>
+    <nav>
+        <a href="#subjects">Предметы</a>
+        <a href="#helpers">Помощники</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>Готовься к ОГЭ в кайф</h1>
+    <p>Выбери предмет и начни путь к заветной пятёрке.</p>
+    <button class="panic-btn" id="panicBtn">У МЕНЯ ПАНИКА!</button>
+</section>
+
+<section class="grid" id="subjects">
+    <div class="card" onclick="showTip('russian')">
+        <h3>📚 Русский язык</h3>
+        <p>Нажми, чтобы получить совет по сочинению.</p>
+    </div>
+    <div class="card" onclick="showTip('math')">
+        <h3>📐 Математика</h3>
+        <p>Как не завалить геометрию?</p>
+    </div>
+    <div class="card" onclick="showTip('geo')">
+        <h3>🌍 География</h3>
+        <p>Секрет работы с атласом.</p>
+    </div>
+    <div class="card" onclick="showTip('info')">
+        <h3>💻 Информатика</h3>
+        <p>Магия двоичной системы.</p>
+    </div>
+</section>
+
+<section class="assistants" id="helpers">
+    <h2>Твоя команда поддержки</h2>
+    <p>(Нажми на любого, чтобы услышать его)</p>
+    <div class="assistant-list">
+        <div class="helper" onclick="talk('arkadiy')">
+            <h4>🧐 Аркадий</h4>
+            <p>Филолог-душнила</p>
         </div>
-        
-        <div class="speech-bubble" id="speech">
-            Привет! Я Варюша! Пощекочи меня или нажми на кнопки ниже!
+        <div class="helper" onclick="talk('bro')">
+            <h4>🛹 Бро-Мат</h4>
+            <p>Твой кореш в мире чисел</p>
         </div>
-        
-        <div class="mood-indicator" id="mood">
-            Настроение: 😊 Радостная
-        </div>
-        
-        <div class="controls">
-            <button class="action-btn" onclick="tickle()">🎀 Пощекотать</button>
-            <button class="action-btn" onclick="tellJoke()">😂 Рассказать шутку</button>
-            <button class="action-btn" onclick="feed()">🍕 Угостить</button>
-            <button class="action-btn" onclick="dance()">💃 Потанцевать</button>
-            <button class="action-btn" onclick="askQuestion()">❓ Задать вопрос</button>
-            <button class="action-btn" onclick="sing()">🎤 Спеть песню</button>
-        </div>
-        
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-value" id="happiness">100</div>
-                <div class="stat-label">Счастье</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value" id="energy">100</div>
-                <div class="stat-label">Энергия</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value" id="friendship">50</div>
-                <div class="stat-label">Дружба</div>
-            </div>
-        </div>
-        
-        <div class="achievements">
-            <h3>🏆 Достижения:</h3>
-            <div class="achievement" id="ach1">Познакомиться с Варюшей</div>
-            <div class="achievement" id="ach2">10 раз пощекотать</div>
-            <div class="achievement" id="ach3">Рассказать 5 шуток</div>
-            <div class="achievement" id="ach4">Достичь 200 очков дружбы</div>
+        <div class="helper" onclick="talk('guide')">
+            <h4>🧭 Гео-Гид</h4>
+            <p>Путешественник</p>
         </div>
     </div>
+</section>
 
-    <script>
-        const phrases = {
-            greeting: [
-                "Привет! Как твои дела?",
-                "О, кто это к нам пришёл!",
-                "Я так рада тебя видеть!",
-                "Приветик! Давай повеселимся!"
-            ],
-            tickle: [
-                "Ха-ха-ха! Щекотно!",
-                "Ай-ай-ай! Перестань!",
-                "Хи-хи-хи! Я очень щекотливая!",
-                "Смеюсь до слёз! Ха-ха!"
-            ],
-            joke: [
-                "Что программист сказал перед смертью? Hello world!",
-                "Почему математики такие хорошие садовники? Потому что у них есть корни!",
-                "Что говорит байт биту? Мы будем друзьями навеки!",
-                "Почему компьютер пошел к врачу? У него был вирус!"
-            ],
-            food: [
-                "Ммм... вкуснятина! Спасибо!",
-                "Я на диете! Но раз уж ты угощаешь...",
-                "Обожаю пиццу! Ты знал(а)?",
-                "Спасибо, теперь у меня есть силы для веселья!"
-            ],
-            dance: [
-                "Смотри как я могу! Ля-ля-ля!",
-                "Танец маленьких утят - мой любимый!",
-                "Раз, два, три... Вращение!",
-                "Я бы пошла на танцы, но они бывают только по средам!"
-            ],
-            question: [
-                "А ты знаешь, что я люблю розовый цвет?",
-                "Как думаешь, я больше похожа на кошку или на лисичку?",
-                "Хочешь услышать секрет? Шшш...",
-                "А ты часто играешь в такие игры?"
-            ],
-            sing: [
-                "🎵 Ла-ла-ла, я пою как соловей! 🎵",
-                "🎶 Дождик, дождик, перестань... 🎶",
-                "🎤 В лесу родилась ёлочка, в лесу она росла! 🎤",
-                "🎵 Мы делили апельсин, много нас, а он один! 🎵"
-            ]
-        };
+<!-- Модальное окно Паники -->
+<div class="modal" id="panicModal">
+    <div class="modal-content">
+        <span class="close-modal" id="closeModal">&times;</span>
+        <h2 style="color: var(--accent)">🚨 ПЛАН СПАСЕНИЯ 🚨</h2>
+        <p>Без паники! Сделай глубокий вдох и начни с этого:</p>
+        <ul id="survivalPlan">
+            <!-- Сюда JS вставит пункты -->
+        </ul>
+        <button class="panic-btn" style="width: 100%" onclick="alert('Удачи! Ты справишься!')">Я В ДЕЛЕ</button>
+    </div>
+</div>
 
-        let happiness = 100;
-        let energy = 100;
-        let friendship = 50;
-        let tickleCount = 0;
-        let jokeCount = 0;
-        let mood = "happy";
+<footer>
+    <p>&copy; 2026 ОГЭ-Драйв. Твой успех — наша работа.</p>
+</footer>
 
-        const moods = {
-            happy: { emoji: "😊", text: "Радостная" },
-            excited: { emoji: "🤩", text: "Восхищенная" },
-            tired: { emoji: "😴", text: "Уставшая" },
-            playful: { emoji: "😜", text: "Игривая" },
-            loved: { emoji: "😍", text: "Влюбленная" }
-        };
+<script>
+    // 1. Логика режима ПАНИКА
+    const panicBtn = document.getElementById('panicBtn');
+    const modal = document.getElementById('panicModal');
+    const closeModal = document.getElementById('closeModal');
+    const survivalPlan = document.getElementById('survivalPlan');
 
-        function getRandomPhrase(category) {
-            const categoryPhrases = phrases[category];
-            return categoryPhrases[Math.floor(Math.random() * categoryPhrases.length)];
+    const steps = [
+        "Выпей стакан воды.",
+        "Реши 5 самых легких тестов для уверенности.",
+        "Посмотри видео-разбор задания №1 по любому предмету.",
+        "Отложи телефон на 25 минут (метод Помодоро).",
+        "Аркадий верит в тебя, а он редко ошибается!"
+    ];
+
+    panicBtn.addEventListener('click', () => {
+        modal.style.display = 'flex';
+        document.body.classList.add('panic-mode');
+        
+        // Заполняем план
+        survivalPlan.innerHTML = steps.map(step => `<li>${step}</li>`).join('');
+    });
+
+    closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+        document.body.classList.remove('panic-mode');
+    });
+
+    // 2. Советы по предметам
+    const tips = {
+        russian: "В задании 9.3 всегда используй два примера: один из текста, другой из жизни.",
+        math: "Помни формулу: $a^2 + b^2 = c^2$. Без Пифагора в геометрии делать нечего!",
+        geo: "Атлас — твой лучший легальный чит. Учись искать в нём страницы быстро.",
+        info: "В 15.1 робот — это просто. Главное — не забудь проверить условия стенок!"
+    };
+
+    function showTip(subject) {
+        alert(tips[subject]);
+    }
+
+    // 3. Фразы помощников
+    const phrases = {
+        arkadiy: "Слушай внимательно: 'не' с глаголами пишется раздельно. Запомни это, или я буду сниться тебе в кошмарах!",
+        bro: "Йоу! Математика — это как скейтборд: сначала падаешь, а потом делаешь крутые трюки с графиками. Погнали!",
+        guide: "Мир огромен! На ОГЭ по географии главное — понимать, где север, а где — полезные ископаемые. Я подскажу!"
+    };
+
+    function talk(who) {
+        const message = phrases[who];
+        // Можно сделать красивый баббл, но для начала хватит и а alert
+        alert(message);
+    }
+
+    // Закрытие модалки при клике вне её
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            document.body.classList.remove('panic-mode');
         }
+    }
+</script>
 
-        function updateStats() {
-            document.getElementById('happiness').textContent = happiness;
-            document.getElementById('energy').textContent = energy;
-            document.getElementById('friendship').textContent = friendship;
-            
-            // Обновление настроения
-            if (happiness > 80) mood = "happy";
-            else if (energy < 30) mood = "tired";
-            else if (friendship > 150) mood = "loved";
-            else if (happiness > 60 && energy > 70) mood = "excited";
-            else mood = "playful";
-            
-            const moodEmoji = moods[mood].emoji;
-            const moodText = moods[mood].text;
-            document.getElementById('mood').innerHTML = `Настроение: ${moodEmoji} ${moodText}`;
-            
-            // Проверка достижений
-            checkAchievements();
-        }
-
-        function talk(phrase) {
-            const speechElement = document.getElementById('speech');
-            const mouth = document.getElementById('mouth');
-            const character = document.getElementById('varusha');
-            
-            speechElement.textContent = phrase;
-            character.classList.add('talking');
-            
-            // Остановка анимации через время
-            setTimeout(() => {
-                character.classList.remove('talking');
-            }, 2000);
-        }
-
-        function tickle() {
-            if (energy < 10) {
-                talk("Я слишком устала для щекотки...");
-                return;
-            }
-            
-            talk(getRandomPhrase('tickle'));
-            happiness = Math.min(happiness + 10, 100);
-            energy = Math.max(energy - 5, 0);
-            friendship += 5;
-            tickleCount++;
-            
-            updateStats();
-        }
-
-        function tellJoke() {
-            talk(getRandomPhrase('joke'));
-            happiness = Math.min(happiness + 15, 100);
-            friendship += 10;
-            jokeCount++;
-            
-            updateStats();
-        }
-
-        function feed() {
-            talk(getRandomPhrase('food'));
-            happiness = Math.min(happiness + 20, 100);
-            energy = Math.min(energy + 30, 100);
-            friendship += 15;
-            
-            updateStats();
-        }
-
-        function dance() {
-            if (energy < 20) {
-                talk("У меня нет сил танцевать...");
-                return;
-            }
-            
-            talk(getRandomPhrase('dance'));
-            happiness = Math.min(happiness + 25, 100);
-            energy = Math.max(energy - 20, 0);
-            friendship += 20;
-            
-            updateStats();
-        }
-
-        function askQuestion() {
-            talk(getRandomPhrase('question'));
-            happiness = Math.min(happiness + 5, 100);
-            friendship += 8;
-            
-            updateStats();
-        }
-
-        function sing() {
-            talk(getRandomPhrase('sing'));
-            happiness = Math.min(happiness + 30, 100);
-            energy = Math.max(energy - 10, 0);
-            friendship += 25;
-            
-            updateStats();
-        }
-
-        function checkAchievements() {
-            // Разблокировка достижений
-            const ach1 = document.getElementById('ach1');
-            const ach2 = document.getElementById('ach2');
-            const ach3 = document.getElementById('ach3');
-            const ach4 = document.getElementById('ach4');
-            
-            // Все начинают с первого достижения
-            ach1.classList.add('unlocked');
-            
-            if (tickleCount >= 10) {
-                ach2.classList.add('unlocked');
-            }
-            
-            if (jokeCount >= 5) {
-                ach3.classList.add('unlocked');
-            }
-            
-            if (friendship >= 200) {
-                ach4.classList.add('unlocked');
-            }
-        }
-
-        // Инициализация
-        document.getElementById('varusha').addEventListener('click', () => {
-            if (Math.random() > 0.5) {
-                tickle();
-            } else {
-                talk(getRandomPhrase('greeting'));
-            }
-        });
-
-        // Авто-обновление энергии каждую минуту
-        setInterval(() => {
-            if (energy < 100) {
-                energy = Math.min(energy + 1, 100);
-                updateStats();
-            }
-        }, 60000);
-
-        // Первое обновление
-        updateStats();
-
-        // Случайные реплики каждые 30 секунд
-        setInterval(() => {
-            if (Math.random() > 0.7) {
-                const categories = Object.keys(phrases);
-                const randomCategory = categories[Math.floor(Math.random() * categories.length)];
-                talk(getRandomPhrase(randomCategory));
-            }
-        }, 30000);
-    </script>
 </body>
 </html>
