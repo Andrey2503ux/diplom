@@ -1,139 +1,59 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-    overflow-x: hidden;
-    min-height: 100vh;
-}
-
-.container {
-    max-width: 100%;
-    padding: 20px;
-}
-
-.header {
-    text-align: center;
-    padding: 40px 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    margin-bottom: 30px;
-    animation: glow 2s ease-in-out infinite alternate;
-}
-
-@keyframes glow {
-    from { box-shadow: 0 0 20px #ff9a9e; }
-    to { box-shadow: 0 0 30px #ff6b6b; }
-}
-
-h1 {
-    color: #fff;
-    font-size: 2.5em;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-    margin-bottom: 10px;
-}
-
-.subtitle {
-    color: white;
-    font-size: 1.2em;
-}
-
-.hearts {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-}
-
-.heart {
-    position: absolute;
-    font-size: 20px;
-    animation: float 6s ease-in infinite;
-    opacity: 0.7;
-}
-
-@keyframes float {
-    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-}
-
-.compliments {
-    display: grid;
-    gap: 15px;
-    margin-top: 30px;
-}
-
-.compliment-card {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 1.1em;
-    color: #333;
-    transform: scale(0.95);
-    transition: all 0.3s ease;
-    animation: slideIn 0.5s ease forwards;
-    opacity: 0;
-}
-
-@keyframes slideIn {
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.compliment-card:hover {
-    transform: scale(1.05);
-    background: rgba(255, 255, 255, 1);
-}
-
-.photo-frame {
-    width: 200px;
-    height: 200px;
-    margin: 20px auto;
-    border: 5px solid white;
-    border-radius: 50%;
-    overflow: hidden;
-    animation: rotate 20s linear infinite;
-    box-shadow: 0 0 25px rgba(255, 107, 107, 0.5);
-}
-
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-.photo-placeholder {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+    font-family: 'Inter', sans-serif;
+    background-color: #f0f2f5;
     display: flex;
-    align-items: center;
     justify-content: center;
-    color: white;
-    font-size: 1.2em;
+    padding: 40px 20px;
 }
 
-.sparkle {
-    position: absolute;
-    width: 4px;
-    height: 4px;
+.quiz-container {
     background: white;
-    border-radius: 50%;
-    animation: sparkle 1.5s linear infinite;
+    max-width: 700px;
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    padding: 30px;
 }
 
-@keyframes sparkle {
-    0%, 100% { opacity: 0; transform: scale(0); }
-    50% { opacity: 1; transform: scale(1); }
+.badge {
+    background: #e1f5fe;
+    color: #0288d1;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    font-weight: bold;
 }
+
+.question-step { display: none; margin-top: 20px; }
+.question-step.active { display: block; animation: fadeIn 0.4s; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9em; }
+th, td { border: 1px solid #edf2f7; padding: 12px; text-align: center; }
+th { background: #f8fafc; }
+
+.image-box img { max-width: 100%; height: auto; border: 1px solid #eee; border-radius: 8px; }
+
+.ans-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1.1em;
+    outline: none;
+}
+
+.options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+.opt-btn {
+    padding: 15px;
+    border: 1px solid #e2e8f0;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.opt-btn:hover { background: #f8fafc; border-color: #cbd5e0; }
+
+.controls { display: flex; justify-content: space-between; margin-top: 30px; }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
