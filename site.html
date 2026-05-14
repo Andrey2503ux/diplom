@@ -1,35 +1,222 @@
-const steps = document.querySelectorAll('.question-step');
-const nextBtn = document.getElementById('next-btn');
-const prevBtn = document.getElementById('prev-btn');
-let currentStep = 0;
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ОГЭ‑тренажёр — полная версия</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>📘 ОГЭ‑тренажёр: математика (полный пробник)</h1>
+        <div class="sub">24 задания • самопроверка • подготовка к экзамену</div>
+    </div>
 
-function updateNavigation() {
-    steps.forEach((step, idx) => {
-        step.classList.toggle('active', idx === currentStep);
-    });
-    
-    prevBtn.disabled = currentStep === 0;
-    nextBtn.innerText = currentStep === steps.length - 1 ? "Завершить" : "Далее";
-}
+    <div class="stats-bar">
+        <div class="score-badge">🎯 Верно: <span id="scoreDisplay">0</span> / <span id="totalTasks">24</span></div>
+        <div class="action-buttons">
+            <button class="btn-primary" id="checkAllBtn">✅ Проверить всё</button>
+            <button class="btn-secondary" id="resetBtn">⟳ Сбросить ответы</button>
+        </div>
+    </div>
 
-nextBtn.addEventListener('click', () => {
-    if (currentStep < steps.length - 1) {
-        currentStep++;
-        updateNavigation();
-    } else {
-        alert("Тест окончен! Проверь свои ответы по ключам.");
+    <div id="tasksContainer" class="tasks-list"></div>
+    <footer>⭐ Клик «Проверить» — оценит ответ. Enter в поле тоже работает. Для заданий 21,22 и промежутков учитываются разные форматы. Успешной подготовки!</footer>
+</div>
+
+<!-- Тот же самый скрипт, что и в index.html (можно скопировать полностью) -->
+<script>
+    const TASKS = [
+        { id: 1, text: "Хозяин бани выбирает печь. В таблице: печь №1 (8–12), №2 (10–16), №3 (9–15,5). Для каждой печи указан наименьший рекомендуемый объём. Установите соответствие: объём помещения 8 → ? , 9 → ? , 10 → ? . В ответ запишите три цифры подряд (например, 132).", answer: "132", normalize: (v) => v.trim().replace(/\s/g, '') },
+        { id: 2, text: "Объём парного отделения: длина 3,5 м, ширина 2,2 м, высота 2 м. Ответ в м³.", answer: "15.4", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 3, text: "Печь №2 (подходит по объёму) стоит 19500 руб. Доставка 1400 руб. Сколько рублей с доставкой?", answer: "20900", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 4, text: "Печь №2 стоимостью 19500 руб, скидка 10%. Новая цена (руб)?", answer: "17550", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 5, text: "Арка печи: вертикальный катет = 33 см, горизонтальная половинка хорды = 44 см. Радиус закругления (см) по Пифагору.", answer: "55", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 6, text: "Вычислите: 5,7 − 7,6.", answer: "-1.9", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 7, text: "Между какими числами заключено √60? 1) 20 и 22 2) 7 и 8 3) 59 и 61 4) 3 и 4. Введите номер варианта.", answer: "2", normalize: (v) => v.trim(), compare: (a,b) => a === b },
+        { id: 8, text: "(y/(5x) - 5x/y) : (y+5x) при x=1/7, y=1/4. Ответ десятичной дробью.", answer: "-2.6", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 9, text: "x² + 3x = 4. Корни запишите в порядке возрастания без пробелов (пример: -41).", answer: "-41", normalize: (v) => { let s = v.trim().replace(/\s/g,'').replace(',','').replace(';',''); if (s.includes('-4') && s.includes('1')) return '-41'; return s; }, compare: (a,b) => a === b || a === '-4,1' || a === '-4;1' },
+        { id: 10, text: "P(A)=1/4, P(B|A)=3/8, P(B|не A)=7/8. Полная вероятность B (десятичная дробь).", answer: "0.75", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 11, text: "По графику квадратичной функции: 1) возраст. на (-∞; -1] 2) наиб. значение = 8 3) f(-4)≠f(2). Какие утверждения НЕВЕРНЫ? (номера подряд, напр. 23)", answer: "23", normalize: (v) => v.trim().replace(/\s/g,''), compare: (a,b) => a === b || a === "32" },
+        { id: 12, text: "R = a/(2 sin α). a=0,6; R=0,75. Найдите sin α.", answer: "0.4", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 13, text: "Решите -x² - 2x ≤ 0. Укажите номер ответа: 1) (-∞;-2)∪(0;+∞) 2) (-∞;-2]∪[0;+∞) 3) (-2;0) 4) [-2;0].", answer: "2", normalize: (v) => v.trim(), compare: (a,b) => a === b },
+        { id: 14, text: "Камень: 1-я сек = 9 м, каждую следующую на 10 м больше. Сколько метров за первые 5 секунд?", answer: "145", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 15, text: "Прямоугольный Δ: катет = 10, противолежащий угол 45°. Найдите площадь.", answer: "50", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 16, text: "Сторона равностороннего Δ = 2√3. Радиус описанной окружности.", answer: "2", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 17, text: "В параллелограмме ABCD ∠DAC=47°, ∠CAB=11°. Найдите больший угол (в градусах).", answer: "122", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 18, text: "Радиус большого круга = 3, радиус малого = √5. Отношение площади большего к меньшему (десятичная дробь).", answer: "1.8", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 19, text: "Верные утверждения: 1) соответственные углы 37° → прямые параллельны. 2) через любые три точки — не более одной прямой. 3) сумма вертикальных углов =180°. Запишите номера верных по возрастанию.", answer: "12", normalize: (v) => v.trim().replace(/\s/g,''), compare: (a,b) => a === b || a === "21" },
+        { id: 20, text: "Решите (11x-4)/5 ≤ 2. Запишите промежуток в формате: [0,4;4] или 0,4-4 (допустимо).", answer: "[0,4;4]", normalize: (v) => v.trim().replace(/\[|\]/g,'').replace(/\s/g,'').replace(',','.').replace(';','-'), compare: (inp,cor) => { let norm = inp.replace(/\[|\]/g,'').replace(/\s/g,'').replace(',','.').replace(';','-'); return norm === "0.4-4" || norm === "0,4-4" || inp === "[0,4;4]" || inp === "0,4;4" || inp === "0.4-4"; } },
+        { id: 21, text: "Сплав 1: 60% меди, сплав 2: 45% меди. В каком отношении (первый:второй) взять для 55% меди? Формат 2:1", answer: "2:1", normalize: (v) => v.trim().replace(/\s/g,''), compare: (a,b) => a === b || a === "2/1" || a === "2;1" },
+        { id: 22, text: "Прямая y=2x+b касается окружности x²+y²=5 в точке с положительной абсциссой. Координаты точки касания (x;y).", answer: "(2;-1)", normalize: (v) => v.trim().replace(/\s/g,'').replace(/\(/, '(').replace(/\)/, ')'), compare: (a,b) => a === b || a === "(2,-1)" || a === "2;-1" },
+        { id: 23, text: "∠АСО: сторона СА касается окружности, дуга AD=100°. Найдите угол АСО в градусах.", answer: "10", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 25, text: "Медиана ВМ — диаметр окружности, пересекающей ВС в её середине. АС=4. Найдите радиус описанной окружности ΔАВС.", answer: "2", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 }
+    ];
+
+    const TOTAL = TASKS.length;
+    let userInputs = new Array(TOTAL).fill('');
+    let taskStatus = new Array(TOTAL).fill(false);
+
+    const container = document.getElementById('tasksContainer');
+    const scoreSpan = document.getElementById('scoreDisplay');
+    document.getElementById('totalTasks').innerText = TOTAL;
+
+    function normalizeAnswer(task, raw) {
+        if (raw === undefined || raw === null) raw = '';
+        let str = String(raw).trim();
+        if (str === '') return '';
+        if (task.normalize) return task.normalize(str);
+        return str;
     }
-});
 
-prevBtn.addEventListener('click', () => {
-    if (currentStep > 0) {
-        currentStep--;
-        updateNavigation();
+    function compareAnswer(task, userRaw) {
+        if (userRaw.trim() === '') return false;
+        let norm = normalizeAnswer(task, userRaw);
+        if (task.compare) return task.compare(norm, task.answer);
+        return String(norm).toLowerCase() === String(task.answer).toLowerCase();
     }
-});
 
-function checkOption(btn, isCorrect) {
-    // Простая визуальная проверка для кнопок
-    btn.style.backgroundColor = isCorrect ? "#c6f6d5" : "#fed7d7";
-    btn.style.borderColor = isCorrect ? "#48bb78" : "#f56565";
-}
+    function checkTask(index) {
+        const inputEl = document.getElementById(`input_${index}`);
+        if (!inputEl) return;
+        const rawValue = inputEl.value;
+        userInputs[index] = rawValue;
+        const isCorrect = compareAnswer(TASKS[index], rawValue);
+        taskStatus[index] = isCorrect;
+        const statusSpan = document.getElementById(`status_${index}`);
+        if (statusSpan) {
+            if (rawValue.trim() === '') {
+                statusSpan.innerText = '✏️ не проверено';
+                statusSpan.className = 'status pending';
+                taskStatus[index] = false;
+            } else if (isCorrect) {
+                statusSpan.innerText = '✓ верно';
+                statusSpan.className = 'status correct';
+            } else {
+                statusSpan.innerText = '✗ неверно';
+                statusSpan.className = 'status wrong';
+            }
+        }
+        updateScore();
+    }
+
+    function updateScore() {
+        let correctCount = taskStatus.filter(v => v === true).length;
+        scoreSpan.innerText = correctCount;
+    }
+
+    function checkAll() {
+        for (let i = 0; i < TOTAL; i++) {
+            const inp = document.getElementById(`input_${i}`);
+            if (inp) {
+                userInputs[i] = inp.value;
+                const isCorrect = compareAnswer(TASKS[i], userInputs[i]);
+                taskStatus[i] = isCorrect;
+                const statusSpan = document.getElementById(`status_${i}`);
+                if (statusSpan) {
+                    if (userInputs[i].trim() === '') {
+                        statusSpan.innerText = '✏️ не проверено';
+                        statusSpan.className = 'status pending';
+                        taskStatus[i] = false;
+                    } else if (isCorrect) {
+                        statusSpan.innerText = '✓ верно';
+                        statusSpan.className = 'status correct';
+                    } else {
+                        statusSpan.innerText = '✗ неверно';
+                        statusSpan.className = 'status wrong';
+                    }
+                }
+            }
+        }
+        updateScore();
+    }
+
+    function resetAll() {
+        for (let i = 0; i < TOTAL; i++) {
+            const inp = document.getElementById(`input_${i}`);
+            if (inp) {
+                inp.value = '';
+                userInputs[i] = '';
+                taskStatus[i] = false;
+                const statusSpan = document.getElementById(`status_${i}`);
+                if (statusSpan) {
+                    statusSpan.innerText = '✏️ не проверено';
+                    statusSpan.className = 'status pending';
+                }
+            }
+        }
+        updateScore();
+    }
+
+    function renderTasks() {
+        container.innerHTML = '';
+        for (let i = 0; i < TOTAL; i++) {
+            const task = TASKS[i];
+            const taskDiv = document.createElement('div');
+            taskDiv.className = 'task';
+            taskDiv.innerHTML = `
+                <div class="task-header">
+                    <span class="task-num">${task.id}</span>
+                    <span class="task-tag">задание ${task.id}</span>
+                </div>
+                <div class="question">${escapeHtml(task.text)}</div>
+                <div class="answer-row">
+                    <input type="text" id="input_${i}" class="answer-input" placeholder="Напишите ответ..." value="${escapeHtml(userInputs[i])}">
+                    <button class="check-btn" data-idx="${i}">🔍 Проверить</button>
+                    <span id="status_${i}" class="status pending">✏️ не проверено</span>
+                </div>
+            `;
+            container.appendChild(taskDiv);
+        }
+        container.addEventListener('click', (e) => {
+            const btn = e.target.closest('.check-btn');
+            if (!btn) return;
+            const idx = btn.getAttribute('data-idx');
+            if (idx !== null) checkTask(parseInt(idx));
+        });
+        container.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const input = e.target.closest('.answer-input');
+                if (input && input.id && input.id.startsWith('input_')) {
+                    const idx = parseInt(input.id.split('_')[1]);
+                    if (!isNaN(idx)) checkTask(idx);
+                }
+            }
+        });
+        for (let i = 0; i < TOTAL; i++) {
+            const inp = document.getElementById(`input_${i}`);
+            if (inp && userInputs[i]) inp.value = userInputs[i];
+            const statusSpan = document.getElementById(`status_${i}`);
+            if (statusSpan) {
+                if (userInputs[i] && userInputs[i].trim() !== '' && taskStatus[i]) {
+                    statusSpan.innerText = '✓ верно';
+                    statusSpan.className = 'status correct';
+                } else if (userInputs[i] && userInputs[i].trim() !== '' && !taskStatus[i]) {
+                    statusSpan.innerText = '✗ неверно';
+                    statusSpan.className = 'status wrong';
+                } else {
+                    statusSpan.innerText = '✏️ не проверено';
+                    statusSpan.className = 'status pending';
+                }
+            }
+        }
+        updateScore();
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    renderTasks();
+    document.getElementById('checkAllBtn').addEventListener('click', checkAll);
+    document.getElementById('resetBtn').addEventListener('click', resetAll);
+</script>
+</body>
+</html>
