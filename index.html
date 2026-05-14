@@ -2,135 +2,221 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тренажер ОГЭ по Математике</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f4f7f6; color: #333; line-height: 1.6; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        .question { display: none; }
-        .question.active { display: block; }
-        .task-number { font-weight: bold; color: #3498db; font-size: 1.2em; margin-bottom: 10px; }
-        .task-text { margin-bottom: 20px; font-size: 1.1em; }
-        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
-        table, th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
-        th { background: #f8f9fa; }
-        img { max-width: 100%; height: auto; border-radius: 8px; margin: 15px 0; display: block; margin-left: auto; margin-right: auto; }
-        .options { margin-top: 15px; }
-        .option { display: block; background: #ebf5fb; padding: 10px; margin: 8px 0; border-radius: 6px; cursor: pointer; transition: 0.3s; border: 1px solid #d6eaf8; }
-        .option:hover { background: #d6eaf8; }
-        input[type="text"] { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; }
-        .nav-btns { margin-top: 30px; display: flex; justify-content: space-between; }
-        button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-next { background: #3498db; color: #fff; }
-        .btn-next:hover { background: #2980b9; }
-        .btn-prev { background: #bdc3c7; color: #fff; }
-        .result { text-align: center; display: none; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ОГЭ‑тренажёр по математике</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
 <div class="container">
-    <h1>Подготовка к ОГЭ: Математика</h1>
-
-    <div class="question active" id="q1">
-        <div class="task-number">Задание №1</div>
-        <div class="task-text">
-            Хозяин дачного участка строит баню с парным отделением. Размеры: длина 3,5 м, ширина 2,2 м, высота 2 м. 
-            Установите соответствие между объемами помещения и номерами печей.
-        </div>
-        <table>
-            <tr>
-                <th>Номер</th>
-                <th>Тип</th>
-                <th>Объем (м³)</th>
-                <th>Масса (кг)</th>
-                <th>Цена (руб)</th>
-            </tr>
-            <tr><td>1</td><td>Дровяная</td><td>8-12</td><td>40</td><td>18 000</td></tr>
-            <tr><td>2</td><td>Дровяная</td><td>10-16</td><td>48</td><td>19 500</td></tr>
-            <tr><td>3</td><td>Электр.</td><td>9-15,5</td><td>15</td><td>15 000</td></tr>
-        </table>
-        <p>Заполните таблицу для объемов 8, 9, 10:</p>
-        <input type="text" id="ans1" placeholder="Введите три цифры без пробелов">
+    <div class="header">
+        <h1>📘 ОГЭ‑тренажёр: реальная математика</h1>
+        <div class="sub">24 задания из открытого банка • досрочная волна, основная волна, ФИПИ</div>
     </div>
 
-    <div class="question" id="q2">
-        <div class="task-number">Задание №5</div>
-        <div class="task-text">
-            Найдите радиус закругления арки <i>R</i> в сантиметрах, используя чертеж передней панели печи.
-        </div>
-        <img src="https://via.placeholder.com/400x250.png?text=Чертеж+печи+(Рис.2)" alt="Чертеж печи">
-        <div class="options">
-            <label class="option"><input type="radio" name="q2" value="wrong"> 35</label>
-            <label class="option"><input type="radio" name="q2" value="correct"> 45</label>
-            <label class="option"><input type="radio" name="q2" value="wrong"> 50</label>
+    <div class="stats-bar">
+        <div class="score-badge">🎯 Верно: <span id="scoreDisplay">0</span> / <span id="totalTasks">24</span></div>
+        <div class="action-buttons">
+            <button class="btn-primary" id="checkAllBtn">✅ Проверить всё</button>
+            <button class="btn-secondary" id="resetBtn">⟳ Сбросить ответы</button>
         </div>
     </div>
 
-    <div class="question" id="q3">
-        <div class="task-number">Задание №11</div>
-        <div class="task-text">Установите соответствие между функциями и их графиками: A) y = -3x, Б) y = -1/3x, В) y = 1/3x.</div>
-        <img src="https://via.placeholder.com/600x200.png?text=Графики+функций" alt="Графики">
-        <input type="text" id="ans3" placeholder="Например: 123">
-    </div>
-
-    <div class="nav-btns">
-        <button class="btn-prev" onclick="prevQuestion()">Назад</button>
-        <button class="btn-next" onclick="nextQuestion()">Далее</button>
-    </div>
-
-    <div class="result" id="resultPage">
-        <h2>Тест завершен!</h2>
-        <p id="scoreText"></p>
-        <button class="btn-next" onclick="location.reload()">Пройти еще раз</button>
-    </div>
+    <div id="tasksContainer" class="tasks-list"></div>
+    <footer>⭐ Клик «Проверить» — оценит ответ. Enter в поле тоже работает. Для заданий 21,22 и промежутков учитываются разные форматы. Успешной подготовки!</footer>
 </div>
 
 <script>
-    let currentStep = 0;
-    const questions = document.querySelectorAll('.question');
-    const resultPage = document.getElementById('resultPage');
-    const scoreText = document.getElementById('scoreText');
+    // ----- БАЗА ЗАДАНИЙ (в точности как в рабочем примере) -----
+    const TASKS = [
+        { id: 1, text: "Хозяин бани выбирает печь. В таблице: печь №1 (8–12), №2 (10–16), №3 (9–15,5). Для каждой печи указан наименьший рекомендуемый объём. Установите соответствие: объём помещения 8 → ? , 9 → ? , 10 → ? . В ответ запишите три цифры подряд (например, 132).", answer: "132", normalize: (v) => v.trim().replace(/\s/g, '') },
+        { id: 2, text: "Объём парного отделения: длина 3,5 м, ширина 2,2 м, высота 2 м. Ответ в м³.", answer: "15.4", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 3, text: "Печь №2 (подходит по объёму) стоит 19500 руб. Доставка 1400 руб. Сколько рублей с доставкой?", answer: "20900", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 4, text: "Печь №2 стоимостью 19500 руб, скидка 10%. Новая цена (руб)?", answer: "17550", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 5, text: "Арка печи: вертикальный катет = 33 см, горизонтальная половинка хорды = 44 см. Радиус закругления (см) по Пифагору.", answer: "55", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 6, text: "Вычислите: 5,7 − 7,6.", answer: "-1.9", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 7, text: "Между какими числами заключено √60? 1) 20 и 22 2) 7 и 8 3) 59 и 61 4) 3 и 4. Введите номер варианта.", answer: "2", normalize: (v) => v.trim(), compare: (a,b) => a === b },
+        { id: 8, text: "(y/(5x) - 5x/y) : (y+5x) при x=1/7, y=1/4. Ответ десятичной дробью.", answer: "-2.6", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 9, text: "x² + 3x = 4. Корни запишите в порядке возрастания без пробелов (пример: -41).", answer: "-41", normalize: (v) => { let s = v.trim().replace(/\s/g,'').replace(',','').replace(';',''); if (s.includes('-4') && s.includes('1')) return '-41'; return s; }, compare: (a,b) => a === b || a === '-4,1' || a === '-4;1' },
+        { id: 10, text: "P(A)=1/4, P(B|A)=3/8, P(B|не A)=7/8. Полная вероятность B (десятичная дробь).", answer: "0.75", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 11, text: "По графику квадратичной функции: 1) возраст. на (-∞; -1] 2) наиб. значение = 8 3) f(-4)≠f(2). Какие утверждения НЕВЕРНЫ? (номера подряд, напр. 23)", answer: "23", normalize: (v) => v.trim().replace(/\s/g,''), compare: (a,b) => a === b || a === "32" },
+        { id: 12, text: "R = a/(2 sin α). a=0,6; R=0,75. Найдите sin α.", answer: "0.4", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 13, text: "Решите -x² - 2x ≤ 0. Укажите номер ответа: 1) (-∞;-2)∪(0;+∞) 2) (-∞;-2]∪[0;+∞) 3) (-2;0) 4) [-2;0].", answer: "2", normalize: (v) => v.trim(), compare: (a,b) => a === b },
+        { id: 14, text: "Камень: 1-я сек = 9 м, каждую следующую на 10 м больше. Сколько метров за первые 5 секунд?", answer: "145", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 15, text: "Прямоугольный Δ: катет = 10, противолежащий угол 45°. Найдите площадь.", answer: "50", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 16, text: "Сторона равностороннего Δ = 2√3. Радиус описанной окружности.", answer: "2", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 17, text: "В параллелограмме ABCD ∠DAC=47°, ∠CAB=11°. Найдите больший угол (в градусах).", answer: "122", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 18, text: "Радиус большого круга = 3, радиус малого = √5. Отношение площади большего к меньшему (десятичная дробь).", answer: "1.8", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
+        { id: 19, text: "Верные утверждения: 1) соответственные углы 37° → прямые параллельны. 2) через любые три точки — не более одной прямой. 3) сумма вертикальных углов =180°. Запишите номера верных по возрастанию.", answer: "12", normalize: (v) => v.trim().replace(/\s/g,''), compare: (a,b) => a === b || a === "21" },
+        { id: 20, text: "Решите (11x-4)/5 ≤ 2. Запишите промежуток в формате: [0,4;4] или 0,4-4 (допустимо).", answer: "[0,4;4]", normalize: (v) => v.trim().replace(/\[|\]/g,'').replace(/\s/g,'').replace(',','.').replace(';','-'), compare: (inp,cor) => { let norm = inp.replace(/\[|\]/g,'').replace(/\s/g,'').replace(',','.').replace(';','-'); return norm === "0.4-4" || norm === "0,4-4" || inp === "[0,4;4]" || inp === "0,4;4" || inp === "0.4-4"; } },
+        { id: 21, text: "Сплав 1: 60% меди, сплав 2: 45% меди. В каком отношении (первый:второй) взять для 55% меди? Формат 2:1", answer: "2:1", normalize: (v) => v.trim().replace(/\s/g,''), compare: (a,b) => a === b || a === "2/1" || a === "2;1" },
+        { id: 22, text: "Прямая y=2x+b касается окружности x²+y²=5 в точке с положительной абсциссой. Координаты точки касания (x;y).", answer: "(2;-1)", normalize: (v) => v.trim().replace(/\s/g,'').replace(/\(/, '(').replace(/\)/, ')'), compare: (a,b) => a === b || a === "(2,-1)" || a === "2;-1" },
+        { id: 23, text: "∠АСО: сторона СА касается окружности, дуга AD=100°. Найдите угол АСО в градусах.", answer: "10", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
+        { id: 25, text: "Медиана ВМ — диаметр окружности, пересекающей ВС в её середине. АС=4. Найдите радиус описанной окружности ΔАВС.", answer: "2", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 }
+    ];
 
-    function showStep(step) {
-        questions.forEach((q, index) => {
-            q.classList.toggle('active', index === step);
+    const TOTAL = TASKS.length;
+    let userInputs = new Array(TOTAL).fill('');
+    let taskStatus = new Array(TOTAL).fill(false);
+
+    const container = document.getElementById('tasksContainer');
+    const scoreSpan = document.getElementById('scoreDisplay');
+    document.getElementById('totalTasks').innerText = TOTAL;
+
+    function normalizeAnswer(task, raw) {
+        if (raw === undefined || raw === null) raw = '';
+        let str = String(raw).trim();
+        if (str === '') return '';
+        if (task.normalize) return task.normalize(str);
+        return str;
+    }
+
+    function compareAnswer(task, userRaw) {
+        if (userRaw.trim() === '') return false;
+        let norm = normalizeAnswer(task, userRaw);
+        if (task.compare) return task.compare(norm, task.answer);
+        return String(norm).toLowerCase() === String(task.answer).toLowerCase();
+    }
+
+    function checkTask(index) {
+        const inputEl = document.getElementById(`input_${index}`);
+        if (!inputEl) return;
+        const rawValue = inputEl.value;
+        userInputs[index] = rawValue;
+        const isCorrect = compareAnswer(TASKS[index], rawValue);
+        taskStatus[index] = isCorrect;
+        const statusSpan = document.getElementById(`status_${index}`);
+        if (statusSpan) {
+            if (rawValue.trim() === '') {
+                statusSpan.innerText = '✏️ не проверено';
+                statusSpan.className = 'status pending';
+                taskStatus[index] = false;
+            } else if (isCorrect) {
+                statusSpan.innerText = '✓ верно';
+                statusSpan.className = 'status correct';
+            } else {
+                statusSpan.innerText = '✗ неверно';
+                statusSpan.className = 'status wrong';
+            }
+        }
+        updateScore();
+    }
+
+    function updateScore() {
+        let correctCount = taskStatus.filter(v => v === true).length;
+        scoreSpan.innerText = correctCount;
+    }
+
+    function checkAll() {
+        for (let i = 0; i < TOTAL; i++) {
+            const inp = document.getElementById(`input_${i}`);
+            if (inp) {
+                userInputs[i] = inp.value;
+                const isCorrect = compareAnswer(TASKS[i], userInputs[i]);
+                taskStatus[i] = isCorrect;
+                const statusSpan = document.getElementById(`status_${i}`);
+                if (statusSpan) {
+                    if (userInputs[i].trim() === '') {
+                        statusSpan.innerText = '✏️ не проверено';
+                        statusSpan.className = 'status pending';
+                        taskStatus[i] = false;
+                    } else if (isCorrect) {
+                        statusSpan.innerText = '✓ верно';
+                        statusSpan.className = 'status correct';
+                    } else {
+                        statusSpan.innerText = '✗ неверно';
+                        statusSpan.className = 'status wrong';
+                    }
+                }
+            }
+        }
+        updateScore();
+    }
+
+    function resetAll() {
+        for (let i = 0; i < TOTAL; i++) {
+            const inp = document.getElementById(`input_${i}`);
+            if (inp) {
+                inp.value = '';
+                userInputs[i] = '';
+                taskStatus[i] = false;
+                const statusSpan = document.getElementById(`status_${i}`);
+                if (statusSpan) {
+                    statusSpan.innerText = '✏️ не проверено';
+                    statusSpan.className = 'status pending';
+                }
+            }
+        }
+        updateScore();
+    }
+
+    function renderTasks() {
+        container.innerHTML = '';
+        for (let i = 0; i < TOTAL; i++) {
+            const task = TASKS[i];
+            const taskDiv = document.createElement('div');
+            taskDiv.className = 'task';
+            taskDiv.innerHTML = `
+                <div class="task-header">
+                    <span class="task-num">${task.id}</span>
+                    <span class="task-tag">задание ${task.id}</span>
+                </div>
+                <div class="question">${escapeHtml(task.text)}</div>
+                <div class="answer-row">
+                    <input type="text" id="input_${i}" class="answer-input" placeholder="Напишите ответ..." value="${escapeHtml(userInputs[i])}">
+                    <button class="check-btn" data-idx="${i}">🔍 Проверить</button>
+                    <span id="status_${i}" class="status pending">✏️ не проверено</span>
+                </div>
+            `;
+            container.appendChild(taskDiv);
+        }
+        container.addEventListener('click', (e) => {
+            const btn = e.target.closest('.check-btn');
+            if (!btn) return;
+            const idx = btn.getAttribute('data-idx');
+            if (idx !== null) checkTask(parseInt(idx));
+        });
+        container.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const input = e.target.closest('.answer-input');
+                if (input && input.id && input.id.startsWith('input_')) {
+                    const idx = parseInt(input.id.split('_')[1]);
+                    if (!isNaN(idx)) checkTask(idx);
+                }
+            }
+        });
+        for (let i = 0; i < TOTAL; i++) {
+            const inp = document.getElementById(`input_${i}`);
+            if (inp && userInputs[i]) inp.value = userInputs[i];
+            const statusSpan = document.getElementById(`status_${i}`);
+            if (statusSpan) {
+                if (userInputs[i] && userInputs[i].trim() !== '' && taskStatus[i]) {
+                    statusSpan.innerText = '✓ верно';
+                    statusSpan.className = 'status correct';
+                } else if (userInputs[i] && userInputs[i].trim() !== '' && !taskStatus[i]) {
+                    statusSpan.innerText = '✗ неверно';
+                    statusSpan.className = 'status wrong';
+                } else {
+                    statusSpan.innerText = '✏️ не проверено';
+                    statusSpan.className = 'status pending';
+                }
+            }
+        }
+        updateScore();
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
         });
     }
 
-    function nextQuestion() {
-        if (currentStep < questions.length - 1) {
-            currentStep++;
-            showStep(currentStep);
-        } else {
-            finishTest();
-        }
-    }
-
-    function prevQuestion() {
-        if (currentStep > 0) {
-            currentStep--;
-            showStep(currentStep);
-        }
-    }
-
-    function finishTest() {
-        questions.forEach(q => q.classList.remove('active'));
-        document.querySelector('.nav-btns').style.display = 'none';
-        resultPage.style.display = 'block';
-        scoreText.innerText = "Вы ответили на все вопросы. Время проверить свои знания по ключам ОГЭ!";
-    }
-</script
-<div class="image-box">
-    <img src="img/stove_scheme.png" alt="Чертеж печи">
-</div>
-
-<div class="image-box">
-    <img src="img/graphs.png" alt="Графики функций">
-</div>
-
-    
-
+    renderTasks();
+    document.getElementById('checkAllBtn').addEventListener('click', checkAll);
+    document.getElementById('resetBtn').addEventListener('click', resetAll);
+</script>
 </body>
 </html>
