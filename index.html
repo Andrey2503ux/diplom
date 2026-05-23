@@ -3,220 +3,629 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ОГЭ‑тренажёр по математике</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>ОГЭ по математике — Контрольная работа</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e0eafc 0%, #cfdef3 100%);
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+        }
+
+        /* контейнер */
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(2px);
+            border-radius: 3rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* шапка */
+        .hero {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb4d);
+            background-size: 200% 200%;
+            animation: gradientShift 6s ease infinite;
+            padding: 2rem 2rem 1.8rem;
+            text-align: center;
+            color: white;
+            border-bottom: 5px solid #ffd966;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero h1 {
+            font-size: 2.7rem;
+            letter-spacing: -0.5px;
+            font-weight: 800;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+            animation: fadeSlideDown 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 0.7rem;
+            font-weight: 500;
+        }
+
+        /* сетка вопросов */
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            gap: 1.8rem;
+            padding: 2rem 2rem;
+        }
+
+        /* карточка вопроса */
+        .quiz-card {
+            background: white;
+            border-radius: 1.8rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.3s;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,240,0.6);
+            animation: cardFloatIn 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) backwards;
+        }
+
+        .quiz-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            background: #f8f9ff;
+            padding: 1rem 1.5rem;
+            border-left: 8px solid #ff8c42;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header i {
+            font-size: 1.6rem;
+            color: #ff8c42;
+        }
+
+        .card-header h3 {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #1e2a3e;
+        }
+
+        .question-text {
+            padding: 1.2rem 1.5rem 0.8rem;
+            font-size: 0.98rem;
+            line-height: 1.45;
+            color: #2c3e4e;
+            background: #ffffff;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .question-text p {
+            margin-bottom: 0.5rem;
+        }
+
+        .math-exp {
+            background: #f1f5f9;
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-family: monospace;
+            font-weight: 600;
+        }
+
+        .input-area {
+            padding: 1rem 1.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        input, select, .options-group {
+            background: #fefcf5;
+            border: 1.5px solid #e2e4e8;
+            border-radius: 1.8rem;
+            padding: 0.7rem 1.2rem;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            outline: none;
+            font-weight: 500;
+        }
+
+        input:focus, select:focus {
+            border-color: #ff8c42;
+            box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.2);
+        }
+
+        .options-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #f1f3f7;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .result-badge {
+            margin-top: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding-left: 0.3rem;
+            transition: 0.2s;
+        }
+
+        .correct-feedback {
+            color: #15803d;
+            background: #e0f2e9;
+            border-radius: 2rem;
+            padding: 0.2rem 1rem;
+            display: inline-block;
+        }
+
+        .wrong-feedback {
+            color: #b91c1c;
+            background: #ffe6e6;
+            border-radius: 2rem;
+            padding: 0.2rem 1rem;
+        }
+
+        /* кнопки */
+        .action-bar {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            padding: 0.5rem 2rem 2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: none;
+            padding: 0.9rem 2rem;
+            font-weight: 700;
+            border-radius: 3rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.2s all;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn-primary {
+            background: #1e2a3e;
+            color: white;
+            border: none;
+        }
+        .btn-primary:hover {
+            background: #ff8c42;
+            transform: scale(1.02);
+            box-shadow: 0 12px 18px -8px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: #2d3e50;
+        }
+        .btn-secondary:hover {
+            background: #cdd7e4;
+        }
+
+        /* рейтинг */
+        .score-panel {
+            background: #1e293b;
+            margin: 0 2rem 2rem;
+            border-radius: 2rem;
+            padding: 1.4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3);
+            animation: fadeUp 0.7s;
+        }
+
+        .score-badge {
+            background: #ffb347;
+            padding: 0.5rem 1.2rem;
+            border-radius: 3rem;
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: #1e2a3e;
+        }
+
+        .grade {
+            font-size: 1.25rem;
+            font-weight: 600;
+            background: #0f172a;
+            padding: 0.4rem 1.2rem;
+            border-radius: 2rem;
+        }
+
+        @keyframes cardFloatIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: #475569;
+            border-top: 1px solid #cbd5e1;
+        }
+
+        @media (max-width: 700px) {
+            .questions-grid {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+        }
+        .small-hint {
+            font-size: 0.7rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
-    <div class="header">
-        <h1>📘 ОГЭ‑тренажёр: реальная математика</h1>
-        <div class="sub">24 задания из открытого банка • досрочная волна, основная волна, ФИПИ</div>
+    <div class="hero">
+        <h1>📐 ОГЭ·МАТЕМАТИКА <i class="fas fa-chalkboard-user"></i></h1>
+        <p>Контрольная работа · Вариант № 79386762 | 16 заданий с автопроверкой</p>
+        <p><i class="fas fa-star-of-life"></i> Внимание! После выполнения нажмите «Проверить» — получите оценку и разбор.</p>
     </div>
 
-    <div class="stats-bar">
-        <div class="score-badge">🎯 Верно: <span id="scoreDisplay">0</span> / <span id="totalTasks">24</span></div>
-        <div class="action-buttons">
-            <button class="btn-primary" id="checkAllBtn">✅ Проверить всё</button>
-            <button class="btn-secondary" id="resetBtn">⟳ Сбросить ответы</button>
-        </div>
+    <div class="questions-grid" id="questionsContainer"></div>
+
+    <div class="action-bar">
+        <button class="btn btn-primary" id="checkBtn"><i class="fas fa-check-circle"></i> Проверить работу</button>
+        <button class="btn btn-secondary" id="resetBtn"><i class="fas fa-undo-alt"></i> Сбросить ответы</button>
     </div>
 
-    <div id="tasksContainer" class="tasks-list"></div>
-    <footer>⭐ Клик «Проверить» — оценит ответ. Enter в поле тоже работает. Для заданий 21,22 и промежутков учитываются разные форматы. Успешной подготовки!</footer>
+    <div class="score-panel" id="scorePanel" style="display: none;">
+        <div><i class="fas fa-clipboard-list"></i> <strong>Результат</strong></div>
+        <div class="score-badge" id="scoreValue">0 / 16</div>
+        <div class="grade" id="gradeMessage">──</div>
+        <div id="perfectBonus"></div>
+    </div>
+    <footer>⚡ Все задания из официального варианта ОГЭ (взяты из предоставленного PDF). Ответы проверяются автоматически. Удачи!</footer>
 </div>
 
 <script>
-    // ----- БАЗА ЗАДАНИЙ (в точности как в рабочем примере) -----
-    const TASKS = [
-        { id: 1, text: "Хозяин бани выбирает печь. В таблице: печь №1 (8–12), №2 (10–16), №3 (9–15,5). Для каждой печи указан наименьший рекомендуемый объём. Установите соответствие: объём помещения 8 → ? , 9 → ? , 10 → ? . В ответ запишите три цифры подряд (например, 132).", answer: "132", normalize: (v) => v.trim().replace(/\s/g, '') },
-        { id: 2, text: "Объём парного отделения: длина 3,5 м, ширина 2,2 м, высота 2 м. Ответ в м³.", answer: "15.4", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
-        { id: 3, text: "Печь №2 (подходит по объёму) стоит 19500 руб. Доставка 1400 руб. Сколько рублей с доставкой?", answer: "20900", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
-        { id: 4, text: "Печь №2 стоимостью 19500 руб, скидка 10%. Новая цена (руб)?", answer: "17550", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
-        { id: 5, text: "Арка печи: вертикальный катет = 33 см, горизонтальная половинка хорды = 44 см. Радиус закругления (см) по Пифагору.", answer: "55", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
-        { id: 6, text: "Вычислите: 5,7 − 7,6.", answer: "-1.9", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
-        { id: 7, text: "Между какими числами заключено √60? 1) 20 и 22 2) 7 и 8 3) 59 и 61 4) 3 и 4. Введите номер варианта.", answer: "2", normalize: (v) => v.trim(), compare: (a,b) => a === b },
-        { id: 8, text: "(y/(5x) - 5x/y) : (y+5x) при x=1/7, y=1/4. Ответ десятичной дробью.", answer: "-2.6", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
-        { id: 9, text: "x² + 3x = 4. Корни запишите в порядке возрастания без пробелов (пример: -41).", answer: "-41", normalize: (v) => { let s = v.trim().replace(/\s/g,'').replace(',','').replace(';',''); if (s.includes('-4') && s.includes('1')) return '-41'; return s; }, compare: (a,b) => a === b || a === '-4,1' || a === '-4;1' },
-        { id: 10, text: "P(A)=1/4, P(B|A)=3/8, P(B|не A)=7/8. Полная вероятность B (десятичная дробь).", answer: "0.75", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
-        { id: 11, text: "По графику квадратичной функции: 1) возраст. на (-∞; -1] 2) наиб. значение = 8 3) f(-4)≠f(2). Какие утверждения НЕВЕРНЫ? (номера подряд, напр. 23)", answer: "23", normalize: (v) => v.trim().replace(/\s/g,''), compare: (a,b) => a === b || a === "32" },
-        { id: 12, text: "R = a/(2 sin α). a=0,6; R=0,75. Найдите sin α.", answer: "0.4", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
-        { id: 13, text: "Решите -x² - 2x ≤ 0. Укажите номер ответа: 1) (-∞;-2)∪(0;+∞) 2) (-∞;-2]∪[0;+∞) 3) (-2;0) 4) [-2;0].", answer: "2", normalize: (v) => v.trim(), compare: (a,b) => a === b },
-        { id: 14, text: "Камень: 1-я сек = 9 м, каждую следующую на 10 м больше. Сколько метров за первые 5 секунд?", answer: "145", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
-        { id: 15, text: "Прямоугольный Δ: катет = 10, противолежащий угол 45°. Найдите площадь.", answer: "50", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
-        { id: 16, text: "Сторона равностороннего Δ = 2√3. Радиус описанной окружности.", answer: "2", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
-        { id: 17, text: "В параллелограмме ABCD ∠DAC=47°, ∠CAB=11°. Найдите больший угол (в градусах).", answer: "122", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
-        { id: 18, text: "Радиус большого круга = 3, радиус малого = √5. Отношение площади большего к меньшему (десятичная дробь).", answer: "1.8", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 },
-        { id: 19, text: "Верные утверждения: 1) соответственные углы 37° → прямые параллельны. 2) через любые три точки — не более одной прямой. 3) сумма вертикальных углов =180°. Запишите номера верных по возрастанию.", answer: "12", normalize: (v) => v.trim().replace(/\s/g,''), compare: (a,b) => a === b || a === "21" },
-        { id: 20, text: "Решите (11x-4)/5 ≤ 2. Запишите промежуток в формате: [0,4;4] или 0,4-4 (допустимо).", answer: "[0,4;4]", normalize: (v) => v.trim().replace(/\[|\]/g,'').replace(/\s/g,'').replace(',','.').replace(';','-'), compare: (inp,cor) => { let norm = inp.replace(/\[|\]/g,'').replace(/\s/g,'').replace(',','.').replace(';','-'); return norm === "0.4-4" || norm === "0,4-4" || inp === "[0,4;4]" || inp === "0,4;4" || inp === "0.4-4"; } },
-        { id: 21, text: "Сплав 1: 60% меди, сплав 2: 45% меди. В каком отношении (первый:второй) взять для 55% меди? Формат 2:1", answer: "2:1", normalize: (v) => v.trim().replace(/\s/g,''), compare: (a,b) => a === b || a === "2/1" || a === "2;1" },
-        { id: 22, text: "Прямая y=2x+b касается окружности x²+y²=5 в точке с положительной абсциссой. Координаты точки касания (x;y).", answer: "(2;-1)", normalize: (v) => v.trim().replace(/\s/g,'').replace(/\(/, '(').replace(/\)/, ')'), compare: (a,b) => a === b || a === "(2,-1)" || a === "2;-1" },
-        { id: 23, text: "∠АСО: сторона СА касается окружности, дуга AD=100°. Найдите угол АСО в градусах.", answer: "10", normalize: (v) => parseInt(v.replace(/\D/g,'')) || 0, compare: (a,b) => a === b },
-        { id: 25, text: "Медиана ВМ — диаметр окружности, пересекающей ВС в её середине. АС=4. Найдите радиус описанной окружности ΔАВС.", answer: "2", normalize: (v) => parseFloat(v.replace(',', '.')) || 0, compare: (a,b) => Math.abs(a - b) < 0.01 }
+    // --------------------------------------------------------------
+    // БАЗА ЗАДАНИЙ (текст + правильные ответы + тип проверки)
+    // --------------------------------------------------------------
+    const questionsData = [
+        { id: 5,  text: "❖ Задание 5: Стиральная машина с фронтальной загрузкой, вместимостью ≥6 кг. Из таблицы выберите наиболее дешёвый вариант с подключением и доставкой. (Ответ: число рублей)", correct: 29300, type: "number", hint: "Модель З: 20000 + 6300 + 15% = 29300" },
+        { id: 6,  text: "❖ Задание 6: Вычислите: 4,6 · 3,4 – 0,34", correct: 15.3, type: "number", hint: "4,6·3,4=15,64; 15,64-0,34=15,3" },
+        { id: 8,  text: "❖ Задание 8: Найдите значение выражения 1/16 · x⁶ · y⁴ при x=2, y=5", correct: 2500, type: "number", hint: "2⁶=64, 5⁴=625 → 64·625=40000, /16=2500" },
+        { id: 9,  text: "❖ Задание 9: Решите уравнение 4x - 4 = 16 + 2x", correct: 10, type: "number", hint: "4x-2x=16+4 → 2x=20 → x=10" },
+        { id: 10, text: "❖ Задание 10: На тарелке 12 пирожков: 5 с мясом, 4 с капустой, 3 с вишней. Вероятность, что выбранный пирожок с вишней?", correct: 0.25, type: "number", hint: "3/12 = 0,25" },
+        { id: 12, text: "❖ Задание 12: Стоимость поездки C = 150 + 11·(t-5), t=15 минут. Найдите C (руб.)", correct: 260, type: "number", hint: "150+11·10=150+110=260" },
+        { id: 13, text: "❖ Задание 13: Решите систему неравенств: { 5x+13 ≤ 0, x+5 ≥ 1 }. Выберите интервал.", correct: "A", type: "choice_system", options: ["A) [-4 ; -2,6]", "B) (-∞ ; -2,6]", "C) (-4 ; -2,6)", "D) [-4 ; +∞)"], hint: "x ≤ -2,6 и x ≥ -4 → [-4 ; -2,6]" },
+        { id: 14, text: "❖ Задание 14: Масса изотопа уменьшается вдвое каждые 7 минут. Начальная масса 640 мг. Через 42 минуты?", correct: 10, type: "number", hint: "42/7=6 полураспадов → 640/64=10 мг" },
+        { id: 15, text: "❖ Задание 15: Два угла треугольника равны 54° и 58°. Найдите третий угол.", correct: 68, type: "number", hint: "180-54-58=68°" },
+        { id: 16, text: "❖ Задание 16: Четырёхугольник ABCD описан около окружности, AB=7, BC=10, CD=14. Найдите AD.", correct: 11, type: "number", hint: "AB+CD=BC+AD → 7+14=10+AD → AD=11" },
+        { id: 17, text: "❖ Задание 17: В прямоугольнике ABCD диагонали пересекаются в O, BO=7, AB=6. Найдите AC.", correct: 14, type: "number", hint: "BO=7 ⇒ BD=14, диагонали равны → AC=14" },
+        { id: 19, text: "❖ Задание 19: Укажите номера верных утверждений: 1) Если соответственные углы равны 37°, то прямые параллельны. 2) Через любые три точки проходит не более одной прямой. 3) Сумма вертикальных углов =180°", correct: [1,2], type: "checkbox", hint: "1 и 2 верны, 3 ложно" },
+        { id: 20, text: "❖ Задание 20: Решите неравенство x ≤ 9/x (выберите верный промежуток).", correct: "A", type: "choice_ineq", options: ["A) (-∞ ; -3] ∪ (0 ; 3]", "B) [-3; 0) ∪ [3;∞)", "C) (-∞; -3) ∪ (0;3)", "D) [-3;3]"], hint: "Метод интервалов: (x²-9)/x ≤0 → ответ (-∞;-3]∪(0;3]" },
+        { id: 21, text: "❖ Задание 21: Автомобилисты: первый постоянная скорость v. Второй первую половину 30 км/ч, вторую на 9 км/ч больше v. Найти скорость первого (км/ч).", correct: 36, type: "number", hint: "Уравнение: 1/v = 1/60 + 1/(2(v+9)) → v=36" },
+        { id: 22, text: "❖ Задание 22: Функция y = |x²+4x-5|. Какое наибольшее число общих точек с прямой, параллельной оси абсцисс?", correct: 4, type: "number", hint: "Парабола с модулем: при y=const (0 < c < 9) пересекает в 4 точках." },
+        { id: 23, text: "❖ Задание 23: Основания трапеции 9 и 15. Найдите отрезок, соединяющий середины диагоналей.", correct: 3, type: "number", hint: "|15-9|/2 = 3" }
     ];
 
-    const TOTAL = TASKS.length;
-    let userInputs = new Array(TOTAL).fill('');
-    let taskStatus = new Array(TOTAL).fill(false);
+    // вспомогательная рендер-функция
+    let userAnswers = {};   // key: вопрос id, value: ответ для разных типов (строка/массив/число)
 
-    const container = document.getElementById('tasksContainer');
-    const scoreSpan = document.getElementById('scoreDisplay');
-    document.getElementById('totalTasks').innerText = TOTAL;
-
-    function normalizeAnswer(task, raw) {
-        if (raw === undefined || raw === null) raw = '';
-        let str = String(raw).trim();
-        if (str === '') return '';
-        if (task.normalize) return task.normalize(str);
-        return str;
-    }
-
-    function compareAnswer(task, userRaw) {
-        if (userRaw.trim() === '') return false;
-        let norm = normalizeAnswer(task, userRaw);
-        if (task.compare) return task.compare(norm, task.answer);
-        return String(norm).toLowerCase() === String(task.answer).toLowerCase();
-    }
-
-    function checkTask(index) {
-        const inputEl = document.getElementById(`input_${index}`);
-        if (!inputEl) return;
-        const rawValue = inputEl.value;
-        userInputs[index] = rawValue;
-        const isCorrect = compareAnswer(TASKS[index], rawValue);
-        taskStatus[index] = isCorrect;
-        const statusSpan = document.getElementById(`status_${index}`);
-        if (statusSpan) {
-            if (rawValue.trim() === '') {
-                statusSpan.innerText = '✏️ не проверено';
-                statusSpan.className = 'status pending';
-                taskStatus[index] = false;
-            } else if (isCorrect) {
-                statusSpan.innerText = '✓ верно';
-                statusSpan.className = 'status correct';
-            } else {
-                statusSpan.innerText = '✗ неверно';
-                statusSpan.className = 'status wrong';
-            }
-        }
-        updateScore();
-    }
-
-    function updateScore() {
-        let correctCount = taskStatus.filter(v => v === true).length;
-        scoreSpan.innerText = correctCount;
-    }
-
-    function checkAll() {
-        for (let i = 0; i < TOTAL; i++) {
-            const inp = document.getElementById(`input_${i}`);
-            if (inp) {
-                userInputs[i] = inp.value;
-                const isCorrect = compareAnswer(TASKS[i], userInputs[i]);
-                taskStatus[i] = isCorrect;
-                const statusSpan = document.getElementById(`status_${i}`);
-                if (statusSpan) {
-                    if (userInputs[i].trim() === '') {
-                        statusSpan.innerText = '✏️ не проверено';
-                        statusSpan.className = 'status pending';
-                        taskStatus[i] = false;
-                    } else if (isCorrect) {
-                        statusSpan.innerText = '✓ верно';
-                        statusSpan.className = 'status correct';
-                    } else {
-                        statusSpan.innerText = '✗ неверно';
-                        statusSpan.className = 'status wrong';
-                    }
-                }
-            }
-        }
-        updateScore();
-    }
-
-    function resetAll() {
-        for (let i = 0; i < TOTAL; i++) {
-            const inp = document.getElementById(`input_${i}`);
-            if (inp) {
-                inp.value = '';
-                userInputs[i] = '';
-                taskStatus[i] = false;
-                const statusSpan = document.getElementById(`status_${i}`);
-                if (statusSpan) {
-                    statusSpan.innerText = '✏️ не проверено';
-                    statusSpan.className = 'status pending';
-                }
-            }
-        }
-        updateScore();
-    }
-
-    function renderTasks() {
+    function renderQuestions() {
+        const container = document.getElementById('questionsContainer');
         container.innerHTML = '';
-        for (let i = 0; i < TOTAL; i++) {
-            const task = TASKS[i];
-            const taskDiv = document.createElement('div');
-            taskDiv.className = 'task';
-            taskDiv.innerHTML = `
-                <div class="task-header">
-                    <span class="task-num">${task.id}</span>
-                    <span class="task-tag">задание ${task.id}</span>
-                </div>
-                <div class="question">${escapeHtml(task.text)}</div>
-                <div class="answer-row">
-                    <input type="text" id="input_${i}" class="answer-input" placeholder="Напишите ответ..." value="${escapeHtml(userInputs[i])}">
-                    <button class="check-btn" data-idx="${i}">🔍 Проверить</button>
-                    <span id="status_${i}" class="status pending">✏️ не проверено</span>
-                </div>
-            `;
-            container.appendChild(taskDiv);
-        }
-        container.addEventListener('click', (e) => {
-            const btn = e.target.closest('.check-btn');
-            if (!btn) return;
-            const idx = btn.getAttribute('data-idx');
-            if (idx !== null) checkTask(parseInt(idx));
+        questionsData.forEach((q, idx) => {
+            const card = document.createElement('div');
+            card.className = 'quiz-card';
+            card.setAttribute('data-qid', q.id);
+            
+            // header
+            const header = document.createElement('div');
+            header.className = 'card-header';
+            header.innerHTML = `<i class="fas fa-puzzle-piece"></i><h3>Задание №${q.id}</h3>`;
+            
+            const textDiv = document.createElement('div');
+            textDiv.className = 'question-text';
+            textDiv.innerHTML = `<p>${q.text}</p>${q.hint ? `<div class="small-hint"><i class="far fa-lightbulb"></i> подсказка: ${q.hint}</div>` : ''}`;
+            
+            const inputArea = document.createElement('div');
+            inputArea.className = 'input-area';
+            
+            let inputHtml = '';
+            if (q.type === 'number') {
+                inputHtml = `<input type="number" step="any" id="input_${q.id}" placeholder="Введите число" class="answer-input" data-id="${q.id}">`;
+            } 
+            else if (q.type === 'choice_system' || q.type === 'choice_ineq') {
+                let opts = q.options;
+                inputHtml = `<select id="input_${q.id}" class="answer-select" data-id="${q.id}">
+                                <option value="">-- Выберите вариант --</option>`;
+                opts.forEach((opt, i) => {
+                    const val = String.fromCharCode(65+i); // A, B, C...
+                    inputHtml += `<option value="${val}">${opt}</option>`;
+                });
+                inputHtml += `</select>`;
+            }
+            else if (q.type === 'checkbox') {
+                // для задания 19
+                inputHtml = `<div class="options-group checkbox-group" data-id="${q.id}">
+                                <label><input type="checkbox" value="1" class="chk_${q.id}"> Утверждение 1</label>
+                                <label><input type="checkbox" value="2" class="chk_${q.id}"> Утверждение 2</label>
+                                <label><input type="checkbox" value="3" class="chk_${q.id}"> Утверждение 3</label>
+                            </div>`;
+            }
+            
+            inputArea.innerHTML = inputHtml;
+            card.appendChild(header);
+            card.appendChild(textDiv);
+            card.appendChild(inputArea);
+            
+            // добавляем блок для индивидуального фидбека
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = 'result-badge';
+            feedbackDiv.id = `fb_${q.id}`;
+            card.appendChild(feedbackDiv);
+            container.appendChild(card);
         });
-        container.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const input = e.target.closest('.answer-input');
-                if (input && input.id && input.id.startsWith('input_')) {
-                    const idx = parseInt(input.id.split('_')[1]);
-                    if (!isNaN(idx)) checkTask(idx);
+        
+        // события для сохранения ответов в объект userAnswers при изменении
+        attachEventListeners();
+    }
+
+    function attachEventListeners() {
+        // числовые поля / селекты
+        document.querySelectorAll('.answer-input').forEach(inp => {
+            inp.addEventListener('change', (e) => {
+                const id = parseInt(inp.dataset.id);
+                let val = inp.value.trim();
+                if (val === '') userAnswers[id] = undefined;
+                else userAnswers[id] = parseFloat(val);
+            });
+            // инициализация
+            const id = parseInt(inp.dataset.id);
+            if (userAnswers[id] !== undefined) inp.value = userAnswers[id];
+        });
+        document.querySelectorAll('.answer-select').forEach(sel => {
+            sel.addEventListener('change', (e) => {
+                const id = parseInt(sel.dataset.id);
+                userAnswers[id] = sel.value;
+            });
+            const id = parseInt(sel.dataset.id);
+            if (userAnswers[id]) sel.value = userAnswers[id];
+        });
+        // чекбоксы
+        questionsData.forEach(q => {
+            if (q.type === 'checkbox') {
+                const checkboxes = document.querySelectorAll(`.chk_${q.id}`);
+                checkboxes.forEach(cb => {
+                    cb.addEventListener('change', () => {
+                        const selected = Array.from(checkboxes).filter(ch => ch.checked).map(ch => parseInt(ch.value));
+                        userAnswers[q.id] = selected.sort((a,b)=>a-b);
+                    });
+                });
+                if (userAnswers[q.id] && Array.isArray(userAnswers[q.id])) {
+                    checkboxes.forEach(cb => {
+                        const val = parseInt(cb.value);
+                        if (userAnswers[q.id].includes(val)) cb.checked = true;
+                    });
                 }
             }
         });
-        for (let i = 0; i < TOTAL; i++) {
-            const inp = document.getElementById(`input_${i}`);
-            if (inp && userInputs[i]) inp.value = userInputs[i];
-            const statusSpan = document.getElementById(`status_${i}`);
-            if (statusSpan) {
-                if (userInputs[i] && userInputs[i].trim() !== '' && taskStatus[i]) {
-                    statusSpan.innerText = '✓ верно';
-                    statusSpan.className = 'status correct';
-                } else if (userInputs[i] && userInputs[i].trim() !== '' && !taskStatus[i]) {
-                    statusSpan.innerText = '✗ неверно';
-                    statusSpan.className = 'status wrong';
-                } else {
-                    statusSpan.innerText = '✏️ не проверено';
-                    statusSpan.className = 'status pending';
+    }
+
+    // проверка работы
+    function checkAnswers() {
+        let totalCorrect = 0;
+        const totalQuestions = questionsData.length;
+        
+        questionsData.forEach(q => {
+            let isCorrect = false;
+            let userVal = userAnswers[q.id];
+            const feedbackSpan = document.getElementById(`fb_${q.id}`);
+            
+            if (q.type === 'number') {
+                if (userVal !== undefined && !isNaN(userVal)) {
+                    // сравниваем с допуском 0.001
+                    const correctNum = q.correct;
+                    isCorrect = Math.abs(userVal - correctNum) < 0.001;
+                }
+            } 
+            else if (q.type === 'choice_system' || q.type === 'choice_ineq') {
+                if (userVal === q.correct) isCorrect = true;
+            }
+            else if (q.type === 'checkbox') {
+                if (Array.isArray(userVal) && userVal.length === q.correct.length &&
+                    userVal.every((v, idx) => v === q.correct[idx])) {
+                    isCorrect = true;
                 }
             }
-        }
-        updateScore();
-    }
-
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
+            
+            if (isCorrect) {
+                totalCorrect++;
+                if(feedbackSpan) feedbackSpan.innerHTML = '<span class="correct-feedback"><i class="fas fa-check-circle"></i> Верно!</span>';
+            } else {
+                let correctDisplay = '';
+                if (q.type === 'number') correctDisplay = q.correct;
+                else if (q.type === 'choice_system' || q.type === 'choice_ineq') correctDisplay = `${q.correct}) ${q.options[q.correct.charCodeAt(0)-65]}`;
+                else if (q.type === 'checkbox') correctDisplay = q.correct.join(', ');
+                if(feedbackSpan) feedbackSpan.innerHTML = `<span class="wrong-feedback"><i class="fas fa-times-circle"></i> Ошибка. Правильный ответ: ${correctDisplay}</span>`;
+            }
         });
+        
+        // Показать панель результатов
+        const scorePanel = document.getElementById('scorePanel');
+        scorePanel.style.display = 'flex';
+        const scoreValueSpan = document.getElementById('scoreValue');
+        scoreValueSpan.innerText = `${totalCorrect} / ${totalQuestions}`;
+        
+        // Оценка по шкале ОГЭ/школьной (5-балльная)
+        let grade = 2;
+        let percent = (totalCorrect / totalQuestions) * 100;
+        if (percent >= 85) grade = 5;
+        else if (percent >= 65) grade = 4;
+        else if (percent >= 45) grade = 3;
+        else grade = 2;
+        
+        let gradeText = '';
+        if (grade === 5) gradeText = 'Отлично (5) ✨';
+        else if (grade === 4) gradeText = 'Хорошо (4) 📘';
+        else if (grade === 3) gradeText = 'Удовлетворительно (3) 📝';
+        else gradeText = 'Неудовлетворительно (2) 📖';
+        
+        const gradeMsgDiv = document.getElementById('gradeMessage');
+        gradeMsgDiv.innerHTML = `<i class="fas fa-star"></i> ${gradeText}`;
+        
+        // анимация + конфетти при 100%
+        if (totalCorrect === totalQuestions) {
+            const perfectDiv = document.getElementById('perfectBonus');
+            perfectDiv.innerHTML = '<span style="background:gold; padding:0.4rem 1rem; border-radius:2rem;">🏆 АБСОЛЮТНЫЙ РЕЗУЛЬТАТ! 🎉</span>';
+            triggerConfetti();
+        } else {
+            const perfectDiv = document.getElementById('perfectBonus');
+            if(perfectDiv) perfectDiv.innerHTML = '';
+        }
+        
+        // прокрутка к панели
+        scorePanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        // добавим пульсацию
+        scorePanel.style.animation = 'none';
+        setTimeout(() => { scorePanel.style.animation = 'fadeUp 0.6s'; }, 10);
     }
-
-    renderTasks();
-    document.getElementById('checkAllBtn').addEventListener('click', checkAll);
-    document.getElementById('resetBtn').addEventListener('click', resetAll);
+    
+    // конфитти эффект
+    function triggerConfetti() {
+        const canvas = document.createElement('canvas');
+        canvas.style.position = 'fixed';
+        canvas.style.top = '0';
+        canvas.style.left = '0';
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        canvas.style.pointerEvents = 'none';
+        canvas.style.zIndex = '9999';
+        document.body.appendChild(canvas);
+        const myConfetti = new window.confetti?.create(canvas, { resize: true, useWorker: true });
+        if(myConfetti) {
+            myConfetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, startVelocity: 20 });
+            setTimeout(() => document.body.removeChild(canvas), 3000);
+        } else {
+            // fallback если confetti не загружен, используем простой
+            for(let i=0;i<80;i++) {
+                const conf = document.createElement('div');
+                conf.style.position='fixed';
+                conf.style.width='10px'; conf.style.height='10px';
+                conf.style.background=`hsl(${Math.random()*360}, 80%, 60%)`;
+                conf.style.left=Math.random()*100+'%';
+                conf.style.top='-10px';
+                conf.style.borderRadius='50%';
+                conf.style.pointerEvents='none';
+                conf.style.zIndex='10000';
+                document.body.appendChild(conf);
+                conf.animate([{transform:'translateY(0) rotate(0deg)', opacity:1},{transform:`translateY(${window.innerHeight+50}px) rotate(720deg)`, opacity:0}],{duration:1500, easing:'cubic-bezier(0.2,0.9,0.4,1)'});
+                setTimeout(()=>conf.remove(),1500);
+            }
+        }
+    }
+    
+    function resetAnswers() {
+        userAnswers = {};
+        // очищаем все поля ввода
+        document.querySelectorAll('.answer-input').forEach(inp => { inp.value = ''; });
+        document.querySelectorAll('.answer-select').forEach(sel => { sel.value = ''; });
+        questionsData.forEach(q => {
+            if (q.type === 'checkbox') {
+                document.querySelectorAll(`.chk_${q.id}`).forEach(cb => cb.checked = false);
+            }
+            const fb = document.getElementById(`fb_${q.id}`);
+            if (fb) fb.innerHTML = '';
+        });
+        const panel = document.getElementById('scorePanel');
+        panel.style.display = 'none';
+        const perfectDiv = document.getElementById('perfectBonus');
+        if(perfectDiv) perfectDiv.innerHTML = '';
+    }
+    
+    // загрузка скрипта конфетти CDN
+    function loadConfetti() {
+        if (!window.confetti) {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1';
+            script.onload = () => { window.confetti = canvasConfetti; };
+            document.head.appendChild(script);
+        }
+    }
+    
+    window.onload = () => {
+        renderQuestions();
+        loadConfetti();
+        document.getElementById('checkBtn').addEventListener('click', checkAnswers);
+        document.getElementById('resetBtn').addEventListener('click', resetAnswers);
+    };
 </script>
 </body>
 </html>
