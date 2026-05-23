@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>ОГЭ математика — контрольная работа</title>
+    <title>ОГЭ математика — контрольная работа с таблицами</title>
     <link rel="stylesheet" href="style.css">
-    <!-- шрифты и иконки -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
@@ -13,8 +12,51 @@
 <div class="container">
     <div class="hero">
         <h1>📐 ОГЭ·МАТЕМАТИКА <i class="fas fa-chalkboard-user"></i></h1>
-        <p>Контрольная работа · Вариант № 79386762 | 16 заданий с автопроверкой</p>
-        <p><i class="fas fa-star-of-life"></i> Внимание! После выполнения нажмите «Проверить» — получите оценку и разбор.</p>
+        <p>Контрольная работа · Вариант № 79386762 | Полноценная версия с таблицами и планом квартиры</p>
+        <p><i class="fas fa-star-of-life"></i> Все задания соответствуют PDF. Для вопросов 1–4 используйте план квартиры.</p>
+    </div>
+
+    <!-- ПЛАН КВАРТИРЫ (общий для заданий 1-4) -->
+    <div class="plan-section">
+        <h3><i class="fas fa-draw-polygon"></i> План двухкомнатной квартиры</h3>
+        <p>Сторона клетки = 0,4 м. Двери и окна обозначены условно. Вход в квартиру – в коридоре. Санузел – слева от входа. Кладовая – в конце коридора. Рядом с кладовой – спальня, из неё выход на лоджию. Гостиная – самая большая, из неё проход в коридор и на кухню. Из кухни выход на другую лоджию.</p>
+        <div class="flat-plan" id="flatPlan">
+            <!-- генерируется через JS для наглядности, но можно и статически -->
+            <div class="plan-grid" id="planGrid"></div>
+        </div>
+        <div class="plan-legend">
+            <span><span class="legend-color" style="background:#b8e1ff;"></span> Коридор</span>
+            <span><span class="legend-color" style="background:#ffb3ba;"></span> Санузел</span>
+            <span><span class="legend-color" style="background:#c5e0b4;"></span> Кладовая</span>
+            <span><span class="legend-color" style="background:#ffd966;"></span> Спальня</span>
+            <span><span class="legend-color" style="background:#b5a1e5;"></span> Гостиная</span>
+            <span><span class="legend-color" style="background:#f7b977;"></span> Кухня</span>
+            <span><span class="legend-color" style="background:#a9d08e;"></span> Лоджии</span>
+        </div>
+    </div>
+
+    <!-- ТАБЛИЦА стиральных машин (задание 5) -->
+    <div class="table-section">
+        <h3><i class="fas fa-tshirt"></i> Таблица стиральных машин (к заданию 5)</h3>
+        <div class="table-responsive">
+            <table class="styled-table">
+                <thead>
+                    <tr><th>Модель</th><th>Вместимость (кг)</th><th>Тип загрузки</th><th>Стоимость (руб.)</th><th>Подключение (руб.)</th><th>Доставка (% от цены)</th><th>Габариты (см)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>А</td><td>7</td><td>верт.</td><td>28000</td><td>1700</td><td>бесплатно</td><td>85×60×45</td></tr>
+                    <tr><td>Б</td><td>5</td><td>фронт.</td><td>24000</td><td>4500</td><td>10%</td><td>85×60×40</td></tr>
+                    <tr><td>В</td><td>5</td><td>фронт.</td><td>25000</td><td>5000</td><td>10%</td><td>85×60×40</td></tr>
+                    <tr><td>Г</td><td>6,5</td><td>фронт.</td><td>24000</td><td>4500</td><td>10%</td><td>85×60×44</td></tr>
+                    <tr><td>Д</td><td>6</td><td>фронт.</td><td>28000</td><td>1700</td><td>бесплатно</td><td>85×60×45</td></tr>
+                    <tr><td>Е</td><td>6</td><td>верт.</td><td>27600</td><td>2300</td><td>бесплатно</td><td>89×60×40</td></tr>
+                    <tr><td>Ж</td><td>6</td><td>верт.</td><td>27585</td><td>1900</td><td>10%</td><td>89×60×40</td></tr>
+                    <tr><td>З</td><td>6</td><td>фронт.</td><td>20000</td><td>6300</td><td>15%</td><td>85×60×42</td></tr>
+                    <tr><td>И</td><td>5</td><td>фронт.</td><td>27000</td><td>1800</td><td>бесплатно</td><td>85×60×40</td></tr>
+                    <tr><td>К</td><td>5</td><td>верт.</td><td>27000</td><td>1800</td><td>бесплатно</td><td>85×60×40</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="questions-grid" id="questionsContainer"></div>
@@ -26,11 +68,11 @@
 
     <div class="score-panel" id="scorePanel" style="display: none;">
         <div><i class="fas fa-clipboard-list"></i> <strong>Результат</strong></div>
-        <div class="score-badge" id="scoreValue">0 / 16</div>
+        <div class="score-badge" id="scoreValue">0 / 21</div>
         <div class="grade" id="gradeMessage">──</div>
         <div id="perfectBonus"></div>
     </div>
-    <footer>⚡ Все задания из официального варианта ОГЭ (взяты из предоставленного PDF). Ответы проверяются автоматически. Удачи!</footer>
+    <footer>⚡ Задания 1-4 используют план квартиры (размер санузла 3×2 клетки = 1,2×0,8 м). Графики к заданию 11 нарисованы на canvas. Удачи!</footer>
 </div>
 <script src="script.js"></script>
 </body>
