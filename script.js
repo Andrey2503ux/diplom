@@ -1,357 +1,239 @@
-// Генерация плана квартиры (сетка 6x5 для наглядности)
-function generatePlan() {
-    const grid = document.getElementById('planGrid');
-    if (!grid) return;
-    // Условные координаты комнат согласно описанию в PDF
-    const rooms = {
-        'коридор': [[0,1],[0,2],[0,3],[1,1],[1,3]],
-        'санузел': [[0,0],[1,0]],
-        'кладовая': [[4,0],[4,1]],
-        'спальня': [[3,0],[3,1],[4,2]],
-        'гостиная': [[2,2],[2,3],[2,4],[3,2],[3,3],[3,4],[4,3],[4,4]],
-        'кухня': [[1,2],[1,4],[2,2],[2,4]],
-        'лоджия1': [[5,0],[5,1]],
-        'лоджия2': [[5,2],[5,3]]
-    };
-    grid.style.gridTemplateColumns = 'repeat(6, 60px)';
-    grid.style.gridTemplateRows = 'repeat(5, 60px)';
-    for (let i = 0; i < 5; i++) {
-        for (let j = 0; j < 6; j++) {
-            const cell = document.createElement('div');
-            cell.className = 'plan-cell';
-            let roomName = '';
-            for (let [name, coords] of Object.entries(rooms)) {
-                if (coords.some(c => c[0] === j && c[1] === i)) {
-                    roomName = name;
-                    break;
-                }
-            }
-            if (roomName === 'коридор') cell.style.background = '#b8e1ff';
-            else if (roomName === 'санузел') cell.style.background = '#ffb3ba';
-            else if (roomName === 'кладовая') cell.style.background = '#c5e0b4';
-            else if (roomName === 'спальня') cell.style.background = '#ffd966';
-            else if (roomName === 'гостиная') cell.style.background = '#b5a1e5';
-            else if (roomName === 'кухня') cell.style.background = '#f7b977';
-            else if (roomName.startsWith('лоджия')) cell.style.background = '#a9d08e';
-            else cell.style.background = '#e9e9e9';
-            cell.textContent = roomName.substring(0, 3);
-            grid.appendChild(cell);
-        }
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Андрей и Варя — 2025</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: linear-gradient(145deg, #1a1118 0%, #2d1b2a 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      font-family: 'Quicksand', sans-serif;
+      padding: 2rem 1rem;
     }
-}
-
-// Данные заданий (21 задание, полное соответствие PDF)
-const questionsData = [
-    { id: 1, text: "Задание 1. По плану определите цифры объектов: коридор, кладовая, спальня, гостиная. Введите последовательность из 4 цифр (например, 2314)", correct: "2314", type: "string" },
-    { id: 2, text: "Задание 2. Санузел имеет размер 3×2 клетки (сторона клетки 0,4 м). Плитка 40×40 см, в упаковке 12 шт. Сколько упаковок нужно для пола санузла?", correct: 2, type: "number" },
-    { id: 3, text: "Задание 3. Найдите площадь санузла (в м²). (Размеры санузла 3×2 клетки = 1,2×0,8 м)", correct: 0.96, type: "number" },
-    { id: 4, text: "Задание 4. Площадь кухни (2×2 клетки = 0,8×0,8=0,64 м²), кладовая (1×1 клетка = 0,16 м²). На сколько процентов площадь кухни больше кладовой? (округлите до целых)", correct: 300, type: "number" },
-    { id: 5, text: "Задание 5. Стиральная машина с фронтальной загрузкой, вместимостью ≥6 кг. Наиболее дешёвый вариант с подключением и доставкой (цена в рублях).", correct: 29300, type: "number" },
-    { id: 6, text: "Задание 6. Вычислите: 4,6 · 3,4 – 0,34", correct: 15.3, type: "number" },
-    { id: 8, text: "Задание 8. Найдите значение выражения 1/16 · x⁶ · y⁴ при x=2, y=5", correct: 2500, type: "number" },
-    { id: 9, text: "Задание 9. Решите уравнение 4x - 4 = 16 + 2x", correct: 10, type: "number" },
-    { id: 10, text: "Задание 10. Вероятность пирожка с вишней (3 из 12)", correct: 0.25, type: "number" },
-    { id: 11, text: "Задание 11. Установите соответствие между функциями и графиками (A, Б, В). Графики нарисованы ниже. Введите ответ в виде трёх цифр (например, 132).", correct: "312", type: "string", hasGraph: true },
-    { id: 12, text: "Задание 12. Стоимость поездки C = 150 + 11·(t-5), t=15", correct: 260, type: "number" },
-    { id: 13, text: "Задание 13. Решите систему неравенств. Выберите вариант A, B, C, D", correct: "A", type: "choice", options: ["A) [-4 ; -2,6]", "B) (-∞ ; -2,6]", "C) (-4 ; -2,6)", "D) [-4 ; +∞)"] },
-    { id: 14, text: "Задание 14. Радиоактивный изотоп: масса 640 мг, период 7 мин. Через 42 мин?", correct: 10, type: "number" },
-    { id: 15, text: "Задание 15. Третий угол треугольника: 54° и 58°", correct: 68, type: "number" },
-    { id: 16, text: "Задание 16. Четырёхугольник описан около окружности: AB=7, BC=10, CD=14. AD=?", correct: 11, type: "number" },
-    { id: 17, text: "Задание 17. Прямоугольник: BO=7, AB=6. AC=?", correct: 14, type: "number" },
-    { id: 19, text: "Задание 19. Верные утверждения (выберите номера через запятую, например 1,2)", correct: "1,2", type: "checkbox", options: ["1", "2", "3"] },
-    { id: 20, text: "Задание 20. Решите неравенство x ≤ 9/x. Выберите вариант.", correct: "A", type: "choice", options: ["A) (-∞ ; -3] ∪ (0 ; 3]", "B) [-3;0)∪[3;∞)", "C) (-∞;-3)∪(0;3)", "D) [-3;3]"] },
-    { id: 21, text: "Задание 21. Скорость первого автомобилиста (км/ч)", correct: 36, type: "number" },
-    { id: 22, text: "Задание 22. График y=|x²+4x-5|. Наибольшее число общих точек с прямой, параллельной оси абсцисс.", correct: 4, type: "number" },
-    { id: 23, text: "Задание 23. Отрезок, соединяющий середины диагоналей трапеции (основания 9 и 15).", correct: 3, type: "number" }
-];
-
-let userAnswers = {};
-
-// Функция отрисовки трёх графиков для задания 11
-function renderGraphsIntoCard() {
-    const card11 = document.querySelector('.quiz-card[data-qid="11"]');
-    if (!card11) return;
-    const inputArea = card11.querySelector('.input-area');
-    if (!inputArea) return;
-    // Удаляем старые графики, если они уже были добавлены
-    const oldGraphs = inputArea.querySelector('.graph-group');
-    if (oldGraphs) oldGraphs.remove();
-
-    const graphDiv = document.createElement('div');
-    graphDiv.className = 'graph-group';
-    const funcs = [
-        { f: (x) => -x * x - x + 5, name: 'y = -x² - x + 5', color: 'red' },
-        { f: (x) => -0.75 * x - 1, name: 'y = -3/4 x - 1', color: 'blue' },
-        { f: (x) => -12 / x, name: 'y = -12/x', color: 'green' }
-    ];
-    funcs.forEach((func) => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 250;
-        canvas.height = 250;
-        canvas.className = 'graph-canvas';
-        const ctx = canvas.getContext('2d');
-        drawGraph(ctx, func.f, func.color, func.name);
-        const item = document.createElement('div');
-        item.className = 'graph-item';
-        item.appendChild(canvas);
-        graphDiv.appendChild(item);
-    });
-    inputArea.appendChild(graphDiv);
-}
-
-function drawGraph(ctx, fn, color, name) {
-    const w = ctx.canvas.width, h = ctx.canvas.height;
-    ctx.clearRect(0, 0, w, h);
-    ctx.beginPath();
-    ctx.strokeStyle = '#ccc';
-    for (let i = 0; i <= w; i += 25) {
-        ctx.moveTo(i, 0);
-        ctx.lineTo(i, h);
-        ctx.moveTo(0, i);
-        ctx.lineTo(w, i);
+    .card {
+      max-width: 860px;
+      width: 100%;
+      background: rgba(40, 25, 35, 0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 48px;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 4px rgba(255,200,220,0.1);
+      padding: 2.5rem 2.2rem;
+      border: 1px solid rgba(200,150,170,0.25);
+      position: relative;
+      overflow: hidden;
     }
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.strokeStyle = 'black';
-    ctx.moveTo(w / 2, 0);
-    ctx.lineTo(w / 2, h);
-    ctx.moveTo(0, h / 2);
-    ctx.lineTo(w, h / 2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
-    let first = true;
-    for (let px = 0; px <= w; px++) {
-        let x = (px - w / 2) / 20;
-        let y = fn(x);
-        let py = h / 2 - y * 20;
-        if (py >= 0 && py <= h) {
-            if (first) {
-                ctx.moveTo(px, py);
-                first = false;
-            } else ctx.lineTo(px, py);
-        } else {
-            first = true;
-            ctx.beginPath();
-        }
+    .card::before { content:"🐱 🐱 🐱"; position:absolute; top:-20px; right:-20px; font-size:5rem; opacity:0.08; transform:rotate(8deg); white-space:nowrap; pointer-events:none; }
+    .card::after { content:"🐾"; position:absolute; bottom:10px; left:10px; font-size:4rem; opacity:0.08; transform:rotate(-10deg); pointer-events:none; }
+    .floating-cats { position:absolute; width:100%; height:100%; top:0; left:0; pointer-events:none; overflow:hidden; z-index:0; }
+    .floating-cats span { position:absolute; font-size:2rem; opacity:0.12; animation:floatUp 14s infinite linear; }
+    @keyframes floatUp {
+      0% { transform:translateY(100%) rotate(0deg); opacity:0.05; }
+      20% { opacity:0.15; }
+      80% { opacity:0.15; }
+      100% { transform:translateY(-120%) rotate(15deg); opacity:0; }
     }
-    ctx.stroke();
-}
+    .content { position:relative; z-index:2; }
+    .header { text-align:center; margin-bottom:2.2rem; }
+    .header h1 { font-family:'Playfair Display',serif; font-weight:700; font-size:2.8rem; color:#f0d5e0; letter-spacing:2px; text-shadow:0 4px 15px rgba(200,100,150,0.3); margin-bottom:0.3rem; }
+    .header .subhead { font-size:1.1rem; font-weight:300; color:#c9a5b5; letter-spacing:3px; background:rgba(60,40,50,0.5); display:inline-block; padding:0.3rem 2rem; border-radius:40px; backdrop-filter:blur(4px); border:1px solid rgba(200,150,170,0.2); }
+    .divider { width:80px; height:3px; background:linear-gradient(90deg,#b07a8f,#d99bb0,#b07a8f); margin:1rem auto 1.5rem; border-radius:10px; }
+    .story { display:flex; flex-direction:column; gap:1.8rem; margin:2rem 0 1rem; }
+    .story-item { background:rgba(60,40,50,0.5); backdrop-filter:blur(2px); border-radius:40px 20px 40px 20px; padding:1.5rem 2rem; box-shadow:0 6px 18px rgba(0,0,0,0.3); border-left:6px solid #b07a8f; transition:all 0.25s ease; position:relative; }
+    .story-item:hover { transform:translateY(-4px) scale(1.01); background:rgba(80,55,65,0.6); box-shadow:0 14px 28px rgba(0,0,0,0.5); border-left-color:#d99bb0; }
+    .story-item .date { font-family:'Playfair Display',serif; font-weight:700; font-size:1.3rem; color:#e6c4d0; display:flex; align-items:center; gap:10px; margin-bottom:0.5rem; flex-wrap:wrap; }
+    .story-item .date span { background:rgba(100,70,85,0.5); padding:0.1rem 0.8rem; border-radius:30px; font-size:0.9rem; font-weight:400; color:#e6c4d0; }
+    .story-item p { font-size:1.05rem; line-height:1.7; color:#f0e0e6; font-weight:300; }
+    .story-item .emoji-deco { position:absolute; right:20px; top:15px; font-size:2rem; opacity:0.2; pointer-events:none; }
+    .epilogue { margin:2.8rem 0 1.5rem; text-align:center; padding:1.5rem 1rem; background:rgba(60,40,50,0.3); border-radius:60px 20px 60px 20px; border:1px solid rgba(200,150,170,0.2); }
+    .epilogue p { font-size:1.4rem; font-family:'Playfair Display',serif; font-style:italic; color:#f0d5e0; letter-spacing:1px; line-height:1.8; }
+    .epilogue .heart-icon { display:inline-block; animation:pulse 2.2s infinite; font-size:2rem; margin:0 8px; }
+    @keyframes pulse { 0% { transform:scale(1); } 50% { transform:scale(1.2); } 100% { transform:scale(1); } }
+    .media-section { margin:2.5rem 0 1.5rem; padding-top:1.5rem; border-top:2px dashed rgba(200,150,170,0.2); }
+    .media-section h2 { font-family:'Playfair Display',serif; font-weight:700; color:#f0d5e0; font-size:2rem; text-align:center; margin-bottom:1.5rem; letter-spacing:1px; }
+    .photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:1rem; margin-bottom:2rem; }
+    .photo-item { position:relative; aspect-ratio:1/1; border-radius:20px; overflow:hidden; background:#3a2a33; border:2px solid rgba(200,150,170,0.2); transition:0.2s; display:flex; align-items:center; justify-content:center; font-size:2.5rem; color:#b07a8f; }
+    .photo-item img { width:100%; height:100%; object-fit:cover; display:block; }
+    .photo-item .placeholder { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; background:#3a2a33; color:#b07a8f; font-size:0.9rem; font-weight:300; }
+    .photo-item .placeholder span { font-size:2.5rem; display:block; margin-bottom:4px; }
+    .upload-area { display:flex; flex-wrap:wrap; gap:1.5rem; align-items:center; justify-content:center; margin:1rem 0 2rem; background:rgba(60,40,50,0.3); padding:1.5rem; border-radius:40px; backdrop-filter:blur(2px); border:1px dashed #b07a8f; }
+    .upload-area label { background:#b07a8f; color:#1a1118; padding:0.7rem 1.8rem; border-radius:60px; font-weight:600; cursor:pointer; transition:0.2s; box-shadow:0 4px 10px rgba(0,0,0,0.3); display:inline-flex; align-items:center; gap:8px; }
+    .upload-area label:hover { background:#d99bb0; transform:scale(1.02); }
+    .upload-area input[type="file"] { display:none; }
+    .upload-area .hint { color:#c9a5b5; font-size:0.95rem; font-weight:300; }
 
-// Рендер всех карточек с вопросами
-function renderQuestions() {
-    const container = document.getElementById('questionsContainer');
-    container.innerHTML = '';
-    questionsData.forEach(q => {
-        const card = document.createElement('div');
-        card.className = 'quiz-card';
-        card.setAttribute('data-qid', q.id);
+    /* Аудио */
+    .audio-common { background:rgba(60,40,50,0.3); border-radius:60px; padding:1.5rem 2rem; backdrop-filter:blur(2px); border:1px solid rgba(200,150,170,0.2); margin:1.5rem 0; }
+    .audio-common .player-row { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:1rem; margin-bottom:0.8rem; }
+    .audio-common audio { width:100%; max-width:450px; border-radius:40px; outline:none; background:#2d1b2a; filter:invert(0.9) hue-rotate(180deg); }
+    .audio-common .url-input-area { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:0.8rem; margin-top:0.5rem; }
+    .audio-common .url-input-area input { flex:1 1 250px; padding:0.6rem 1.2rem; border-radius:60px; border:1px solid rgba(200,150,170,0.3); background:rgba(30,20,25,0.6); color:#f0e0e6; font-size:0.95rem; outline:none; transition:0.2s; }
+    .audio-common .url-input-area input:focus { border-color:#d99bb0; box-shadow:0 0 12px rgba(200,100,150,0.2); }
+    .audio-common .url-input-area button { background:#b07a8f; color:#1a1118; border:none; padding:0.6rem 1.8rem; border-radius:60px; font-weight:600; cursor:pointer; transition:0.2s; box-shadow:0 4px 10px rgba(0,0,0,0.3); font-size:0.95rem; }
+    .audio-common .url-input-area button:hover { background:#d99bb0; transform:scale(1.02); }
+    .audio-common .hint { color:#c9a5b5; font-size:0.9rem; text-align:center; margin-top:0.5rem; font-weight:300; }
+    .local-audio-row { margin-top:0.8rem; border-top:1px dashed rgba(200,150,170,0.2); padding-top:0.8rem; }
+    .local-audio-row label { background:#6a4a5a; color:#f0e0e6; padding:0.5rem 1.5rem; border-radius:60px; cursor:pointer; transition:0.2s; display:inline-flex; align-items:center; gap:8px; font-weight:400; }
+    .local-audio-row label:hover { background:#8a5a6a; }
 
-        const header = document.createElement('div');
-        header.className = 'card-header';
-        header.innerHTML = `<i class="fas fa-puzzle-piece"></i><h3>Задание №${q.id}</h3>`;
+    .footer-note { margin-top:2rem; display:flex; justify-content:center; gap:1.2rem; flex-wrap:wrap; font-size:0.9rem; color:#c9a5b5; border-top:1px solid rgba(200,150,170,0.2); padding-top:1.8rem; }
+    .footer-note span { background:rgba(60,40,50,0.3); padding:0.2rem 1.2rem; border-radius:50px; backdrop-filter:blur(2px); }
 
-        const textDiv = document.createElement('div');
-        textDiv.className = 'question-text';
-        textDiv.innerHTML = `<p>${q.text}</p>`;
+    @media (max-width:550px) { .card { padding:1.8rem 1.2rem; } .header h1 { font-size:2.2rem; } .story-item { padding:1.2rem; } .story-item p { font-size:1rem; } .epilogue p { font-size:1.2rem; } .story-item .date { font-size:1.1rem; } .photo-grid { grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); } .audio-common { padding:1.2rem; } }
+    @media (max-width:400px) { .header h1 { font-size:1.8rem; } }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="floating-cats">
+    <span style="left:5%; animation-delay:0s;">🐱</span><span style="left:20%; animation-delay:2.5s;">😺</span>
+    <span style="left:40%; animation-delay:5s;">🐈</span><span style="left:65%; animation-delay:1.2s;">🐾</span>
+    <span style="left:85%; animation-delay:3.8s;">🐱</span><span style="left:50%; animation-delay:6.5s;">😻</span>
+    <span style="left:10%; animation-delay:8s;">🐈‍⬛</span><span style="left:75%; animation-delay:10s;">🐱</span>
+    <span style="left:30%; animation-delay:4s;">😽</span><span style="left:90%; animation-delay:7s;">🐈</span>
+  </div>
+  <div class="content">
+    <div class="header">
+      <h1>✨ Андрей & Варя ✨</h1>
+      <div class="subhead">наша история 2025 🐾</div>
+      <div class="divider"></div>
+    </div>
 
-        const inputArea = document.createElement('div');
-        inputArea.className = 'input-area';
+    <div class="story">
+      <div class="story-item"><div class="date"><span>🍃</span> Июнь 2025 <span>встреча</span></div><p>Я, Андрей, решил навестить друга Санана в общаге. Там были две девочки — Варя и Алиса. Мы тогда не общались, но судьба уже свела нас. Варя курила у меня в умывальнике, а я ещё ничего не понимал…</p><div class="emoji-deco">🐈</div></div>
+      <div class="story-item"><div class="date"><span>🌙</span> Июль 2025 <span>заливка вейпа</span></div><p>Через неделю Варя с Алисой пришли ко мне в «кастоломку» залить жидкость. Я залил, они ушли. Позже мы начали гулять вместе, и я понял, что Варя — особенная. Но тогда ещё не знал, что нас ждёт.</p><div class="emoji-deco">😺</div></div>
+      <div class="story-item"><div class="date"><span>💌</span> 7 августа 2025 <span>признание</span></div><p>Ровно в полночь Варя написала мне о любви. Я колебался из-за Санана, но она объяснила, что они мутили по приколу. Я согласился. Утром мы сказали Санану — он разозлился, угрожал неделю, но потом помирились. Началась наша настоящая история.</p><div class="emoji-deco">🐱</div></div>
+      <div class="story-item"><div class="date"><span>🍂</span> Осень 2025 <span>ночёвки и Хэллоуин</span></div><p>Мы гуляли в основном в общаге — на улице было холодно. Часто ночевали у Кати, подруги Вари. На Хэллоуин делали грим, пили алкоголь, играли в «угадай слово» — я ужасно тупил, но было весело. Запомнилась ночь, когда я случайно довёл Настю, и она ушла гулять — мы все были на панике, но она вернулась.</p><div class="emoji-deco">🐈‍⬛</div></div>
+      <div class="story-item"><div class="date"><span>🎄</span> Новый год 2025 <span>комната и ужастики</span></div><p>Варя позвала меня праздновать в общагу. Мама дала ключи от бабушкиной комнаты, и мы часто ночевали там. Смотрели страшные фильмы — я смеялся над «Астралом», а Варя боялась. Мы теряли ключи, но мама снова давала их. Летом тоже ходили туда, пока не приехала бабушка.</p><div class="emoji-deco">😻</div></div>
+      <div class="story-item"><div class="date"><span>🎬</span> Весна–Лето 2025 <span>кино и ПВЗ</span></div><p>Ходили в кино на «Колобка» — Варе очень понравилось. Работали промоутерами на ПВЗ «Озон», гуляли, веселились. Каждый день рядом с Варей был наполнен светом. Мы строили планы и верили, что всё будет хорошо.</p><div class="emoji-deco">🐾</div></div>
+      <div class="story-item"><div class="date"><span>✈️</span> Август 2025 <span>прощание в аэропорту</span></div><p>Варя улетела в Сочи, а меня не отпустили. Я пишу этот текст, пока она сидит в самолёте. Я люблю её сильнее всех на свете. Я верю, что наша любовь переживёт любые расстояния. Варюша, я тебя очень сильно люблю ❤️</p><div class="emoji-deco">🐈</div></div>
+    </div>
 
-        let inputHtml = '';
-        if (q.type === 'number') {
-            inputHtml = `<input type="number" step="any" id="input_${q.id}" placeholder="Введите число" class="answer-input" data-id="${q.id}" data-type="number">`;
-        } else if (q.type === 'choice') {
-            inputHtml = `<select id="input_${q.id}" class="answer-select" data-id="${q.id}" data-type="choice">
-                            <option value="">-- Выберите вариант --</option>`;
-            q.options.forEach(opt => {
-                const val = opt[0];
-                inputHtml += `<option value="${val}">${opt}</option>`;
-            });
-            inputHtml += `</select>`;
-        } else if (q.type === 'checkbox') {
-            inputHtml = `<div class="checkbox-group" data-id="${q.id}">
-                            <label><input type="checkbox" value="1" class="chk_${q.id}"> Утверждение 1</label><br>
-                            <label><input type="checkbox" value="2" class="chk_${q.id}"> Утверждение 2</label><br>
-                            <label><input type="checkbox" value="3" class="chk_${q.id}"> Утверждение 3</label>
-                         </div>`;
-        } else if (q.type === 'string') {
-            inputHtml = `<input type="text" id="input_${q.id}" placeholder="Введите ответ" class="answer-input" data-id="${q.id}" data-type="string">`;
-        }
+    <div class="epilogue">
+      <p><span class="heart-icon">❤️</span> Я люблю тебя, Варюша. Ты — моя самая тёплая глава. <span class="heart-icon">❤️</span></p>
+      <div style="margin-top:12px; font-size:1rem; font-style:normal; font-family:'Quicksand',sans-serif; color:#c9a5b5; font-weight:300;">«Надеюсь, у нас будет так же хорошо, как и до разлуки» 🐱</div>
+    </div>
 
-        inputArea.innerHTML = inputHtml;
-        card.appendChild(header);
-        card.appendChild(textDiv);
-        card.appendChild(inputArea);
+    <!-- ФОТО -->
+    <div class="media-section">
+      <h2>📸 Наши фото</h2>
+      <div class="photo-grid" id="photoGrid">
+        <div class="photo-item"><div class="placeholder"><span>🖼️</span> Загрузите<br>фото</div></div>
+      </div>
+      <div class="upload-area">
+        <label for="photoInput">📤 Выбрать фото</label>
+        <input type="file" id="photoInput" accept="image/*" multiple />
+        <span class="hint">(можно несколько)</span>
+      </div>
 
-        const feedbackDiv = document.createElement('div');
-        feedbackDiv.className = 'result-badge';
-        feedbackDiv.id = `fb_${q.id}`;
-        card.appendChild(feedbackDiv);
-        container.appendChild(card);
-    });
+      <!-- АУДИО -->
+      <h2 style="margin-top:2rem;">🎵 Наша песня</h2>
+      <div class="audio-common">
+        <div class="player-row">
+          <audio id="commonAudio" controls style="width:100%; max-width:450px;">
+            <source src="" type="audio/mpeg" />
+            Ваш браузер не поддерживает аудио.
+          </audio>
+        </div>
+        <div class="url-input-area">
+          <input type="text" id="audioUrlInput" placeholder="Вставьте прямую ссылку на MP3" value="https://drive.google.com/uc?export=download&id=1FUvjJ2ZsOt0WFMqi58w428FvJGGVwOiY" />
+          <button id="setAudioBtn">🎧 Установить для всех</button>
+        </div>
+        <div class="local-audio-row url-input-area" style="border-top:1px dashed rgba(200,150,170,0.2); padding-top:0.8rem; margin-top:0.8rem;">
+          <label for="localAudioInput">📁 Загрузить с устройства (только для вас)</label>
+          <input type="file" id="localAudioInput" accept="audio/*" style="display:none;" />
+          <span class="hint" style="font-size:0.85rem; margin-left:0.5rem;">Файл останется локально</span>
+        </div>
+        <div class="hint">💡 Чтобы песня играла у всех, откройте доступ к файлу на Google Диске (ссылка уже вставлена).</div>
+      </div>
+    </div>
 
-    // После добавления всех карточек отрисовываем графики для задания 11
-    renderGraphsIntoCard();
+    <div class="footer-note">
+      <span>💖 Андрей & Варя</span><span>✨ навечно</span><span>🌹 2025</span><span>🐱 🐾</span>
+    </div>
+  </div>
+</div>
 
-    // Прикрепляем обработчики событий для сохранения ответов
-    attachEventListeners();
-}
-
-function attachEventListeners() {
-    // Обработка числовых и текстовых полей
-    document.querySelectorAll('.answer-input').forEach(inp => {
-        inp.addEventListener('change', (e) => {
-            const id = parseInt(inp.dataset.id);
-            let val = inp.value.trim();
-            if (val === '') {
-                userAnswers[id] = undefined;
-            } else {
-                if (inp.dataset.type === 'number') userAnswers[id] = parseFloat(val);
-                else userAnswers[id] = val;
-            }
-        });
-        // Восстановление сохранённых значений (при сбросе не нужно, но для полноты)
-        const id = parseInt(inp.dataset.id);
-        if (userAnswers[id] !== undefined) inp.value = userAnswers[id];
+<script>
+  (function() {
+    // ФОТО
+    const photoInput = document.getElementById('photoInput');
+    const photoGrid = document.getElementById('photoGrid');
+    photoInput.addEventListener('change', function(e) {
+      const files = e.target.files;
+      if (!files.length) return;
+      while (photoGrid.firstChild) photoGrid.removeChild(photoGrid.firstChild);
+      let hasImages = false;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!file.type.startsWith('image/')) continue;
+        hasImages = true;
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          const div = document.createElement('div');
+          div.className = 'photo-item';
+          const img = document.createElement('img');
+          img.src = ev.target.result;
+          img.alt = 'Фото';
+          div.appendChild(img);
+          photoGrid.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      }
+      if (!hasImages) {
+        const placeholderDiv = document.createElement('div');
+        placeholderDiv.className = 'photo-item';
+        placeholderDiv.innerHTML = `<div class="placeholder"><span>🖼️</span> Загрузите<br>фото</div>`;
+        photoGrid.appendChild(placeholderDiv);
+      }
     });
 
-    // Обработка выпадающих списков (choice)
-    document.querySelectorAll('.answer-select').forEach(sel => {
-        sel.addEventListener('change', (e) => {
-            const id = parseInt(sel.dataset.id);
-            userAnswers[id] = sel.value;
-        });
-        const id = parseInt(sel.dataset.id);
-        if (userAnswers[id]) sel.value = userAnswers[id];
+    // АУДИО ПО ССЫЛКЕ
+    const audioPlayer = document.getElementById('commonAudio');
+    const audioUrlInput = document.getElementById('audioUrlInput');
+    const setAudioBtn = document.getElementById('setAudioBtn');
+
+    // При загрузке страницы пробуем установить ссылку из поля
+    const defaultUrl = audioUrlInput.value.trim();
+    if (defaultUrl) {
+      audioPlayer.src = defaultUrl;
+      audioPlayer.load();
+    }
+
+    setAudioBtn.addEventListener('click', function() {
+      const url = audioUrlInput.value.trim();
+      if (!url) { alert('Введите ссылку на аудиофайл.'); return; }
+      audioPlayer.src = url;
+      audioPlayer.load();
+      localStorage.setItem('commonAudioUrl', url);
+      audioPlayer.play().catch(() => {});
     });
 
-    // Обработка чекбоксов (задание 19)
-    const checkboxes = document.querySelectorAll('[class^="chk_"]');
-    checkboxes.forEach(cb => {
-        cb.addEventListener('change', () => {
-            const classes = cb.className.split(' ');
-            let qid = null;
-            for (let cls of classes) {
-                if (cls.startsWith('chk_')) {
-                    qid = parseInt(cls.split('_')[1]);
-                    break;
-                }
-            }
-            if (qid) {
-                const checkedBoxes = Array.from(document.querySelectorAll(`.chk_${qid}:checked`)).map(c => c.value);
-                userAnswers[qid] = checkedBoxes.join(',');
-            }
-        });
-        // Восстановление
-        const match = cb.className.match(/chk_(\d+)/);
-        if (match) {
-            const qid = parseInt(match[1]);
-            if (userAnswers[qid] && userAnswers[qid].includes(cb.value)) cb.checked = true;
-        }
+    // ЛОКАЛЬНОЕ АУДИО
+    const localAudioInput = document.getElementById('localAudioInput');
+    localAudioInput.addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('audio/')) { alert('Выберите аудиофайл'); return; }
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        const blob = new Blob([ev.target.result], { type: file.type });
+        const url = URL.createObjectURL(blob);
+        audioPlayer.src = url;
+        audioPlayer.load();
+        audioPlayer.play().catch(() => {});
+      };
+      reader.readAsArrayBuffer(file);
     });
-}
-
-// Проверка ответов и вывод оценки
-function checkAnswers() {
-    let totalCorrect = 0;
-    questionsData.forEach(q => {
-        let userVal = userAnswers[q.id];
-        let isCorrect = false;
-        const correctAnswer = q.correct;
-
-        if (q.type === 'number') {
-            if (userVal !== undefined && !isNaN(userVal)) {
-                isCorrect = Math.abs(userVal - correctAnswer) < 0.001;
-            }
-        } else if (q.type === 'choice') {
-            if (userVal === correctAnswer) isCorrect = true;
-        } else if (q.type === 'checkbox') {
-            if (userVal === correctAnswer) isCorrect = true;
-        } else if (q.type === 'string') {
-            if (userVal === correctAnswer) isCorrect = true;
-        }
-
-        const feedbackSpan = document.getElementById(`fb_${q.id}`);
-        if (feedbackSpan) {
-            if (isCorrect) {
-                feedbackSpan.innerHTML = '<span class="correct-feedback"><i class="fas fa-check-circle"></i> Верно!</span>';
-                totalCorrect++;
-            } else {
-                let correctDisplay = correctAnswer;
-                if (q.type === 'choice' && q.options) {
-                    const opt = q.options.find(o => o.startsWith(correctAnswer));
-                    correctDisplay = opt ? opt : correctAnswer;
-                }
-                feedbackSpan.innerHTML = `<span class="wrong-feedback"><i class="fas fa-times-circle"></i> Ошибка. Правильный ответ: ${correctDisplay}</span>`;
-            }
-        }
-    });
-
-    const scorePanel = document.getElementById('scorePanel');
-    scorePanel.style.display = 'flex';
-    document.getElementById('scoreValue').innerText = `${totalCorrect} / ${questionsData.length}`;
-
-    const percent = (totalCorrect / questionsData.length) * 100;
-    let grade = 2;
-    if (percent >= 85) grade = 5;
-    else if (percent >= 65) grade = 4;
-    else if (percent >= 45) grade = 3;
-    const gradeText = grade === 5 ? 'Отлично (5) ✨' : grade === 4 ? 'Хорошо (4) 📘' : grade === 3 ? 'Удовлетворительно (3) 📝' : 'Неудовлетворительно (2) 📖';
-    document.getElementById('gradeMessage').innerHTML = `<i class="fas fa-star"></i> ${gradeText}`;
-
-    const perfectDiv = document.getElementById('perfectBonus');
-    if (totalCorrect === questionsData.length) {
-        perfectDiv.innerHTML = '<span style="background:gold; padding:0.4rem 1rem; border-radius:2rem;">🏆 АБСОЛЮТНЫЙ РЕЗУЛЬТАТ! 🎉</span>';
-        triggerConfetti();
-    } else {
-        perfectDiv.innerHTML = '';
-    }
-    scorePanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function triggerConfetti() {
-    if (window.confetti) {
-        window.confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 }, startVelocity: 20 });
-    } else {
-        // fallback
-        for (let i = 0; i < 80; i++) {
-            const conf = document.createElement('div');
-            conf.style.position = 'fixed';
-            conf.style.width = '10px';
-            conf.style.height = '10px';
-            conf.style.background = `hsl(${Math.random() * 360}, 80%, 60%)`;
-            conf.style.left = Math.random() * 100 + '%';
-            conf.style.top = '-10px';
-            conf.style.borderRadius = '50%';
-            conf.style.pointerEvents = 'none';
-            conf.style.zIndex = '10000';
-            document.body.appendChild(conf);
-            conf.animate([
-                { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
-                { transform: `translateY(${window.innerHeight + 50}px) rotate(720deg)`, opacity: 0 }
-            ], { duration: 1500, easing: 'cubic-bezier(0.2,0.9,0.4,1)' });
-            setTimeout(() => conf.remove(), 1500);
-        }
-    }
-}
-
-function resetAnswers() {
-    // Просто перезагружаем страницу для чистого сброса
-    location.reload();
-}
-
-window.onload = () => {
-    generatePlan();
-    renderQuestions();
-    document.getElementById('checkBtn').addEventListener('click', checkAnswers);
-    document.getElementById('resetBtn').addEventListener('click', resetAnswers);
-    // Загружаем библиотеку конфетти
-    if (!window.confetti) {
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/canvas-confetti@1';
-        script.onload = () => { window.confetti = canvasConfetti; };
-        document.head.appendChild(script);
-    }
-};
+  })();
+</script>
+</body>
+</html>
