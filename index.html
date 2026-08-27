@@ -1,239 +1,138 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Андрей и Варя — 2025</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
-  <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      background: linear-gradient(145deg, #1a1118 0%, #2d1b2a 100%);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      font-family: 'Quicksand', sans-serif;
-      padding: 2rem 1rem;
-    }
-    .card {
-      max-width: 860px;
-      width: 100%;
-      background: rgba(40, 25, 35, 0.8);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 48px;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 4px rgba(255,200,220,0.1);
-      padding: 2.5rem 2.2rem;
-      border: 1px solid rgba(200,150,170,0.25);
-      position: relative;
-      overflow: hidden;
-    }
-    .card::before { content:"🐱 🐱 🐱"; position:absolute; top:-20px; right:-20px; font-size:5rem; opacity:0.08; transform:rotate(8deg); white-space:nowrap; pointer-events:none; }
-    .card::after { content:"🐾"; position:absolute; bottom:10px; left:10px; font-size:4rem; opacity:0.08; transform:rotate(-10deg); pointer-events:none; }
-    .floating-cats { position:absolute; width:100%; height:100%; top:0; left:0; pointer-events:none; overflow:hidden; z-index:0; }
-    .floating-cats span { position:absolute; font-size:2rem; opacity:0.12; animation:floatUp 14s infinite linear; }
-    @keyframes floatUp {
-      0% { transform:translateY(100%) rotate(0deg); opacity:0.05; }
-      20% { opacity:0.15; }
-      80% { opacity:0.15; }
-      100% { transform:translateY(-120%) rotate(15deg); opacity:0; }
-    }
-    .content { position:relative; z-index:2; }
-    .header { text-align:center; margin-bottom:2.2rem; }
-    .header h1 { font-family:'Playfair Display',serif; font-weight:700; font-size:2.8rem; color:#f0d5e0; letter-spacing:2px; text-shadow:0 4px 15px rgba(200,100,150,0.3); margin-bottom:0.3rem; }
-    .header .subhead { font-size:1.1rem; font-weight:300; color:#c9a5b5; letter-spacing:3px; background:rgba(60,40,50,0.5); display:inline-block; padding:0.3rem 2rem; border-radius:40px; backdrop-filter:blur(4px); border:1px solid rgba(200,150,170,0.2); }
-    .divider { width:80px; height:3px; background:linear-gradient(90deg,#b07a8f,#d99bb0,#b07a8f); margin:1rem auto 1.5rem; border-radius:10px; }
-    .story { display:flex; flex-direction:column; gap:1.8rem; margin:2rem 0 1rem; }
-    .story-item { background:rgba(60,40,50,0.5); backdrop-filter:blur(2px); border-radius:40px 20px 40px 20px; padding:1.5rem 2rem; box-shadow:0 6px 18px rgba(0,0,0,0.3); border-left:6px solid #b07a8f; transition:all 0.25s ease; position:relative; }
-    .story-item:hover { transform:translateY(-4px) scale(1.01); background:rgba(80,55,65,0.6); box-shadow:0 14px 28px rgba(0,0,0,0.5); border-left-color:#d99bb0; }
-    .story-item .date { font-family:'Playfair Display',serif; font-weight:700; font-size:1.3rem; color:#e6c4d0; display:flex; align-items:center; gap:10px; margin-bottom:0.5rem; flex-wrap:wrap; }
-    .story-item .date span { background:rgba(100,70,85,0.5); padding:0.1rem 0.8rem; border-radius:30px; font-size:0.9rem; font-weight:400; color:#e6c4d0; }
-    .story-item p { font-size:1.05rem; line-height:1.7; color:#f0e0e6; font-weight:300; }
-    .story-item .emoji-deco { position:absolute; right:20px; top:15px; font-size:2rem; opacity:0.2; pointer-events:none; }
-    .epilogue { margin:2.8rem 0 1.5rem; text-align:center; padding:1.5rem 1rem; background:rgba(60,40,50,0.3); border-radius:60px 20px 60px 20px; border:1px solid rgba(200,150,170,0.2); }
-    .epilogue p { font-size:1.4rem; font-family:'Playfair Display',serif; font-style:italic; color:#f0d5e0; letter-spacing:1px; line-height:1.8; }
-    .epilogue .heart-icon { display:inline-block; animation:pulse 2.2s infinite; font-size:2rem; margin:0 8px; }
-    @keyframes pulse { 0% { transform:scale(1); } 50% { transform:scale(1.2); } 100% { transform:scale(1); } }
-    .media-section { margin:2.5rem 0 1.5rem; padding-top:1.5rem; border-top:2px dashed rgba(200,150,170,0.2); }
-    .media-section h2 { font-family:'Playfair Display',serif; font-weight:700; color:#f0d5e0; font-size:2rem; text-align:center; margin-bottom:1.5rem; letter-spacing:1px; }
-    .photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:1rem; margin-bottom:2rem; }
-    .photo-item { position:relative; aspect-ratio:1/1; border-radius:20px; overflow:hidden; background:#3a2a33; border:2px solid rgba(200,150,170,0.2); transition:0.2s; display:flex; align-items:center; justify-content:center; font-size:2.5rem; color:#b07a8f; }
-    .photo-item img { width:100%; height:100%; object-fit:cover; display:block; }
-    .photo-item .placeholder { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; background:#3a2a33; color:#b07a8f; font-size:0.9rem; font-weight:300; }
-    .photo-item .placeholder span { font-size:2.5rem; display:block; margin-bottom:4px; }
-    .upload-area { display:flex; flex-wrap:wrap; gap:1.5rem; align-items:center; justify-content:center; margin:1rem 0 2rem; background:rgba(60,40,50,0.3); padding:1.5rem; border-radius:40px; backdrop-filter:blur(2px); border:1px dashed #b07a8f; }
-    .upload-area label { background:#b07a8f; color:#1a1118; padding:0.7rem 1.8rem; border-radius:60px; font-weight:600; cursor:pointer; transition:0.2s; box-shadow:0 4px 10px rgba(0,0,0,0.3); display:inline-flex; align-items:center; gap:8px; }
-    .upload-area label:hover { background:#d99bb0; transform:scale(1.02); }
-    .upload-area input[type="file"] { display:none; }
-    .upload-area .hint { color:#c9a5b5; font-size:0.95rem; font-weight:300; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мини-игра</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #222;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        #game-area {
+            text-align: center;
+            width: 400px;
+            height: 400px;
+            border: 2px dashed #555;
+            position: relative;
+            background-color: #333;
+            border-radius: 20px;
+        }
+        
+        #score-text {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            font-size: 24px;
+            font-weight: bold;
+            pointer-events: none;
+        }
 
-    /* Аудио */
-    .audio-common { background:rgba(60,40,50,0.3); border-radius:60px; padding:1.5rem 2rem; backdrop-filter:blur(2px); border:1px solid rgba(200,150,170,0.2); margin:1.5rem 0; }
-    .audio-common .player-row { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:1rem; margin-bottom:0.8rem; }
-    .audio-common audio { width:100%; max-width:450px; border-radius:40px; outline:none; background:#2d1b2a; filter:invert(0.9) hue-rotate(180deg); }
-    .audio-common .url-input-area { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:0.8rem; margin-top:0.5rem; }
-    .audio-common .url-input-area input { flex:1 1 250px; padding:0.6rem 1.2rem; border-radius:60px; border:1px solid rgba(200,150,170,0.3); background:rgba(30,20,25,0.6); color:#f0e0e6; font-size:0.95rem; outline:none; transition:0.2s; }
-    .audio-common .url-input-area input:focus { border-color:#d99bb0; box-shadow:0 0 12px rgba(200,100,150,0.2); }
-    .audio-common .url-input-area button { background:#b07a8f; color:#1a1118; border:none; padding:0.6rem 1.8rem; border-radius:60px; font-weight:600; cursor:pointer; transition:0.2s; box-shadow:0 4px 10px rgba(0,0,0,0.3); font-size:0.95rem; }
-    .audio-common .url-input-area button:hover { background:#d99bb0; transform:scale(1.02); }
-    .audio-common .hint { color:#c9a5b5; font-size:0.9rem; text-align:center; margin-top:0.5rem; font-weight:300; }
-    .local-audio-row { margin-top:0.8rem; border-top:1px dashed rgba(200,150,170,0.2); padding-top:0.8rem; }
-    .local-audio-row label { background:#6a4a5a; color:#f0e0e6; padding:0.5rem 1.5rem; border-radius:60px; cursor:pointer; transition:0.2s; display:inline-flex; align-items:center; gap:8px; font-weight:400; }
-    .local-audio-row label:hover { background:#8a5a6a; }
+        #click-btn {
+            position: absolute;
+            padding: 15px 30px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: transform 0.1s;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        #click-btn:active {
+            transform: translate(-50%, -50%) scale(0.9);
+        }
 
-    .footer-note { margin-top:2rem; display:flex; justify-content:center; gap:1.2rem; flex-wrap:wrap; font-size:0.9rem; color:#c9a5b5; border-top:1px solid rgba(200,150,170,0.2); padding-top:1.8rem; }
-    .footer-note span { background:rgba(60,40,50,0.3); padding:0.2rem 1.2rem; border-radius:50px; backdrop-filter:blur(2px); }
+        #prize {
+            display: none;
+            text-align: center;
+            background-color: #444;
+            padding: 20px;
+            border-radius: 20px;
+            animation: popIn 0.5s ease-out;
+            max-width: 500px;
+        }
 
-    @media (max-width:550px) { .card { padding:1.8rem 1.2rem; } .header h1 { font-size:2.2rem; } .story-item { padding:1.2rem; } .story-item p { font-size:1rem; } .epilogue p { font-size:1.2rem; } .story-item .date { font-size:1.1rem; } .photo-grid { grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); } .audio-common { padding:1.2rem; } }
-    @media (max-width:400px) { .header h1 { font-size:1.8rem; } }
-  </style>
+        #prize img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255,215,0,0.8);
+            margin-top: 10px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
 </head>
 <body>
-<div class="card">
-  <div class="floating-cats">
-    <span style="left:5%; animation-delay:0s;">🐱</span><span style="left:20%; animation-delay:2.5s;">😺</span>
-    <span style="left:40%; animation-delay:5s;">🐈</span><span style="left:65%; animation-delay:1.2s;">🐾</span>
-    <span style="left:85%; animation-delay:3.8s;">🐱</span><span style="left:50%; animation-delay:6.5s;">😻</span>
-    <span style="left:10%; animation-delay:8s;">🐈‍⬛</span><span style="left:75%; animation-delay:10s;">🐱</span>
-    <span style="left:30%; animation-delay:4s;">😽</span><span style="left:90%; animation-delay:7s;">🐈</span>
-  </div>
-  <div class="content">
-    <div class="header">
-      <h1>✨ Андрей & Варя ✨</h1>
-      <div class="subhead">наша история 2025 🐾</div>
-      <div class="divider"></div>
+
+    <div id="game-area">
+        <p id="score-text">Счёт: 0 / 10</p>
+        <button id="click-btn">Жми!</button>
     </div>
 
-    <div class="story">
-      <div class="story-item"><div class="date"><span>🍃</span> Июнь 2025 <span>встреча</span></div><p>Я, Андрей, решил навестить друга Санана в общаге. Там были две девочки — Варя и Алиса. Мы тогда не общались, но судьба уже свела нас. Варя курила у меня в умывальнике, а я ещё ничего не понимал…</p><div class="emoji-deco">🐈</div></div>
-      <div class="story-item"><div class="date"><span>🌙</span> Июль 2025 <span>заливка вейпа</span></div><p>Через неделю Варя с Алисой пришли ко мне в «кастоломку» залить жидкость. Я залил, они ушли. Позже мы начали гулять вместе, и я понял, что Варя — особенная. Но тогда ещё не знал, что нас ждёт.</p><div class="emoji-deco">😺</div></div>
-      <div class="story-item"><div class="date"><span>💌</span> 7 августа 2025 <span>признание</span></div><p>Ровно в полночь Варя написала мне о любви. Я колебался из-за Санана, но она объяснила, что они мутили по приколу. Я согласился. Утром мы сказали Санану — он разозлился, угрожал неделю, но потом помирились. Началась наша настоящая история.</p><div class="emoji-deco">🐱</div></div>
-      <div class="story-item"><div class="date"><span>🍂</span> Осень 2025 <span>ночёвки и Хэллоуин</span></div><p>Мы гуляли в основном в общаге — на улице было холодно. Часто ночевали у Кати, подруги Вари. На Хэллоуин делали грим, пили алкоголь, играли в «угадай слово» — я ужасно тупил, но было весело. Запомнилась ночь, когда я случайно довёл Настю, и она ушла гулять — мы все были на панике, но она вернулась.</p><div class="emoji-deco">🐈‍⬛</div></div>
-      <div class="story-item"><div class="date"><span>🎄</span> Новый год 2025 <span>комната и ужастики</span></div><p>Варя позвала меня праздновать в общагу. Мама дала ключи от бабушкиной комнаты, и мы часто ночевали там. Смотрели страшные фильмы — я смеялся над «Астралом», а Варя боялась. Мы теряли ключи, но мама снова давала их. Летом тоже ходили туда, пока не приехала бабушка.</p><div class="emoji-deco">😻</div></div>
-      <div class="story-item"><div class="date"><span>🎬</span> Весна–Лето 2025 <span>кино и ПВЗ</span></div><p>Ходили в кино на «Колобка» — Варе очень понравилось. Работали промоутерами на ПВЗ «Озон», гуляли, веселились. Каждый день рядом с Варей был наполнен светом. Мы строили планы и верили, что всё будет хорошо.</p><div class="emoji-deco">🐾</div></div>
-      <div class="story-item"><div class="date"><span>✈️</span> Август 2025 <span>прощание в аэропорту</span></div><p>Варя улетела в Сочи, а меня не отпустили. Я пишу этот текст, пока она сидит в самолёте. Я люблю её сильнее всех на свете. Я верю, что наша любовь переживёт любые расстояния. Варюша, я тебя очень сильно люблю ❤️</p><div class="emoji-deco">🐈</div></div>
+    <div id="prize">
+        <h2>Ура! Ты победил! 🎉</h2>
+        <p>Вот твоя награда:</p>
+        <!-- ССЫЛКА УЖЕ ВСТАВЛЕНА -->
+        <img src="https://drive.google.com/thumbnail?id=1nQAWnM5SLzorfVJRdyThF7QRfQPJXlGH&sz=w1000" alt="Твоя награда">
     </div>
 
-    <div class="epilogue">
-      <p><span class="heart-icon">❤️</span> Я люблю тебя, Варюша. Ты — моя самая тёплая глава. <span class="heart-icon">❤️</span></p>
-      <div style="margin-top:12px; font-size:1rem; font-style:normal; font-family:'Quicksand',sans-serif; color:#c9a5b5; font-weight:300;">«Надеюсь, у нас будет так же хорошо, как и до разлуки» 🐱</div>
-    </div>
+    <script>
+        let score = 0;
+        const target = 10; // Можно поменять количество кликов
+        const btn = document.getElementById('click-btn');
+        const gameArea = document.getElementById('game-area');
+        const scoreText = document.getElementById('score-text');
+        const prize = document.getElementById('prize');
 
-    <!-- ФОТО -->
-    <div class="media-section">
-      <h2>📸 Наши фото</h2>
-      <div class="photo-grid" id="photoGrid">
-        <div class="photo-item"><div class="placeholder"><span>🖼️</span> Загрузите<br>фото</div></div>
-      </div>
-      <div class="upload-area">
-        <label for="photoInput">📤 Выбрать фото</label>
-        <input type="file" id="photoInput" accept="image/*" multiple />
-        <span class="hint">(можно несколько)</span>
-      </div>
+        btn.addEventListener('click', () => {
+            score++;
+            scoreText.textContent = `Счёт: ${score} / ${target}`;
 
-      <!-- АУДИО -->
-      <h2 style="margin-top:2rem;">🎵 Наша песня</h2>
-      <div class="audio-common">
-        <div class="player-row">
-          <audio id="commonAudio" controls style="width:100%; max-width:450px;">
-            <source src="" type="audio/mpeg" />
-            Ваш браузер не поддерживает аудио.
-          </audio>
-        </div>
-        <div class="url-input-area">
-          <input type="text" id="audioUrlInput" placeholder="Вставьте прямую ссылку на MP3" value="https://drive.google.com/uc?export=download&id=1FUvjJ2ZsOt0WFMqi58w428FvJGGVwOiY" />
-          <button id="setAudioBtn">🎧 Установить для всех</button>
-        </div>
-        <div class="local-audio-row url-input-area" style="border-top:1px dashed rgba(200,150,170,0.2); padding-top:0.8rem; margin-top:0.8rem;">
-          <label for="localAudioInput">📁 Загрузить с устройства (только для вас)</label>
-          <input type="file" id="localAudioInput" accept="audio/*" style="display:none;" />
-          <span class="hint" style="font-size:0.85rem; margin-left:0.5rem;">Файл останется локально</span>
-        </div>
-        <div class="hint">💡 Чтобы песня играла у всех, откройте доступ к файлу на Google Диске (ссылка уже вставлена).</div>
-      </div>
-    </div>
+            // Победа!
+            if (score >= target) {
+                gameArea.style.display = 'none';
+                prize.style.display = 'block';
+            } else {
+                moveButton(); // Кнопка убегает
+            }
+        });
 
-    <div class="footer-note">
-      <span>💖 Андрей & Варя</span><span>✨ навечно</span><span>🌹 2025</span><span>🐱 🐾</span>
-    </div>
-  </div>
-</div>
+        function moveButton() {
+            const areaWidth = gameArea.clientWidth;
+            const areaHeight = gameArea.clientHeight;
+            const btnWidth = btn.clientWidth;
+            const btnHeight = btn.clientHeight;
 
-<script>
-  (function() {
-    // ФОТО
-    const photoInput = document.getElementById('photoInput');
-    const photoGrid = document.getElementById('photoGrid');
-    photoInput.addEventListener('change', function(e) {
-      const files = e.target.files;
-      if (!files.length) return;
-      while (photoGrid.firstChild) photoGrid.removeChild(photoGrid.firstChild);
-      let hasImages = false;
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (!file.type.startsWith('image/')) continue;
-        hasImages = true;
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-          const div = document.createElement('div');
-          div.className = 'photo-item';
-          const img = document.createElement('img');
-          img.src = ev.target.result;
-          img.alt = 'Фото';
-          div.appendChild(img);
-          photoGrid.appendChild(div);
-        };
-        reader.readAsDataURL(file);
-      }
-      if (!hasImages) {
-        const placeholderDiv = document.createElement('div');
-        placeholderDiv.className = 'photo-item';
-        placeholderDiv.innerHTML = `<div class="placeholder"><span>🖼️</span> Загрузите<br>фото</div>`;
-        photoGrid.appendChild(placeholderDiv);
-      }
-    });
+            // Случайная позиция внутри игрового поля
+            const maxX = areaWidth - btnWidth;
+            const maxY = areaHeight - btnHeight;
 
-    // АУДИО ПО ССЫЛКЕ
-    const audioPlayer = document.getElementById('commonAudio');
-    const audioUrlInput = document.getElementById('audioUrlInput');
-    const setAudioBtn = document.getElementById('setAudioBtn');
+            // Ставим кнопку в случайное место
+            btn.style.left = Math.random() * maxX + 'px';
+            btn.style.top = Math.random() * maxY + 'px';
+        }
+    </script>
 
-    // При загрузке страницы пробуем установить ссылку из поля
-    const defaultUrl = audioUrlInput.value.trim();
-    if (defaultUrl) {
-      audioPlayer.src = defaultUrl;
-      audioPlayer.load();
-    }
-
-    setAudioBtn.addEventListener('click', function() {
-      const url = audioUrlInput.value.trim();
-      if (!url) { alert('Введите ссылку на аудиофайл.'); return; }
-      audioPlayer.src = url;
-      audioPlayer.load();
-      localStorage.setItem('commonAudioUrl', url);
-      audioPlayer.play().catch(() => {});
-    });
-
-    // ЛОКАЛЬНОЕ АУДИО
-    const localAudioInput = document.getElementById('localAudioInput');
-    localAudioInput.addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      if (!file.type.startsWith('audio/')) { alert('Выберите аудиофайл'); return; }
-      const reader = new FileReader();
-      reader.onload = function(ev) {
-        const blob = new Blob([ev.target.result], { type: file.type });
-        const url = URL.createObjectURL(blob);
-        audioPlayer.src = url;
-        audioPlayer.load();
-        audioPlayer.play().catch(() => {});
-      };
-      reader.readAsArrayBuffer(file);
-    });
-  })();
-</script>
 </body>
-</html>       
+</html>      
